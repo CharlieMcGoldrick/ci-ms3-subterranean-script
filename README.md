@@ -1,32 +1,38 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Subterraneon Script
 
-Welcome,
+The project, "Subterranean Script," is my innovative approach to the text-based, choice-driven adventure genre, deeply rooted in the spirit of iconic Choose-Your-Own-Adventure books. It adds a unique twist by plunging players into a sprawling, enigmatic dungeon world, with their destiny dictated by the doors they elect to pass through.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+Drawing inspiration from the rich tradition of Dungeons & Dragons, Subterranean Script incorporates a series of well-established rules and mechanics from the legendary tabletop game. This blend of elements aims to enrich the gameplay experience, inviting players to engage with a complex web of decisions that mirror a D&D campaign's depth and dynamism.
 
-## Reminders
+At its core, Subterranean Script aims to capture players with its layered, immersive narrative and dynamic choice-driven gameplay, challenging their decision-making skills at every turn. It is meticulously crafted for those who appreciate the immersive allure of traditional text-based games but crave an additional level of interactive mystery and suspense, reminiscent of a well-rounded D&D adventure.
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+<details>
+<summary><h3>Strategy</h3></summary>
 
-## Creating the Heroku app
+<details>
+<summary><h4>User Stories</h4></summary>
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+#### First Time Visitor Goals ####
+As a First Time user, I want to easily understand the main concept of the game and its gameplay mechanics.
+As a First Time user, I want to be able to effortlessly navigate through the game commands and decision-making processes.
+As a First Time user, I want to experience a compelling introduction to the game world and its narrative.
 
-1. `heroku/python`
-2. `heroku/nodejs`
+#### Returning Visitor Goals ####
+As a Returning user, I want to find and explore new paths, narratives, and experiences within the game that deepen my immersion.
+As a Returning user, I want to see the consequences of my previous choices and understand how they shape my current gameplay.
+As a Returning user, I want the ability to reset the game or make different decisions, enabling varied experiences and outcomes.
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+#### Frequent Visitor Goals ####
+As a Frequent user, I want to continue my ongoing adventure, with the game storing my progress.
+As a Frequent user, I want to see if there are any new updates or developments in the game’s narrative or mechanics.
+As a Frequent user, I want to share my gaming experience with others or compare my decisions and game outcomes with them.
+</details>
+<details>
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
----
-
-Happy coding!
+<summary><h4>CLI Owner Goals</h4></summary>
+As a Command Line Application Owner, I want to offer an intuitive and immersive text-based adventure game that engages users and draws them into its narrative world.
+As a Command Line Application Owner, I want to notify users of new game content or changes, keeping them interested and up-to-date.
+As a Command Line Application Owner, I want to gather user feedback and experiences, which can be used to refine and expand the game.
+As a Command Line Application Owner, I want to build a community of engaged players who are invested in the game's world and narrative.
+As a Command Line Application Owner, I want to be able to showcase the creative team behind the game, to promote their work and foster a deeper connection with the player base.
+</details>
