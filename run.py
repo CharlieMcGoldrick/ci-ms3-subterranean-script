@@ -1,4 +1,5 @@
 import random
+import colorama
 
 
 # Global dictionary to hold the current character's stats.
@@ -101,6 +102,26 @@ def start_game():
     the game is terminated. If 'enter' or 'Enter' is entered, a game
     introduction message is printed and the `enter_name()` function is called.
     """
+    print(" __       _     _                                                 ")
+    print("/ _\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                  ")
+    print("\ \| | | | '_ \| __/ _ \ '__| '__/ _ \/ _` | '_ \                 ")
+    print("_\ \ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |                ")
+    print("\__/\__,_|_.__/ \__\___|_|  |_|  \___|\__,_|_| |_|                ")
+    print(" __           _       _                                           ")
+    print("/ _\ ___ _ __(_)_ __ | |_                                         ")
+    print("\ \ / __| '__| | '_ \| __|                                        ")
+    print("_\ \ (__| |  | | |_) | |_                                         ")
+    print("\__/\___|_|  |_| .__/ \__|                                        ")
+    print("               |_|                                                ")
+    print("                                                                  ")
+    print("Welcome to the depths of 'Subterranean Script'!                   ")
+    print("This is a text-based, choice-driven adventure game.               ")
+    print("Navigate through the all-encompassing darkness                    ")
+    print("where every door opens a new path, a new destiny.                 ")
+    print("                                                                  ")
+    print("Note: Whisper 'help' anytime to conjure the command list          ")
+    print("                                                                  ")
+    print("Ready to step into the unknown? Type 'Enter' if you dare          ")
     while True:
         user_input = input("").lower()
         if user_input == 'help':
@@ -133,29 +154,4 @@ def start_game():
             print(str(e))
 
 
-while True:
-    print(" __       _     _                                                 ")
-    print("/ _\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                  ")
-    print("\ \| | | | '_ \| __/ _ \ '__| '__/ _ \/ _` | '_ \                 ")
-    print("_\ \ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |                ")
-    print("\__/\__,_|_.__/ \__\___|_|  |_|  \___|\__,_|_| |_|                ")
-    print(" __           _       _                         ")
-    print("/ _\ ___ _ __(_)_ __ | |_                       ")
-    print("\ \ / __| '__| | '_ \| __|                      ")
-    print("_\ \ (__| |  | | |_) | |_                       ")
-    print("\__/\___|_|  |_| .__/ \__|                      ")
-    print("               |_|                              ")
-    print("                                                                  ")
-    print("Welcome to the depths of 'Subterranean Script'!                   ")
-    print("This is a text-based, choice-driven adventure game.               ")
-    print("Navigate through the all-encompassing darkness                    ")
-    print("where every door opens a new path, a new destiny.                 ")
-    print("                                                                  ")
-    print("Note: Whisper 'help' anytime to conjure the command list          ")
-    print("                                                                  ")
-    print("Ready to step into the unknown? Type 'Enter' if you dare          ")
-
-    start_game()
-
-    # Break the outer loop if the game has started or 'exit' was entered
-    break
+start_game()
