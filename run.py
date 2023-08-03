@@ -31,13 +31,13 @@ def start_game():
     introduction message is printed and the `enter_name()` function is called.
     """
     while True:
-        user_input = input("")
+        user_input = input("").lower()
         if user_input.lower() == 'exit':
             print()
             print("\nMaybe it's all just a dream...")
             return
         try:
-            if user_input not in ['enter', 'Enter']:
+            if user_input != 'enter':
                 raise ValueError("Are you lost? Type 'enter' or 'Enter'.")
             else:
                 print()
