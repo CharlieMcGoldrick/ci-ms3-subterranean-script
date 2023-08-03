@@ -1,6 +1,16 @@
 import random
 
 
+def print_help():
+    """
+    Prints a help message describing the available commands.
+    """
+    print("\nYou whispered for help... The shadows respond:")
+    print("'Help': Show this help message.")
+    print("'Enter': Restart the game.")
+    print("'Exit: Terminate the game.")
+
+
 def roll_stats():
     """
     Rolls stats for a new D&D character. The six main attributes of D&D:
@@ -28,8 +38,11 @@ def enter_name():
     is entered, the function returns and the game is terminated.
     """
     while True:
-        player_name = input("\nWhat does it say?\n")
-        if player_name.lower() == 'exit':
+        player_name = input("\nWhat does it say?\n").lower()
+        if player_name == 'help':
+            print_help()  # Call help function
+            continue
+        elif player_name == 'exit':
             return
         try:
             if not player_name.isalpha() or player_name.lower() == 'exit':
@@ -66,13 +79,15 @@ def start_game():
     """
     while True:
         user_input = input("").lower()
-        if user_input.lower() == 'exit':
-            print()
+        if user_input == 'help':
+            print_help()  # Call help function
+            continue
+        elif user_input == 'exit':
             print("\nMaybe it's all just a dream...")
             return
         try:
             if user_input != 'enter':
-                raise ValueError("Are you lost? Type 'enter' or 'Enter'.")
+                raise ValueError("\nThe shadows don't understand your whisper. Try again...")
             else:
                 print()
                 print("Awakening in a room, a sense of déjà vu strikes you...")
@@ -113,6 +128,8 @@ while True:
     print("     Ready to step into the unknown? Type 'Enter' if you dare     ")
 
     start_game()
-    
+   
     # Break the outer loop if the game has started or 'exit' was entered
     break
+
+
