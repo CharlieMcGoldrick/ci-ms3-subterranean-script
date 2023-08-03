@@ -1,3 +1,25 @@
+import random
+
+
+def roll_stats():
+    """
+    Rolls stats for a new D&D character. The six main attributes of D&D:
+    Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma,
+    are determined by rolling 4 six-sided dice (d6) and discarding the lowest
+    roll, then adding up the remaining three.
+    """
+    attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
+                  'Wisdom', 'Charisma']
+    attribute_values = {}
+
+    for attribute in attributes:
+        rolls = [random.randint(1, 6) for _ in range(4)]
+        rolls.remove(min(rolls))  # Remove the lowest roll
+        attribute_values[attribute] = sum(rolls)
+
+    return attribute_values
+
+
 def enter_name():
     """
     Prompts the user for a valid player name. A valid name only contains
@@ -6,7 +28,7 @@ def enter_name():
     is entered, the function returns and the game is terminated.
     """
     while True:
-        player_name = input("\nWhat does it say?")
+        player_name = input("\nWhat does it say?\n")
         if player_name.lower() == 'exit':
             return
         try:
@@ -20,6 +42,18 @@ def enter_name():
             break  # Correct name breaks the inner while loop
         except ValueError as e:
             print(str(e))
+   
+    # After the player enters their name, introduce the stat rolling
+    print("\nAs you navigate the darkness, your competency comes flooding back"
+          "...")
+   
+    stats = roll_stats()
+ 
+    for stat, value in stats.items():
+        print(f"\nYour {stat} is {value}")
+
+    # Return from the function once the stats are rolled
+    return
 
 
 def start_game():
@@ -79,3 +113,6 @@ while True:
     print("     Ready to step into the unknown? Type 'Enter' if you dare     ")
 
     start_game()
+    
+    # Break the outer loop if the game has started or 'exit' was entered
+    break
