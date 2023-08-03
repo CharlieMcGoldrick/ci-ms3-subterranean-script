@@ -1,14 +1,34 @@
 import random
 
 
+# Global dictionary to hold the current character's stats.
+character = {
+    "name": None,
+    "stats": None
+}
+
+
 def print_help():
     """
     Prints a help message describing the available commands.
     """
     print("\nYou whispered for help... The shadows respond:")
-    print("'Help': Show this help message.")
+    print("'Stats': Show your current character's stats.")
+    print("'Help' : Show this help message.")
     print("'Enter': Restart the game.")
-    print("'Exit: Terminate the game.")
+    print("'Exit  : Terminate the game.")
+
+
+def print_stats():
+    """
+    Prints the current character's stats.
+    """
+    if character["name"] is None or character["stats"] is None:
+        print("\nYou're not sure who you are yet...")
+    else:
+        print(f"\n{character['name']}, your current stats are:")
+        for stat, value in character["stats"].items():
+            print(f"{stat}: {value}")
 
 
 def roll_stats():
@@ -38,11 +58,14 @@ def enter_name():
     is entered, the function returns and the game is terminated.
     """
     while True:
-        player_name = input("\nWhat does it say?\n").lower()
-        if player_name == 'help':
-            print_help()  # Call help function
+        player_name = input("\nWhat does it say?\n")
+        if player_name.lower() == 'help':
+            print_help()
             continue
-        elif player_name == 'exit':
+        elif player_name.lower() == 'stats':
+            print_stats()
+            continue
+        elif player_name.lower() == 'exit':
             return
         try:
             if not player_name.isalpha() or player_name.lower() == 'exit':
@@ -50,18 +73,19 @@ def enter_name():
                                  "symbols, on your arm.")
             elif len(player_name) > 20:
                 raise ValueError("The etching on your arm can't be that long.")
+            print("----------------------------------------------------------")
             print(f"\n{player_name}, that appears to be my name...")
             print("I suppose that's as good a start as any.")
             break  # Correct name breaks the inner while loop
         except ValueError as e:
             print(str(e))
-   
+
     # After the player enters their name, introduce the stat rolling
     print("\nAs you navigate the darkness, your competency comes flooding back"
           "...")
-   
+
     stats = roll_stats()
- 
+
     for stat, value in stats.items():
         print(f"\nYour {stat} is {value}")
 
@@ -80,14 +104,18 @@ def start_game():
     while True:
         user_input = input("").lower()
         if user_input == 'help':
-            print_help()  # Call help function
+            print_help()
+            continue
+        elif user_input == 'stats':
+            print_stats()
             continue
         elif user_input == 'exit':
             print("\nMaybe it's all just a dream...")
             return
         try:
             if user_input != 'enter':
-                raise ValueError("\nThe shadows don't understand your whisper. Try again...")
+                raise ValueError("\nThe shadows don't understand your whisper."
+                                 "Try again...")
             else:
                 print()
                 print("Awakening in a room, a sense of déjà vu strikes you...")
@@ -128,8 +156,6 @@ while True:
     print("     Ready to step into the unknown? Type 'Enter' if you dare     ")
 
     start_game()
-   
+
     # Break the outer loop if the game has started or 'exit' was entered
     break
-
-
