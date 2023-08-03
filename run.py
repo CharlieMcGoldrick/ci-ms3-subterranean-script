@@ -1,3 +1,27 @@
+def enter_name():
+    """
+    Prompts the user for a valid player name. A valid name only contains 
+    alphabetic characters and is not longer than 20 characters. If a valid 
+    name is entered, this function calls `play_game(player_name)`. If 'exit' 
+    is entered, the function returns and the game is terminated.
+    """
+    while True:
+        player_name = input("\nWhat does it say? ")
+        if player_name.lower() == 'exit':
+            return
+        try:
+            if not player_name.isalpha() or player_name.lower() == 'exit':
+                raise ValueError("These appear to be letters, not numbers or"
+                                 "symbols, on your arm.")
+            elif len(player_name) > 20:
+                raise ValueError("The etching on your arm can't be that long.")
+            print(f"\n{player_name}, that appears to be my name...")
+            print("I suppose that's as good a start as any.")
+            break  # Correct name breaks the inner while loop
+        except ValueError as e:
+            print(str(e))
+
+
 def start_game():
     """
     Initiates the game by prompting the user to enter 'enter' or 'Enter'. 
@@ -23,6 +47,7 @@ def start_game():
                 print("punctuated by the echoing drip of water against stone walls.")
                 print("In the feeble light, an inscription comes to view on")
                 print("your arm, etched crudely by an apparent blade.")
+                enter_name()
                 # Correct input breaks the while loop and the game starts
                 break
         except ValueError as e:
