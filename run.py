@@ -74,7 +74,7 @@ def enter_name():
                                  "symbols, on your arm.")
             elif len(player_name) > 20:
                 raise ValueError("The etching on your arm can't be that long.")
-            print("----------------------------------------------------------")
+            print("------------------------------------------------------")
             print(f"\n{player_name}, that appears to be my name...")
             print("I suppose that's as good a start as any.")
             break  # Correct name breaks the inner while loop
@@ -89,6 +89,7 @@ def enter_name():
 
     for stat, value in stats.items():
         print(f"\nYour {stat} is {value}")
+    print("------------------------------------------------------")
 
     # Return from the function once the stats are rolled
     return
@@ -103,25 +104,25 @@ def start_game():
     introduction message is printed and the `enter_name()` function is called.
     """
     print(" __       _     _                                                 ")
-    print("/ _\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                  ")
-    print("\ \| | | | '_ \| __/ _ \ '__| '__/ _ \/ _` | '_ \                 ")
-    print("_\ \ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |                ")
-    print("\__/\__,_|_.__/ \__\___|_|  |_|  \___|\__,_|_| |_|                ")
-    print(" __           _       _                                           ")
-    print("/ _\ ___ _ __(_)_ __ | |_                                         ")
-    print("\ \ / __| '__| | '_ \| __|                                        ")
-    print("_\ \ (__| |  | | |_) | |_                                         ")
-    print("\__/\___|_|  |_| .__/ \__|                                        ")
-    print("               |_|                                                ")
+    print("/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                 ")
+    print("\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\           ")
+    print("_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |              ")
+    print("\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|          ")
+    print("  __           _       _                                          ")
+    print(" / _\\ ___ _ __(_)_ __ | |_                                       ")
+    print(" \\ \\ / __| '__| | '_ \\| __|                                    ")
+    print(" _\\ \\ (__| |  | | |_) | |_                                      ")
+    print(" \\__/\\___|_|  |_| .__/ \\__|                                    ")
+    print("                |_|                                               ")
     print("                                                                  ")
     print("Welcome to the depths of 'Subterranean Script'!                   ")
     print("This is a text-based, choice-driven adventure game.               ")
     print("Navigate through the all-encompassing darkness                    ")
     print("where every door opens a new path, a new destiny.                 ")
     print("                                                                  ")
-    print("Note: Whisper 'help' anytime to conjure the command list          ")
+    print("Whisper 'help' anytime to conjure the command list.               ")
     print("                                                                  ")
-    print("Ready to step into the unknown? Type 'Enter' if you dare          ")
+    print("Ready to step into the unknown? Type 'Enter' if you dare.         ")
     while True:
         user_input = input("").lower()
         if user_input == 'help':
@@ -136,9 +137,9 @@ def start_game():
         try:
             if user_input != 'enter':
                 raise ValueError("\nThe shadows don't understand your whisper."
-                                 "Try again...")
+                                 " Try again...")
             else:
-                print()
+                print("------------------------------------------------------")
                 print("Awakening in a room, a sense of déjà vu strikes you...")
                 print("Have you visited this place before?")
                 print("A shroud of darkness wraps the space, its cold grip")
