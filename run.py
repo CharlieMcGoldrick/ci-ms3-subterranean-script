@@ -1,6 +1,7 @@
 import random
 import colorama
 
+import game_states
 
 # Global dictionary to hold the current character's stats.
 character = {
@@ -9,15 +10,27 @@ character = {
 }
 
 
-def print_help():
+def print_help(current_state):
     """
-    Prints a help message describing the available commands.
+    Prints a help message describing the available commands based on the
+    current state.
     """
-    print("\nYou whispered for help... The shadows respond:")
-    print("'Stats': Show your current character's stats.")
-    print("'Help' : Show this help message.")
-    print("'Enter': Restart the game.")
-    print("'Exit  : Terminate the game.")
+    print("\nYou whispered for help... The shadows respond:")     
+    if current_state == game_states.STATE_START:
+        print("'Enter': Begin your descent into the depths of 'Subterranean"
+              "Script'.")
+        print("'Help' : Seek guidance from the shadows.")
+        print("'Exit' : Wake from the dream and return to reality.")
+    elif current_state == game_states.STATE_NAME:
+        print("Type your name to continue, a name is more than just an"
+              "identity here...")
+        print("'Help' : Seek guidance from the shadows.")
+        print("'Exit' : Wake from the dream and return to reality.")
+    else:
+        print("'Stats': Gaze upon your own essence and abilities.")
+        print("'Help' : Seek guidance from the shadows.")
+        print("'Exit' : Wake from the dream and return to reality.")
+    # ... More states will go here!
 
 
 def print_stats():
@@ -34,10 +47,7 @@ def print_stats():
 
 def roll_stats():
     """
-    Rolls stats for a new D&D character. The six main attributes of D&D:
-    Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma,
-    are determined by rolling 4 six-sided dice (d6) and discarding the lowest
-    roll, then adding up the remaining three.
+    Rolls stats for a new character.
     """
     attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
                   'Wisdom', 'Charisma']
@@ -51,58 +61,74 @@ def roll_stats():
     return attribute_values
 
 
-def enter_name():
-    """
-    Prompts the user for a valid player name. A valid name only contains
-    alphabetic characters and is not longer than 20 characters. If a valid
-    name is entered, this function calls `play_game(player_name)`. If 'exit'
-    is entered, the function returns and the game is terminated.
-    """
+def main_game_loop():
+    current_state = game_states.STATE_START
     while True:
-        player_name = input("\nWhat does it say?\n")
-        if player_name.lower() == 'help':
-            print_help()
-            continue
-        elif player_name.lower() == 'stats':
-            print_stats()
-            continue
-        elif player_name.lower() == 'exit':
-            return
+        if current_state == game_states.STATE_START:
+            prompt = "Ready to step into the unknown? Type 'Enter' if you dare"
+            "."
+        elif current_state == game_states.STATE_NAME:
+            prompt = "What does it say on your arm?"
+        else:
+            prompt = "What do you do?"
+
         try:
-            if not player_name.isalpha() or player_name.lower() == 'exit':
-                raise ValueError("These appear to be letters, not numbers or"
-                                 "symbols, on your arm.")
-            elif len(player_name) > 20:
-                raise ValueError("The etching on your arm can't be that long.")
-            print("------------------------------------------------------")
-            print(f"\n{player_name}, that appears to be my name...")
-            print("I suppose that's as good a start as any.")
-            break  # Correct name breaks the inner while loop
+            user_input = input(f"\n{prompt}\n").lower()
+
+            if user_input == 'help':
+                print_help(current_state)
+                continue
+            elif user_input == 'stats':
+                print_stats()
+                continue
+            elif user_input == 'exit':
+                print("\nMaybe it's all just a dream...")
+                break
+
+            # First Input Error Message
+            if (current_state == game_states.STATE_START and
+                    user_input != 'enter'):
+                raise ValueError("\nThe shadows were quite explicit. Type"
+                                 " 'Enter'.")
+            # Second Input Error Message
+            elif current_state == game_states.STATE_NAME:
+                # Validate name
+                if not user_input.isalpha() or user_input.lower() == 'exit':
+                    raise ValueError("\nThese appear to be letters, not"
+                                     " numbers or symbols, on your arm.")
+                elif len(user_input) > 20:
+                    raise ValueError("\nThe etching on your arm can't be that"
+                                     " long.")
+
         except ValueError as e:
-            print(str(e))
+            print(f"{e}")
+            continue
 
-    # After the player enters their name, introduce the stat rolling
-    print("\nAs you navigate the darkness, your competency comes flooding back"
-          "...")
-
-    stats = roll_stats()
-
-    for stat, value in stats.items():
-        print(f"\nYour {stat} is {value}")
-    print("------------------------------------------------------")
-
-    # Return from the function once the stats are rolled
-    return
+        if current_state == game_states.STATE_START:
+            if user_input == 'enter':
+                print("------------------------------------------------------")
+                print("Awakening in a room, a sense of déjà vu strikes you...")
+                print("Have you visited this place before?")
+                print("A shroud of darkness wraps the space, its cold grip")
+                print("only punctuated by the echoing drip of water against")
+                print("stone walls. In the feeble light, an inscription comes")
+                print("to view on your arm, etched crudely by an apparent")
+                print("blade.")
+                # Transition to next state
+                current_state = game_states.STATE_NAME
+        elif current_state == game_states.STATE_NAME:
+            character["name"] = user_input
+            print("------------------------------------------------------")
+            print(f"\n{user_input}, that appears to be my name...")
+            print("I suppose that's as good a start as any.")
+            character["stats"] = roll_stats()
+            for stat, value in character["stats"].items():
+                print(f"\nYour {stat} is {value}")
+        # Transition to the next state...
+        # current_state = STATE_NEXT
 
 
 def start_game():
-    """
-    Initiates the game by prompting the user to enter 'enter' or 'Enter'.
-    If a different input is received, a ValueError is raised and the prompt
-    is shown again. If 'exit' is entered, a farewell message is printed and
-    the game is terminated. If 'enter' or 'Enter' is entered, a game
-    introduction message is printed and the `enter_name()` function is called.
-    """
     print(" __       _     _                                                 ")
     print("/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                 ")
     print("\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\           ")
@@ -117,42 +143,11 @@ def start_game():
     print("                                                                  ")
     print("Welcome to the depths of 'Subterranean Script'!                   ")
     print("This is a text-based, choice-driven adventure game.               ")
-    print("Navigate through the all-encompassing darkness                    ")
-    print("where every door opens a new path, a new destiny.                 ")
+    print("Navigate through the all-encompassing darkness where every door   ")
+    print("opens a new path, a new destiny.                                  ")
     print("                                                                  ")
     print("Whisper 'help' anytime to conjure the command list.               ")
-    print("                                                                  ")
-    print("Ready to step into the unknown? Type 'Enter' if you dare.         ")
-    while True:
-        user_input = input("").lower()
-        if user_input == 'help':
-            print_help()
-            continue
-        elif user_input == 'stats':
-            print_stats()
-            continue
-        elif user_input == 'exit':
-            print("\nMaybe it's all just a dream...")
-            return
-        try:
-            if user_input != 'enter':
-                raise ValueError("\nThe shadows don't understand your whisper."
-                                 " Try again...")
-            else:
-                print("------------------------------------------------------")
-                print("Awakening in a room, a sense of déjà vu strikes you...")
-                print("Have you visited this place before?")
-                print("A shroud of darkness wraps the space, its cold grip")
-                print("only punctuated by the echoing drip of water against")
-                print("stone walls. In the feeble light, an inscription comes")
-                print("to view on your arm, etched crudely by an apparent")
-                print("blade.")
-                #  Call enter_name function
-                enter_name()
-                #  Correct input breaks the while loop and the game starts
-                break
-        except ValueError as e:
-            print(str(e))
+    main_game_loop()
 
 
 start_game()
