@@ -1,5 +1,6 @@
 import random
-import colorama
+from colorama import Fore, Back, Style
+# colorama.init()
 
 import game_states
 
@@ -26,7 +27,8 @@ def print_help(current_state, previous_state):
     :param previous_state: The previous state of the game, also used to
            provide context-specific help.
     """
-    print("------------------------------------------------------")
+    print(Back.RED + Fore.RED + "\n---------------------------------"
+          "---------------------" + Style.RESET_ALL)
     print("\nYou whispered for help... The shadows respond:")
     print("'Return': Resume your previous action.")
     print("'Exit' : Wake from the dream and return to reality.")
@@ -116,11 +118,13 @@ def handle_start_state(user_input):
     """
     if user_input != 'enter':
         raise ValueError("\nThe shadows were quite explicit. Type 'Enter'.")
-    print("------------------------------------------------------")
-    print("Awakening in a room, a sense of déjà vu strikes you...")
+    print(Back.RED + Fore.RED + "\n---------------------------------"
+          "---------------------" + Style.RESET_ALL)
+    print("\nAwakening in a room, a sense of déjà vu strikes you...")
     print("Have you visited this place before?")
     print("A shroud of darkness wraps the space, its cold grip")
-    print("only punctuated by the echoing drip of water against")
+    print("only punctuated by the echoing drip of " + Fore.BLUE +
+          Back.BLACK + "water" + Fore.RESET + Back.RESET + " against")
     print("stone walls. In the feeble light, an inscription comes")
     print("to view on your arm, etched crudely by an apparent")
     print("blade.")
@@ -150,16 +154,17 @@ def handle_name_state(user_input):
         print("'Exit' : Wake from the dream and return to reality.")
         return game_states.STATE_NAME  # Stay in the same state
     if not user_input.isalpha() or user_input.lower() == 'exit':
-        raise ValueError("\n-------------------------------------------------"
-                         "-----\n"
+        raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
+                         "--------------------------\n" + Style.RESET_ALL +
                          "These appear to be letters, not numbers or symbols, "
                          "on your arm.")
     elif len(user_input) > 20:
-        raise ValueError("\n-------------------------------------------------"
-                         "-----\n"
+        raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
+                         "--------------------------\n" + Style.RESET_ALL +
                          "The etching on your arm can't be that long.")
     character["name"] = user_input
-    print("------------------------------------------------------")
+    print(Back.RED + Fore.RED + "\n---------------------------------"
+          "---------------------" + Style.RESET_ALL)
     print(f"\n{user_input}, that appears to be my name...")
     print("I suppose that's as good a start as any.\n")
     # Roll the stats here
@@ -203,15 +208,15 @@ def main_game_loop():
         elif current_state == game_states.STATE_STATS:
             prompt = "If you've finished looking at yourself, type 'return'"
         elif current_state == game_states.STATE_START:
-            prompt = "Ready to step into the unknown? Type 'Enter' if you"
+            prompt = "\nReady to step into the unknown? Type 'Enter' if you"
             "dare."
         elif current_state == game_states.STATE_NAME:
-            prompt = "What does it say on your arm?"
+            prompt = "\nWhat does it say on your arm?"
         else:
             prompt = "What do you do?"
 
         try:
-            user_input = input(f"\n{prompt}\n").lower()
+            user_input = input(f"{prompt}\n").lower()
 
             # Check for universal commands
             new_state = handle_universal_commands(user_input, current_state,
@@ -252,24 +257,41 @@ def start_game():
 
     :note: Whisper 'help' anytime in the game to view a list of commands.
     """
-    print(" __       _     _                                                 ")
-    print("/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                 ")
-    print("\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\           ")
-    print("_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |              ")
-    print("\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|          ")
-    print("  __           _       _                                          ")
-    print(" / _\\ ___ _ __(_)_ __ | |_                                       ")
-    print(" \\ \\ / __| '__| | '_ \\| __|                                    ")
-    print(" _\\ \\ (__| |  | | |_) | |_                                      ")
-    print(" \\__/\\___|_|  |_| .__/ \\__|                                    ")
-    print("                |_|                                               ")
-    print("                                                                  ")
-    print("Welcome to the depths of 'Subterranean Script'!                   ")
-    print("This is a text-based, choice-driven adventure game.               ")
-    print("Navigate through the all-encompassing darkness where every door   ")
-    print("opens a new path, a new destiny.                                  ")
-    print("                                                                  ")
-    print("Whisper 'help' anytime to conjure the command list.               ")
+    lines = [
+        "                                                                  ",
+        "                                                                  ",
+        "                                                                  ",
+        " __       _     _                                                 ",
+        "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                 ",
+        "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\           ",
+        "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |              ",
+        "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|          ",
+        " __           _       _                                           ",
+        "/ _\\ ___ _ __(_)_ __ | |_                                        ",
+        "\\ \\ / __| '__| | '_ \\| __|                                     ",
+        "_\\ \\ (__| |  | | |_) | |_                                       ",
+        "\\__/\\___|_|  |_| .__/ \\__|                                     ",
+        "                |_|                                               ",
+        "                                                                  ",
+        "Welcome to the depths of 'Subterranean Script'!                   ",
+        "This is a text-based, choice-driven adventure game.               ",
+        "Navigate through the all-encompassing darkness where every door   ",
+        "opens a new path, a new destiny.                                  ",
+        "                                                                  ",
+        "Whisper 'help' anytime to conjure the command list.               "
+    ]
+
+    # Find the maximum length of the lines
+    max_length = max(len(line) for line in lines)
+
+    # Print each line with a background color
+    for line in lines:
+        # Fill the line with spaces to the maximum length
+        filled_line = line.ljust(max_length)
+        # Print with the desired foreground and background colors
+        print(Back.RED + Fore.WHITE + filled_line + Back.RESET + Fore.RESET)
+
+    # Call Main Game Loop
     main_game_loop()
 
 
