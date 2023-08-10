@@ -134,8 +134,6 @@ def main_game_loop():
                 current_state = handle_start_state(user_input)
             elif current_state == game_states.STATE_NAME:
                 current_state = handle_name_state(user_input)
-            elif current_state == game_states.STATE_STATS:
-                handle_stats_state()
 
         except ValueError as e:
             print(f"{e}")
