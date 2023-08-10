@@ -8,7 +8,15 @@ import weapons
 # Global dictionary to hold the current character's stats.
 character = {
     "name": None,
-    "stats": None
+    "stats": {
+        "Strength": 0,
+        "Dexterity": 0,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Wisdom": 0,
+        "Charisma": 0,
+        "Weapon": "Fists"
+    }
 }
 
 
