@@ -3,6 +3,7 @@ from colorama import Fore, Back, Style
 # colorama.init()
 
 import game_states
+import weapons
 
 # Global dictionary to hold the current character's stats.
 character = {
