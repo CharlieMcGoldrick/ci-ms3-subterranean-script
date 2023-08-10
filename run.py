@@ -156,12 +156,6 @@ def handle_name_state(user_input):
                         empty, or exceeds 20 characters, an error message
                         is raised to guide the player to input a valid name.
     """
-    if user_input == 'help':
-        print("Type your name to continue. A name is more than just an"
-              "identity here.")
-        print("'Help' : Seek guidance from the shadows.")
-        print("'Exit' : Wake from the dream and return to reality.")
-        return game_states.STATE_NAME  # Stay in the same state
     if not user_input.isalpha() or user_input.lower() == 'exit':
         raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
                          "--------------------------\n" + Style.RESET_ALL +
