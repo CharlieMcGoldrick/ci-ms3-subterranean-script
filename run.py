@@ -171,7 +171,7 @@ def handle_name_state(user_input):
     character["stats"] = roll_stats()
     # Print the stats here
     print_stats()
-    return game_states.STATE_NEXT
+    return game_states.STATE_ROOM_FIRST_LAYER
 
 
 def main_game_loop():
