@@ -15,7 +15,10 @@ character = {
         "Intelligence": 0,
         "Wisdom": 0,
         "Charisma": 0,
-        "Weapon": "Fists"
+        "Weapon": {
+            "name": "Fists",
+            "description": "Your own bare hands."
+        }
     }
 }
 
@@ -85,7 +88,16 @@ def print_stats():
     """
     print(f"{character['name']}, your current stats are:")
     for stat, value in character["stats"].items():
-        print(f"Your {stat:<15} is {value}")
+        if stat != 'Weapon':
+            print(f"Your {stat:<15} is {value}")
+
+    weapon_details = character["stats"]["Weapon"]
+
+    if weapon_details['name'] == "Fists":
+        print("\nYou have no weapon... only your fists.")
+    else:
+        print(f"\nYou are wielding a {weapon_details['name']}")
+        print(weapon_details['description'])
 
 
 def roll_stats():
@@ -102,14 +114,12 @@ def roll_stats():
     attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
                   'Wisdom', 'Charisma']
     attribute_values = {}
-
     for attribute in attributes:
         rolls = [random.randint(1, 6) for _ in range(4)]
         rolls.remove(min(rolls))  # Remove the lowest roll
         attribute_values[attribute] = sum(rolls)
-
     return attribute_values
-
+    
 
 def handle_start_state(user_input):
     """
@@ -158,59 +168,57 @@ def handle_name_state(user_input):
     """
     if not user_input.isalpha() or user_input.lower() == 'exit':
         raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
-                         "--------------------------\n" + Style.RESET_ALL +
-                         "These appear to be letters, not numbers or symbols, "
-                         "on your arm.")
+                         "--------------------------" + Style.RESET_ALL +
+                         "\nThese appear to be letters, not numbers or"
+                         " symbols, on your arm.")
     elif len(user_input) > 20:
         raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
-                         "--------------------------\n" + Style.RESET_ALL +
-                         "The etching on your arm can't be that long.")
+                         "--------------------------" + Style.RESET_ALL +
+                         "\nThe etching on your arm can't be that long.")
     character["name"] = user_input
     print(Back.RED + Fore.RED + "\n---------------------------------"
           "---------------------" + Style.RESET_ALL)
     print(f"\n{user_input}, that appears to be my name...")
     print("I suppose that's as good a start as any.\n")
     # Roll the stats here
-    character["stats"] = roll_stats()
+    rolled_stats = roll_stats()
+    for key, value in rolled_stats.items():
+        character["stats"][key] = value
     # Print the stats here
     print_stats()
-    return game_states.STATE_ROOM_FIRST_LAYER
+
+    # Flavour Text for next function
+    if 'weapon_picked' not in character:
+        weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
+        character['weapon'] = weapon_choice
+        print(Back.RED + Fore.RED + "\n---------------------------------"
+              "---------------------" + Style.RESET_ALL)
+        print(f"\nA strange chill fills the room, and your eyes are drawn to a"
+              " faint glow.")
+        print(f"Upon closer inspection, it's a {weapon_choice['name']} lying"
+              " at your feet.")
+        print(weapon_choice['description'])
+    return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
 
 
-def handle_room_state(user_input):
-    """
-    Handles the room state where the player can pick up a weapon or choose a
-    door.
-
-    :return: The next game state.
-    """
+def handle_pick_up_weapon_first_layer(user_input):
     weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
-    print(Back.RED + Fore.RED + "\n---------------------------------"
-          "---------------------" + Style.RESET_ALL)
-    print(f"\nA strange chill fills the room, and your eyes are drawn to a"
-          " faint glow.")
-    print(f"Upon closer inspection, it's a {weapon_choice['name']} lying at"
-          " your feet.")
-    print(weapon_choice['description'])
-    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
-          " the darkness.")
-    print("A mysterious force urges you to make a choice.")
-    while True:
-        if user_input == 'pick up':
-            print(f"You have picked up the {weapon_choice['name']}!")
-            for stat, change in weapon_choice["stat_changes"].items():
-                character["stats"][stat] += change
-            print_stats()
-            # You can continue the logic here, or move to another state
-        elif user_input == 'left':
-            print("You chose the left door...")
-            # Move to the left room state or continue the logic
-        elif user_input == 'right':
-            print("You chose the right door...")
-            # Move to the right room state or continue the logic
-        else:
-            print("The shadows whisper: 'Make a choice.'")
-            continue
+    if user_input == 'pick up':
+        print("\nYour hand trembles as you approach the object, memories"
+              "and emotions swirling within you.")
+        print("The air feels thick, and a voice in the back of your mind"
+              "urges you to make a choice.")
+        print(f"\nYou have picked up the {weapon_choice['name']}!")
+        character['stats']['Weapon'] = weapon_choice
+        for stat, change in weapon_choice["stat_changes"].items():
+            character["stats"][stat] += change
+        print_stats()
+        # Mark the weapon as picked up
+        character['weapon_picked'] = True
+        return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
+    else:
+        raise ValueError("The shadows whisper: 'Make a choice.'")
+    return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
 
 
 def main_game_loop():
@@ -251,8 +259,10 @@ def main_game_loop():
             "dare."
         elif current_state == game_states.STATE_NAME:
             prompt = "\nWhat does it say on your arm?"
-        elif current_state == game_states.STATE_ROOM_FIRST_LAYER:
-            prompt = "Do you 'Pick Up' the weapon, go 'left', or go 'right'?\n"
+        elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
+            prompt = "\nDo you 'Pick Up' the weapon?"
+        elif current_state == game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
+            prompt = "Do you go 'left', or go 'right'?\n"
         else:
             prompt = "What do you do?"
 
@@ -274,10 +284,17 @@ def main_game_loop():
                 current_state = previous_state or game_states.STATE_NAME
                 continue
 
+            # Handle State Inputs
             if current_state == game_states.STATE_START:
                 current_state = handle_start_state(user_input)
             elif current_state == game_states.STATE_NAME:
                 current_state = handle_name_state(user_input)
+            elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
+                current_state = handle_pick_up_weapon_first_layer(user_input)
+            elif current_state == \
+                    game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
+                current_state = \
+                    handle_direction_decision_first_layer(user_input)
 
         except ValueError as e:
             print(f"{e}")
