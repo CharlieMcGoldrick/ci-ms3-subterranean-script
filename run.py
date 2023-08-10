@@ -28,9 +28,9 @@ def handle_universal_commands(user_input, current_state, previous_state):
     if user_input == 'help':
         print_help(current_state, previous_state)
         return game_states.STATE_HELP
-    elif user_input == 'stats':
+    elif user_input == 'stats' and character['name'] is not None and character['stats'] is not None:
         print_stats()
-        return game_states.STATE_STATS
+        return previous_state
     return None
 
 
@@ -38,12 +38,9 @@ def print_stats():
     """
     Prints the current character's stats.
     """
-    if character["name"] is None or character["stats"] is None:
-        print("\nYou're not sure who you are yet...")
-    else:
-        print(f"\n{character['name']}, your current stats are:")
-        for stat, value in character["stats"].items():
-            print(f"{stat}: {value}")
+    print(f"{character['name']}, your current stats are:")
+    for stat, value in character["stats"].items():
+        print(f"Your {stat:<15} is {value}")
 
 
 def roll_stats():
@@ -82,9 +79,6 @@ def handle_name_state(user_input):
         print("'Help' : Seek guidance from the shadows.")
         print("'Exit' : Wake from the dream and return to reality.")
         return game_states.STATE_NAME  # Stay in the same state
-    elif user_input == 'stats':
-        print_stats()
-        return game_states.STATE_NAME 
     if not user_input.isalpha() or user_input.lower() == 'exit':
         raise ValueError("\n-------------------------------------------------"
                          "-----\n"
@@ -98,18 +92,22 @@ def handle_name_state(user_input):
     print("------------------------------------------------------")
     print(f"\n{user_input}, that appears to be my name...")
     print("I suppose that's as good a start as any.\n")
-    return game_states.STATE_STATS
-
-
-def handle_stats_state():
+    # Roll the stats here
     character["stats"] = roll_stats()
-    print("------------------------------------------------------")
-    print("As you navigate the darkness, your competency comes flooding"
-          " back...")
-    for stat, value in character["stats"].items():
-        print(f"Your {stat:<15} is {value}")
-    # Placeholder
+    # Print the stats here
+    print_stats()
     return game_states.STATE_NEXT
+
+
+# def handle_stats_state():
+#     character["stats"] = roll_stats()
+#     print("------------------------------------------------------")
+#     print("As you navigate the darkness, your competency comes flooding"
+#           " back...")
+#     for stat, value in character["stats"].items():
+#         print(f"Your {stat:<15} is {value}")
+#     # Placeholder
+#     return game_states.STATE_NEXT
 
 
 def main_game_loop():
