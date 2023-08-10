@@ -5,3 +5,5 @@ STATE_STATS = 3
 
 STATE_NEXT = 4
 # ... More states will be added here
+STATE_HELP = 'help'
+STATE_STATS = 'stats'

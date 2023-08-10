@@ -10,27 +10,28 @@ character = {
 }
 
 
-def print_help(current_state):
+def print_help(current_state, previous_state):
     """
     Prints a help message describing the available commands based on the
     current state.
     """
-    print("\nYou whispered for help... The shadows respond:")     
-    if current_state == game_states.STATE_START:
-        print("'Enter': Begin your descent into the depths of 'Subterranean"
-              "Script'.")
-        print("'Help' : Seek guidance from the shadows.")
-        print("'Exit' : Wake from the dream and return to reality.")
-    elif current_state == game_states.STATE_NAME:
-        print("Type your name to continue, a name is more than just an"
-              "identity here...")
-        print("'Help' : Seek guidance from the shadows.")
-        print("'Exit' : Wake from the dream and return to reality.")
-    else:
-        print("'Stats': Gaze upon your own essence and abilities.")
-        print("'Help' : Seek guidance from the shadows.")
-        print("'Exit' : Wake from the dream and return to reality.")
+    print("------------------------------------------------------")
+    print("\nYou whispered for help... The shadows respond:")
+    print("'Return': Resume your previous action.")
+    print("'Exit' : Wake from the dream and return to reality.")
+    if previous_state == game_states.STATE_NAME:
+        print("\nType your name to continue, a name is more than just an identity here...")
     # ... More states will go here!
+
+
+def handle_universal_commands(user_input, current_state, previous_state):
+    if user_input == 'help':
+        print_help(current_state, previous_state)
+        return game_states.STATE_HELP
+    elif user_input == 'stats':
+        print_stats()
+        return game_states.STATE_STATS
+    return None
 
 
 def print_stats():
@@ -76,6 +77,14 @@ def handle_start_state(user_input):
 
 
 def handle_name_state(user_input):
+    if user_input == 'help':
+        print("Type your name to continue. A name is more than just an identity here.")
+        print("'Help' : Seek guidance from the shadows.")
+        print("'Exit' : Wake from the dream and return to reality.")
+        return game_states.STATE_NAME  # Stay in the same state
+    elif user_input == 'stats':
+        print_stats()
+        return game_states.STATE_NAME 
     if not user_input.isalpha() or user_input.lower() == 'exit':
         raise ValueError("\n-------------------------------------------------"
                          "-----\n"
@@ -105,30 +114,34 @@ def handle_stats_state():
 
 def main_game_loop():
     current_state = game_states.STATE_START
+    # Store the previous state to return to
+    previous_state = None
     while True:
-        if current_state == game_states.STATE_START:
-            prompt = "Ready to step into the unknown? Type 'Enter' if you "
-            "dare."
+        if current_state == game_states.STATE_HELP:
+            prompt = "What do you demand of the shadows? Type 'return' to go back."
+        elif current_state == game_states.STATE_STATS:
+            prompt = "If you've finished looking at yourself, type 'return'"
+        elif current_state == game_states.STATE_START:
+            prompt = "Ready to step into the unknown? Type 'Enter' if you dare."
         elif current_state == game_states.STATE_NAME:
             prompt = "What does it say on your arm?"
-        elif current_state == game_states.STATE_STATS:
-            current_state = handle_stats_state()
-            continue
         else:
             prompt = "What do you do?"
 
         try:
             user_input = input(f"\n{prompt}\n").lower()
 
-            if user_input == 'help':
-                print_help(current_state)
+            # Check for universal commands
+            new_state = handle_universal_commands(user_input, current_state, previous_state)
+            if new_state is not None:
+                if current_state != new_state:
+                    previous_state = current_state
+                current_state = new_state
                 continue
-            elif user_input == 'stats':
-                print_stats()
+
+            if user_input == 'return' and current_state in (game_states.STATE_HELP, game_states.STATE_STATS):
+                current_state = previous_state or game_states.STATE_NAME  # return to the previous state or a default state
                 continue
-            elif user_input == 'exit':
-                print("\nMaybe it's all just a dream...")
-                break
 
             if current_state == game_states.STATE_START:
                 current_state = handle_start_state(user_input)
