@@ -121,9 +121,15 @@ def main_game_loop():
             print("------------------------------------------------------")
             print(f"\n{user_input}, that appears to be my name...")
             print("I suppose that's as good a start as any.")
+            # Transition to next state
+            current_state = game_states.STATE_STATS
+        if current_state == game_states.STATE_STATS:
+            print("------------------------------------------------------")
+            print("As you navigate the darkness, your competency comes "
+                  "flooding back...") 
             character["stats"] = roll_stats()
             for stat, value in character["stats"].items():
-                print(f"\nYour {stat} is {value}")
+                print(f"Your {stat} is {value}")
         # Transition to the next state...
         # current_state = STATE_NEXT
 
