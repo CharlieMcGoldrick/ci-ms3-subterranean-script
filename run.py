@@ -61,14 +61,59 @@ def roll_stats():
     return attribute_values
 
 
+def handle_start_state(user_input):
+    if user_input != 'enter':
+        raise ValueError("\nThe shadows were quite explicit. Type 'Enter'.")
+    print("------------------------------------------------------")
+    print("Awakening in a room, a sense of déjà vu strikes you...")
+    print("Have you visited this place before?")
+    print("A shroud of darkness wraps the space, its cold grip")
+    print("only punctuated by the echoing drip of water against")
+    print("stone walls. In the feeble light, an inscription comes")
+    print("to view on your arm, etched crudely by an apparent")
+    print("blade.")
+    return game_states.STATE_NAME
+
+
+def handle_name_state(user_input):
+    if not user_input.isalpha() or user_input.lower() == 'exit':
+        raise ValueError("\n-------------------------------------------------"
+                         "-----\n"
+                         "These appear to be letters, not numbers or symbols, "
+                         "on your arm.")
+    elif len(user_input) > 20:
+        raise ValueError("\n-------------------------------------------------"
+                         "-----\n"
+                         "The etching on your arm can't be that long.")
+    character["name"] = user_input
+    print("------------------------------------------------------")
+    print(f"\n{user_input}, that appears to be my name...")
+    print("I suppose that's as good a start as any.\n")
+    return game_states.STATE_STATS
+
+
+def handle_stats_state():
+    character["stats"] = roll_stats()
+    print("------------------------------------------------------")
+    print("As you navigate the darkness, your competency comes flooding"
+          " back...")
+    for stat, value in character["stats"].items():
+        print(f"Your {stat:<15} is {value}")
+    # Placeholder
+    return game_states.STATE_NEXT
+
+
 def main_game_loop():
     current_state = game_states.STATE_START
     while True:
         if current_state == game_states.STATE_START:
-            prompt = "Ready to step into the unknown? Type 'Enter' if you dare"
-            "."
+            prompt = "Ready to step into the unknown? Type 'Enter' if you "
+            "dare."
         elif current_state == game_states.STATE_NAME:
             prompt = "What does it say on your arm?"
+        elif current_state == game_states.STATE_STATS:
+            current_state = handle_stats_state()
+            continue
         else:
             prompt = "What do you do?"
 
@@ -85,51 +130,16 @@ def main_game_loop():
                 print("\nMaybe it's all just a dream...")
                 break
 
-            # First Input Error Message
-            if (current_state == game_states.STATE_START and
-                    user_input != 'enter'):
-                raise ValueError("\nThe shadows were quite explicit. Type"
-                                 " 'Enter'.")
-            # Second Input Error Message
+            if current_state == game_states.STATE_START:
+                current_state = handle_start_state(user_input)
             elif current_state == game_states.STATE_NAME:
-                # Validate name
-                if not user_input.isalpha() or user_input.lower() == 'exit':
-                    raise ValueError("\nThese appear to be letters, not"
-                                     " numbers or symbols, on your arm.")
-                elif len(user_input) > 20:
-                    raise ValueError("\nThe etching on your arm can't be that"
-                                     " long.")
+                current_state = handle_name_state(user_input)
+            elif current_state == game_states.STATE_STATS:
+                handle_stats_state()
 
         except ValueError as e:
             print(f"{e}")
             continue
-
-        if current_state == game_states.STATE_START:
-            if user_input == 'enter':
-                print("------------------------------------------------------")
-                print("Awakening in a room, a sense of déjà vu strikes you...")
-                print("Have you visited this place before?")
-                print("A shroud of darkness wraps the space, its cold grip")
-                print("only punctuated by the echoing drip of water against")
-                print("stone walls. In the feeble light, an inscription comes")
-                print("to view on your arm, etched crudely by an apparent")
-                print("blade.")
-                # Transition to next state
-                current_state = game_states.STATE_NAME
-        elif current_state == game_states.STATE_NAME:
-            character["name"] = user_input
-            print("------------------------------------------------------")
-            print(f"\n{user_input}, that appears to be my name...")
-            print("I suppose that's as good a start as any.")
-            # Transition to next state
-            current_state = game_states.STATE_STATS
-
-        if current_state == game_states.STATE_STATS:
-            character["stats"] = roll_stats()
-            print("As you navigate the darkness, your competency comes "
-                "flooding back...")
-            for stat, value in character["stats"].items():
-                print(f"Your {stat:<15} is {value}")
         # Transition to the next state...
         # current_state = STATE_NEXT
 
