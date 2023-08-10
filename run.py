@@ -175,6 +175,42 @@ def handle_name_state(user_input):
     return game_states.STATE_ROOM_FIRST_LAYER
 
 
+def handle_room_state(user_input):
+    """
+    Handles the room state where the player can pick up a weapon or choose a
+    door.
+
+    :return: The next game state.
+    """
+    weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
+    print(Back.RED + Fore.RED + "\n---------------------------------"
+          "---------------------" + Style.RESET_ALL)
+    print(f"\nA strange chill fills the room, and your eyes are drawn to a"
+          " faint glow.")
+    print(f"Upon closer inspection, it's a {weapon_choice['name']} lying at"
+          " your feet.")
+    print(weapon_choice['description'])
+    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
+          " the darkness.")
+    print("A mysterious force urges you to make a choice.")
+    while True:
+        if user_input == 'pick up':
+            print(f"You have picked up the {weapon_choice['name']}!")
+            for stat, change in weapon_choice["stat_changes"].items():
+                character["stats"][stat] += change
+            print_stats()
+            # You can continue the logic here, or move to another state
+        elif user_input == 'left':
+            print("You chose the left door...")
+            # Move to the left room state or continue the logic
+        elif user_input == 'right':
+            print("You chose the right door...")
+            # Move to the right room state or continue the logic
+        else:
+            print("The shadows whisper: 'Make a choice.'")
+            continue
+
+
 def main_game_loop():
     """
     Manages the main gameplay loop, orchestrating the progression between
@@ -213,6 +249,8 @@ def main_game_loop():
             "dare."
         elif current_state == game_states.STATE_NAME:
             prompt = "\nWhat does it say on your arm?"
+        elif current_state == game_states.STATE_ROOM_FIRST_LAYER:
+            prompt = "Do you 'Pick Up' the weapon, go 'left', or go 'right'?\n"
         else:
             prompt = "What do you do?"
 
