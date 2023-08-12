@@ -40,17 +40,17 @@ class Character:
         """
         print(f"{self.name}, your current stats are:")
         print(f"Your Strength       is {self.strength}" +
-              f"{self.format_change(stat_changes, 'Strength')}")
+              f"{self.format_stat_change(stat_changes, 'Strength')}")
         print(f"Your Dexterity      is {self.dexterity}" +
-              f"{self.format_change(stat_changes, 'Dexterity')}")
+              f"{self.format_stat_change(stat_changes, 'Dexterity')}")
         print(f"Your Constitution   is {self.constitution}" +
-              f"{self.format_change(stat_changes, 'Constitution')}")
+              f"{self.format_stat_change(stat_changes, 'Constitution')}")
         print(f"Your Intelligence   is {self.intelligence}" +
-              f"{self.format_change(stat_changes, 'Intelligence')}")
+              f"{self.format_stat_change(stat_changes, 'Intelligence')}")
         print(f"Your Wisdom         is {self.wisdom}" +
-              f"{self.format_change(stat_changes, 'Wisdom')}")
+              f"{self.format_stat_change(stat_changes, 'Wisdom')}")
         print(f"Your Charisma       is {self.charisma}" +
-              f"{self.format_change(stat_changes, 'Charisma')}")
+              f"{self.format_stat_change(stat_changes, 'Charisma')}")
 
         weapon_details = self.weapon
 
@@ -60,7 +60,7 @@ class Character:
             print(f"\nYou are wielding a {weapon_details['name']}")
             print(weapon_details['description'])
 
-    def format_change(self, stat_changes, stat_name):
+    def format_stat_change(self, stat_changes, stat_name):
         """
         Formats a stat change to include in the printed stat display.
 
