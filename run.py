@@ -1,16 +1,17 @@
-import random
-from colorama import Fore, Back, Style, init
-#init colorama
-init()
-
 import game_states
 import weapons
 import utilities
+import random
+from colorama import Fore, Back, Style, init
+# init colorama
+init()
+
 
 class Character:
     def __init__(self, name=None):
         """
-        Initializes a Character object with default attributes and a given name.
+        Initializes a Character object with default attributes and a given
+        name.
 
         :param name: (Optional) The name of the character. Defaults to None.
         """
@@ -27,22 +28,29 @@ class Character:
         }
         self.weapon_picked = False
 
-    def print_stats(self):
+    def print_stats(self, stat_changes=None):
         """
         Prints the current character's stats, including Strength, Dexterity,
         Constitution, Intelligence, Wisdom, Charisma, and weapon details.
 
         :note: Assumes that all attributes are already set and prints them
                in a formatted manner. If the character has no weapon, it will
-               print a special message indicating that they only have their fists.
+               print a special message indicating that they only have their
+               fists.
         """
         print(f"{self.name}, your current stats are:")
-        print(f"Your Strength       is {self.strength}")
-        print(f"Your Dexterity      is {self.dexterity}")
-        print(f"Your Constitution   is {self.constitution}")
-        print(f"Your Intelligence   is {self.intelligence}")
-        print(f"Your Wisdom         is {self.wisdom}")
-        print(f"Your Charisma       is {self.charisma}")
+        print(f"Your Strength       is {self.strength}" +
+              f"{self.format_change(stat_changes, 'Strength')}")
+        print(f"Your Dexterity      is {self.dexterity}" +
+              f"{self.format_change(stat_changes, 'Dexterity')}")
+        print(f"Your Constitution   is {self.constitution}" +
+              f"{self.format_change(stat_changes, 'Constitution')}")
+        print(f"Your Intelligence   is {self.intelligence}" +
+              f"{self.format_change(stat_changes, 'Intelligence')}")
+        print(f"Your Wisdom         is {self.wisdom}" +
+              f"{self.format_change(stat_changes, 'Wisdom')}")
+        print(f"Your Charisma       is {self.charisma}" +
+              f"{self.format_change(stat_changes, 'Charisma')}")
 
         weapon_details = self.weapon
 
@@ -51,6 +59,24 @@ class Character:
         else:
             print(f"\nYou are wielding a {weapon_details['name']}")
             print(weapon_details['description'])
+
+    def format_change(self, stat_changes, stat_name):
+        """
+        Formats a stat change to include in the printed stat display.
+
+        :param stat_changes: A dictionary containing changes to the
+                            character's stats.
+        :param stat_name: The name of the stat to format the change for.
+        :return: A string representing the change to the stat, or an empty
+                string if there is no change.
+        """
+        if stat_changes is None or stat_changes.get(stat_name) is None:
+            return ""
+        change = stat_changes[stat_name]
+        if change != 0:
+            sign = " +" if change > 0 else " -"
+            return f"{sign} {abs(change)}"
+        return ""
 
     def roll_stats(self):
         """
@@ -212,22 +238,13 @@ def handle_pick_up_weapon_first_layer(character, user_input):
               "urges you to make a choice.")
         print(f"\nYou have picked up the {weapon_choice['name']}!")
         character.weapon = weapon_choice
-        for stat, change in weapon_choice["stat_changes"].items():
-            if stat == 'Strength':
-                character.strength += change
-            elif stat == 'Dexterity':
-                character.dexterity += change
-            elif stat == 'Constitution':
-                character.constitution += change
-            elif stat == 'Intelligence':
-                character.intelligence += change
-            elif stat == 'Wisdom':
-                character.wisdom += change
-            elif stat == 'Charisma':
-                character.charisma += change
-        character.print_stats()
+        print("\nAs you grasp the weapon, you feel its power infusing your"
+              "very being:")
+        character.print_stats(stat_changes=weapon_choice["stat_changes"])
+
         # Mark the weapon as picked up
         character.weapon_picked = True
+
         return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
     else:
         raise ValueError("The shadows whisper: 'Make a choice.'")
@@ -288,7 +305,7 @@ def main_game_loop():
             prompt = "If you've finished looking at yourself, type 'return'"
         elif current_state == game_states.STATE_START:
             prompt = ("\nReady to step into the unknown? Type 'Enter' if you"
-            " dare." + Fore.RESET)
+                      " dare." + Fore.RESET)
         elif current_state == game_states.STATE_NAME:
             prompt = "\nWhat does it say on your arm?"
         elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
@@ -323,7 +340,8 @@ def main_game_loop():
             elif current_state == game_states.STATE_NAME:
                 current_state = handle_name_state(character, user_input)
             elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
-                current_state = handle_pick_up_weapon_first_layer(character, user_input)
+                current_state = \
+                    handle_pick_up_weapon_first_layer(character, user_input)
             elif current_state == \
                     game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
                 current_state = \
