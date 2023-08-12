@@ -124,7 +124,8 @@ def print_help(current_state, previous_state):
     # ... More states will go here!
 
 
-def handle_universal_commands(user_input, current_state, previous_state):
+def handle_universal_commands(user_input, current_state,
+                              previous_state, character):
     """
     Handles universal commands that are available in multiple states of the
     game.
@@ -132,7 +133,7 @@ def handle_universal_commands(user_input, current_state, previous_state):
     :param user_input: The input provided by the user.
     :param current_state: The current state of the game.
     :param previous_state: The previous state of the game.
-
+    :param character: The character object for the player.
     :return: The next game state if a universal command is recognized and
              handled, or None if the user input does not correspond to a
              universal command. The 'stats' command is only recognized if
@@ -145,9 +146,8 @@ def handle_universal_commands(user_input, current_state, previous_state):
     elif user_input == 'exit':
         print("\nMaybe it's all just a dream...")
         exit(0)
-    elif (user_input == 'stats' and character['name']
-          is not None and character['stats'] is not None):
-        print_stats()
+    elif user_input == 'stats' and character.name is not None:
+        character.print_stats()
         return previous_state
     return None
 
@@ -321,7 +321,7 @@ def main_game_loop():
 
             # Check for universal commands
             new_state = handle_universal_commands(user_input, current_state,
-                                                  previous_state)
+                                                  previous_state, character)
             if new_state is not None:
                 if current_state != new_state:
                     previous_state = current_state
