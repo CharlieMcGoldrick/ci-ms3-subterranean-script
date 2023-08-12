@@ -175,7 +175,7 @@ def handle_start_state(user_input):
           Back.BLUE + "water" + Fore.RESET + Back.RESET + " against")
     print("stone walls. In the feeble light, an inscription comes")
     print("to view on your arm, " + Fore.WHITE +
-          Back.RED + "etched" + Fore.RESET + Back.RESET + 
+          Back.RED + "etched" + Fore.RESET + Back.RESET +
           " crudely by an apparent blade.")
     return game_states.STATE_NAME
 
@@ -231,28 +231,33 @@ def handle_name_state(character, user_input):
 
 def handle_pick_up_weapon_first_layer(character, user_input):
     weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
-    if user_input == 'pick up':
+    if user_input == 'Pick Up':
         print("\nYour hand trembles as you approach the object, memories"
-              "and emotions swirling within you.")
+              " and emotions swirling within you.")
         print("The air feels thick, and a voice in the back of your mind"
-              "urges you to make a choice.")
+              " urges you to make a choice.")
         print(f"\nYou have picked up the {weapon_choice['name']}!")
         character.weapon = weapon_choice
         print("\nAs you grasp the weapon, you feel its power infusing your"
-              "very being:")
+              " very being:")
         character.print_stats(stat_changes=weapon_choice["stat_changes"])
 
         # Mark the weapon as picked up
         character.weapon_picked = True
 
-        return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
+    elif user_input == 'Leave':
+        print("\nYou decide to leave the weapon, feeling a strange sense"
+              " of resolve as you move forward.")
+
     else:
-        raise ValueError("The shadows whisper: 'Make a choice.'")
-    return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
+        raise ValueError("\nThe shadows whisper: 'Make a choice:"
+                         " Pick up or Leave.'")
+
+    return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
 
 
-def handle_direction_decision_first_layer(user_input):
-    if 'weapon_picked' in character:
+def handle_direction_decision_first_layer(character, user_input):
+    if character.weapon_picked:
         print("\nTwo doors, faintly illuminated by candlelight, beckon from"
               " the darkness.")
         print("A mysterious force urges you to make a choice.")
@@ -309,9 +314,9 @@ def main_game_loop():
         elif current_state == game_states.STATE_NAME:
             prompt = "\nWhat does it say on your arm?"
         elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
-            prompt = "\nDo you 'Pick Up' the weapon?"
+            prompt = "\nDo you 'Pick Up' or 'Leave' the weapon?"
         elif current_state == game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
-            prompt = "Do you go 'left', or go 'right'?\n"
+            prompt = "\nDo you go 'left', or go 'right'?"
         else:
             prompt = "What do you do?"
 
