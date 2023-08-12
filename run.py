@@ -142,11 +142,12 @@ def handle_start_state(user_input):
     print("\nAwakening in a room, a sense of déjà vu strikes you...")
     print("Have you visited this place before?")
     print("A shroud of darkness wraps the space, its cold grip")
-    print("only punctuated by the echoing drip of " + Fore.BLUE +
-          Back.BLACK + "water" + Fore.RESET + Back.RESET + " against")
+    print("only punctuated by the echoing drip of " + Fore.WHITE +
+          Back.BLUE + "water" + Fore.RESET + Back.RESET + " against")
     print("stone walls. In the feeble light, an inscription comes")
-    print("to view on your arm, etched crudely by an apparent")
-    print("blade.")
+    print("to view on your arm, " + Fore.WHITE +
+          Back.RED + "etched" + Fore.RESET + Back.RESET + 
+          " crudely by an apparent blade.")
     return game_states.STATE_NAME
 
 
@@ -267,8 +268,8 @@ def main_game_loop():
         elif current_state == game_states.STATE_STATS:
             prompt = "If you've finished looking at yourself, type 'return'"
         elif current_state == game_states.STATE_START:
-            prompt = "\nReady to step into the unknown? Type 'Enter' if you"
-            "dare."
+            prompt = ("\nReady to step into the unknown? Type 'Enter' if you"
+            " dare." + Fore.RESET)
         elif current_state == game_states.STATE_NAME:
             prompt = "\nWhat does it say on your arm?"
         elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
@@ -342,7 +343,7 @@ def start_game():
         "\\ \\ / __| '__| | '_ \\| __|                                     ",
         "_\\ \\ (__| |  | | |_) | |_                                       ",
         "\\__/\\___|_|  |_| .__/ \\__|                                     ",
-        "                |_|                                               ",
+        "               |_|                                                ",
         "                                                                  ",
         "Welcome to the depths of 'Subterranean Script'!                   ",
         "This is a text-based, choice-driven adventure game.               ",
@@ -360,7 +361,7 @@ def start_game():
         # Fill the line with spaces to the maximum length
         filled_line = line.ljust(max_length)
         # Print with the desired foreground and background colors
-        print(Back.RED + Fore.WHITE + filled_line + Back.RESET + Fore.RESET)
+        print(Fore.RED + filled_line)
 
     # Call Main Game Loop
     main_game_loop()
