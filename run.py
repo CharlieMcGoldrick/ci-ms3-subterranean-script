@@ -1,9 +1,9 @@
 import random
 from colorama import Fore, Back, Style
-# colorama.init()
 
 import game_states
 import weapons
+import utilities
 
 # Global dictionary to hold the current character's stats.
 character = {
@@ -22,7 +22,6 @@ character = {
     }
 }
 
-
 def print_help(current_state, previous_state):
     """
     Prints a help message describing the available commands based on the
@@ -39,8 +38,6 @@ def print_help(current_state, previous_state):
     :param previous_state: The previous state of the game, also used to
            provide context-specific help.
     """
-    print(Back.RED + Fore.RED + "\n---------------------------------"
-          "---------------------" + Style.RESET_ALL)
     print("\nYou whispered for help... The shadows respond:")
     print("'Return': Resume your previous action.")
     print("'Exit' : Wake from the dream and return to reality.")
@@ -68,6 +65,9 @@ def handle_universal_commands(user_input, current_state, previous_state):
     if user_input == 'help':
         print_help(current_state, previous_state)
         return game_states.STATE_HELP
+    elif user_input == 'exit':
+        print("Maybe it's all just a dream...")
+        exit(0)
     elif (user_input == 'stats' and character['name']
           is not None and character['stats'] is not None):
         print_stats()
@@ -137,8 +137,6 @@ def handle_start_state(user_input):
     """
     if user_input != 'enter':
         raise ValueError("\nThe shadows were quite explicit. Type 'Enter'.")
-    print(Back.RED + Fore.RED + "\n---------------------------------"
-          "---------------------" + Style.RESET_ALL)
     print("\nAwakening in a room, a sense of déjà vu strikes you...")
     print("Have you visited this place before?")
     print("A shroud of darkness wraps the space, its cold grip")
@@ -167,19 +165,15 @@ def handle_name_state(user_input):
                         is raised to guide the player to input a valid name.
     """
     if not user_input.isalpha() or user_input.lower() == 'exit':
-        raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
-                         "--------------------------" + Style.RESET_ALL +
-                         "\nThese appear to be letters, not numbers or"
-                         " symbols, on your arm.")
+        raise ValueError("\nThese appear to be letters, not numbers"
+                         " or symbols, on your arm.")
     elif len(user_input) > 20:
-        raise ValueError(Back.RED + Fore.RED + "\n----------------------------"
-                         "--------------------------" + Style.RESET_ALL +
-                         "\nThe etching on your arm can't be that long.")
+        raise ValueError("\nThe etching on your arm can't be that"
+                         " long.")
     character["name"] = user_input
-    print(Back.RED + Fore.RED + "\n---------------------------------"
-          "---------------------" + Style.RESET_ALL)
     print(f"\n{user_input}, that appears to be my name...")
     print("I suppose that's as good a start as any.\n")
+
     # Roll the stats here
     rolled_stats = roll_stats()
     for key, value in rolled_stats.items():
@@ -191,8 +185,6 @@ def handle_name_state(user_input):
     if 'weapon_picked' not in character:
         weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
         character['weapon'] = weapon_choice
-        print(Back.RED + Fore.RED + "\n---------------------------------"
-              "---------------------" + Style.RESET_ALL)
         print(f"\nA strange chill fills the room, and your eyes are drawn to a"
               " faint glow.")
         print(f"Upon closer inspection, it's a {weapon_choice['name']} lying"
@@ -219,6 +211,24 @@ def handle_pick_up_weapon_first_layer(user_input):
     else:
         raise ValueError("The shadows whisper: 'Make a choice.'")
     return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
+
+
+def handle_direction_decision_first_layer(user_input):
+    if 'weapon_picked' in character:
+        print("\nTwo doors, faintly illuminated by candlelight, beckon from"
+              " the darkness.")
+        print("A mysterious force urges you to make a choice.")
+
+        if user_input == 'left':
+            print("You chose the left door...")
+            return game_states.STATE_LEFT_ROOM
+        elif user_input == 'right':
+            print("You chose the right door...")
+            return game_states.STATE_RIGHT_ROOM
+        else:
+            raise ValueError("The shadows whisper: 'Make a choice.'")
+
+    return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
 
 
 def main_game_loop():
@@ -268,6 +278,7 @@ def main_game_loop():
 
         try:
             user_input = input(f"{prompt}\n").lower()
+            print(f"\n" + utilities.return_divider())
 
             # Check for universal commands
             new_state = handle_universal_commands(user_input, current_state,
