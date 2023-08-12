@@ -1,5 +1,7 @@
 import random
-from colorama import Fore, Back, Style
+from colorama import Fore, Back, Style, init
+#init colorama
+init()
 
 import game_states
 import weapons
@@ -66,7 +68,7 @@ def handle_universal_commands(user_input, current_state, previous_state):
         print_help(current_state, previous_state)
         return game_states.STATE_HELP
     elif user_input == 'exit':
-        print("Maybe it's all just a dream...")
+        print("\nMaybe it's all just a dream...")
         exit(0)
     elif (user_input == 'stats' and character['name']
           is not None and character['stats'] is not None):
