@@ -7,22 +7,71 @@ import game_states
 import weapons
 import utilities
 
-# Global dictionary to hold the current character's stats.
-character = {
-    "name": None,
-    "stats": {
-        "Strength": 0,
-        "Dexterity": 0,
-        "Constitution": 0,
-        "Intelligence": 0,
-        "Wisdom": 0,
-        "Charisma": 0,
-        "Weapon": {
+class Character:
+    def __init__(self, name=None):
+        """
+        Initializes a Character object with default attributes and a given name.
+
+        :param name: (Optional) The name of the character. Defaults to None.
+        """
+        self.name = name
+        self.strength = 0
+        self.dexterity = 0
+        self.constitution = 0
+        self.intelligence = 0
+        self.wisdom = 0
+        self.charisma = 0
+        self.weapon = {
             "name": "Fists",
             "description": "Your own bare hands."
         }
-    }
-}
+        self.weapon_picked = False
+
+    def print_stats(self):
+        """
+        Prints the current character's stats, including Strength, Dexterity,
+        Constitution, Intelligence, Wisdom, Charisma, and weapon details.
+
+        :note: Assumes that all attributes are already set and prints them
+               in a formatted manner. If the character has no weapon, it will
+               print a special message indicating that they only have their fists.
+        """
+        print(f"{self.name}, your current stats are:")
+        print(f"Your Strength       is {self.strength}")
+        print(f"Your Dexterity      is {self.dexterity}")
+        print(f"Your Constitution   is {self.constitution}")
+        print(f"Your Intelligence   is {self.intelligence}")
+        print(f"Your Wisdom         is {self.wisdom}")
+        print(f"Your Charisma       is {self.charisma}")
+
+        weapon_details = self.weapon
+
+        if weapon_details['name'] == "Fists":
+            print("\nYou have no weapon... only your fists.")
+        else:
+            print(f"\nYou are wielding a {weapon_details['name']}")
+            print(weapon_details['description'])
+
+    def roll_stats(self):
+        """
+        Rolls stats for a new character using the 4d6 drop lowest method.
+
+        For each attribute (Strength, Dexterity, Constitution, Intelligence,
+        Wisdom, Charisma), this function rolls four 6-sided dice, removes the
+        lowest roll, and sums the remaining three to generate the value for
+        that attribute.
+
+        :return: A dictionary containing the rolled values for each attribute.
+        """
+        attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
+                      'Wisdom', 'Charisma']
+        attribute_values = {}
+        for attribute in attributes:
+            rolls = [random.randint(1, 6) for _ in range(4)]
+            rolls.remove(min(rolls))
+            attribute_values[attribute] = sum(rolls)
+        return attribute_values
+
 
 def print_help(current_state, previous_state):
     """
@@ -77,52 +126,6 @@ def handle_universal_commands(user_input, current_state, previous_state):
     return None
 
 
-def print_stats():
-    """
-    Prints the current character's stats in a formatted manner.
-
-    This function retrieves the character's name and stats from the global
-    'character' dictionary, and prints them line by line, aligning the
-    stat names to the left with a specific width for a clean presentation.
-
-    :note: Assumes that the 'character' dictionary contains 'name' and
-           'stats' keys with valid values.
-    """
-    print(f"{character['name']}, your current stats are:")
-    for stat, value in character["stats"].items():
-        if stat != 'Weapon':
-            print(f"Your {stat:<15} is {value}")
-
-    weapon_details = character["stats"]["Weapon"]
-
-    if weapon_details['name'] == "Fists":
-        print("\nYou have no weapon... only your fists.")
-    else:
-        print(f"\nYou are wielding a {weapon_details['name']}")
-        print(weapon_details['description'])
-
-
-def roll_stats():
-    """
-    Rolls stats for a new character using the 4d6 drop lowest method.
-
-    This function rolls four 6-sided dice for each attribute, removes the
-    lowest roll, and sums the remaining three to generate the value for
-    each attribute. The attributes being rolled for are: Strength,
-    Dexterity, Constitution, Intelligence, Wisdom, and Charisma.
-
-    :return: A dictionary containing the rolled values for each attribute.
-    """
-    attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
-                  'Wisdom', 'Charisma']
-    attribute_values = {}
-    for attribute in attributes:
-        rolls = [random.randint(1, 6) for _ in range(4)]
-        rolls.remove(min(rolls))  # Remove the lowest roll
-        attribute_values[attribute] = sum(rolls)
-    return attribute_values
-    
-
 def handle_start_state(user_input):
     """
     Handles the starting state of the game where the player is prompted to
@@ -151,7 +154,7 @@ def handle_start_state(user_input):
     return game_states.STATE_NAME
 
 
-def handle_name_state(user_input):
+def handle_name_state(character, user_input):
     """
     Handles the state where the player is prompted to enter their character's
     name.
@@ -173,21 +176,25 @@ def handle_name_state(user_input):
     elif len(user_input) > 20:
         raise ValueError("\nThe etching on your arm can't be that"
                          " long.")
-    character["name"] = user_input
+    character.name = user_input
     print(f"\n{user_input}, that appears to be my name...")
     print("I suppose that's as good a start as any.\n")
 
     # Roll the stats here
-    rolled_stats = roll_stats()
-    for key, value in rolled_stats.items():
-        character["stats"][key] = value
+    rolled_stats = character.roll_stats()
+    character.strength = rolled_stats['Strength']
+    character.dexterity = rolled_stats['Dexterity']
+    character.constitution = rolled_stats['Constitution']
+    character.intelligence = rolled_stats['Intelligence']
+    character.wisdom = rolled_stats['Wisdom']
+    character.charisma = rolled_stats['Charisma']
     # Print the stats here
-    print_stats()
+    character.print_stats()
 
     # Flavour Text for next function
-    if 'weapon_picked' not in character:
+    if not hasattr(character, 'weapon_picked'):
         weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
-        character['weapon'] = weapon_choice
+        character.weapon = weapon_choice
         print(f"\nA strange chill fills the room, and your eyes are drawn to a"
               " faint glow.")
         print(f"Upon closer inspection, it's a {weapon_choice['name']} lying"
@@ -196,7 +203,7 @@ def handle_name_state(user_input):
     return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
 
 
-def handle_pick_up_weapon_first_layer(user_input):
+def handle_pick_up_weapon_first_layer(character, user_input):
     weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
     if user_input == 'pick up':
         print("\nYour hand trembles as you approach the object, memories"
@@ -204,12 +211,23 @@ def handle_pick_up_weapon_first_layer(user_input):
         print("The air feels thick, and a voice in the back of your mind"
               "urges you to make a choice.")
         print(f"\nYou have picked up the {weapon_choice['name']}!")
-        character['stats']['Weapon'] = weapon_choice
+        character.weapon = weapon_choice
         for stat, change in weapon_choice["stat_changes"].items():
-            character["stats"][stat] += change
-        print_stats()
+            if stat == 'Strength':
+                character.strength += change
+            elif stat == 'Dexterity':
+                character.dexterity += change
+            elif stat == 'Constitution':
+                character.constitution += change
+            elif stat == 'Intelligence':
+                character.intelligence += change
+            elif stat == 'Wisdom':
+                character.wisdom += change
+            elif stat == 'Charisma':
+                character.charisma += change
+        character.print_stats()
         # Mark the weapon as picked up
-        character['weapon_picked'] = True
+        character.weapon_picked = True
         return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
     else:
         raise ValueError("The shadows whisper: 'Make a choice.'")
@@ -258,6 +276,7 @@ def main_game_loop():
     :note: The function utilizes helper functions like handle_start_state,
            handle_name_state, etc., to manage specific states.
     """
+    character = Character()
     current_state = game_states.STATE_START
     # Store the previous state to return to
     previous_state = None
@@ -302,9 +321,9 @@ def main_game_loop():
             if current_state == game_states.STATE_START:
                 current_state = handle_start_state(user_input)
             elif current_state == game_states.STATE_NAME:
-                current_state = handle_name_state(user_input)
+                current_state = handle_name_state(character, user_input)
             elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
-                current_state = handle_pick_up_weapon_first_layer(user_input)
+                current_state = handle_pick_up_weapon_first_layer(character, user_input)
             elif current_state == \
                     game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
                 current_state = \
