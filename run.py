@@ -40,6 +40,7 @@ class Character(Entity):
         :param name: (Optional) The name of the character. Defaults to None.
         """
         super().__init__(name, 0, 0, 0, 0, 0, 0)
+        self.type = "humanoid"
         self.weapon = {
             "name": "Fists",
             "description": "Your own bare hands."
