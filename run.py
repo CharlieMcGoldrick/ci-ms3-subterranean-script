@@ -473,36 +473,40 @@ class Game:
             print(e)
 
     def handle_room_pickup(self, user_input):
-        print(f"Handling room pickup with input: {user_input}")
+        try:
+            object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+            if user_input.lower() == 'pick up':
+                print("\nYour hand trembles as you approach the object,"
+                      " memories and emotions swirling within you.")
+                print("The air feels thick, and a voice in the back of your"
+                      " mind urges you to make a choice.")
+                print(f"\nYou have picked up the {object_choice['name']}!")
+                self.character.weapon = self.object_choice
+                print("\nAs you grasp the weapon, you feel its power infusing"
+                      " your very being:")
+                self.character.print_stats(stat_changes=object_choice
+                                           ["stat_changes"])
 
-        object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
-        if user_input == 'pick up':
-            print("\nYour hand trembles as you approach the object, memories"
-                  " and emotions swirling within you.")
-            print("The air feels thick, and a voice in the back of your mind"
-                  " urges you to make a choice.")
-            print(f"\nYou have picked up the {object_choice['name']}!")
-            self.character.weapon = self.object_choice
-            print("\nAs you grasp the weapon, you feel its power infusing your"
-                  " very being:")
-            self.character.print_stats(stat_changes=object_choice
-                                       ["stat_changes"])
+                # Mark the weapon as picked up
+                self.character.object_picked_FL = True
 
-            # Mark the weapon as picked up
-            self.character.object_picked_FL = True
+                # Transition to next state
+                self.state = (game_states.FIRST_LAYER_STATES
+                              ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
+            elif user_input.lower() == 'leave':
+                print("\nYou decide to leave the weapon, feeling a strange"
+                      " sense of resolve\n"
+                      "as you move forward.")
+                # Transition to next state
+                self.state = (game_states.FIRST_LAYER_STATES
+                              ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
+            else:
+                raise ValueError("\nThe shadows whisper: 'Make a choice:"
+                                 " 'Pick Up' or 'Leave'.")
 
-            # Transition to next state
-            self.state = (game_states.FIRST_LAYER_STATES
-                          ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
-        elif user_input == 'leave':
-            print("\nYou decide to leave the weapon, feeling a strange sense"
-                  " of resolve as you move forward.")
-            # Transition to next state
-            self.state = (game_states.FIRST_LAYER_STATES
-                          ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
-        else:
-            raise ValueError("\nThe shadows whisper: 'Make a choice:"
-                             " Pick up or Leave.'")
+        except ValueError as e:
+            # Print the error message that was raised
+            print(e)
 
     def handle_room_door_choice(self, user_input):
         if user_input.lower() in ['left', 'right']:
