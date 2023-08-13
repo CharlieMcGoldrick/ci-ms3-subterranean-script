@@ -123,6 +123,7 @@ class Game:
         self.character = Character()
         self.current_room = dungeon_areas.ROOMS['first_layer']['starting_room']
         self.handle_initialise()
+        self.object_choice = None
 
     def run(self):
         """
@@ -318,13 +319,14 @@ class Game:
         # PROMPT - GAME STATE - FIRST LAYER - ROOM PICKUP
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
-            self.weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+            if self.object_choice is None:
+                self.object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
             prompt_text = (
                 "\nA strange chill fills the room, and your eyes are drawn to"
                 " a faint glow.\n"
                 f"\nUpon closer inspection, it's a"
-                f" {self.weapon_choice['name']} lying at your feet."
-                f"\n{self.weapon_choice['description']}\n"
+                f" {self.object_choice['name']} lying at your feet."
+                f"\n{self.object_choice['description']}\n"
                 "\nDo you 'Pick Up' or 'Leave' the weapon?"
             )
             return prompt_text
@@ -446,17 +448,17 @@ class Game:
     def handle_room_pickup(self, user_input):
         print(f"Handling room pickup with input: {user_input}")
 
-        weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+        object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
         if user_input == 'pick up':
             print("\nYour hand trembles as you approach the object, memories"
                   " and emotions swirling within you.")
             print("The air feels thick, and a voice in the back of your mind"
                   " urges you to make a choice.")
-            print(f"\nYou have picked up the {weapon_choice['name']}!")
-            self.character.weapon = self.weapon_choice
+            print(f"\nYou have picked up the {object_choice['name']}!")
+            self.character.weapon = self.object_choice
             print("\nAs you grasp the weapon, you feel its power infusing your"
                   " very being:")
-            self.character.print_stats(stat_changes=weapon_choice
+            self.character.print_stats(stat_changes=object_choice
                                        ["stat_changes"])
 
             # Mark the weapon as picked up
