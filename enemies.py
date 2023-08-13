@@ -1,5 +1,5 @@
 ENEMIES = {
-    "common": [
+    "common_enemies": [
         {
             "name": "Dungeon Rat",
             "strength": 2,
@@ -33,10 +33,10 @@ ENEMIES = {
             "constitution": 4,
             "intelligence": 2,
             "wisdom": 2,
-                "charisma": 2,
-                "weapon": {
-                    "name": "Crude Club",
-                    "description": "A simple and roughly-made wooden club."
+            "charisma": 2,
+            "weapon": {
+                "name": "Crude Club",
+                "description": "A simple and roughly-made wooden club."
                 }
         }
     ],
@@ -105,4 +105,16 @@ ENEMIES = {
             "description": "Long, slimy tentacles that grab and constrict."
         }
     }
+}
+
+# Extracting the common enemies
+COMMON_ENEMIES = ENEMIES["common_enemies"]
+
+# Extracting the specific enemies
+SPECIFIC_ENEMIES = {
+    "torture chamber": ENEMIES["torture chamber"],
+    "alchemist's lab": ENEMIES["alchemist's lab"],
+    "guard barracks": ENEMIES["guard barracks"],
+    "crypt of forgotten souls": ENEMIES["crypt of forgotten souls"],
+    "underground lake": ENEMIES["underground lake"]
 }

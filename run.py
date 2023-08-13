@@ -1,5 +1,6 @@
 import game_states
 import dungeon_areas
+import enemies
 import objects
 import utilities
 import random
@@ -9,7 +10,8 @@ init()
 
 
 class Entity:
-    def __init__(self, name, strength, dexterity, constitution, intelligence, wisdom, charisma):
+    def __init__(self, name, strength, dexterity, constitution,
+                 intelligence, wisdom, charisma):
         self.name = name
         self.strength = strength
         self.dexterity = dexterity

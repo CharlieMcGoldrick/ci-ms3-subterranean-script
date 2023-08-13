@@ -1,4 +1,5 @@
 import objects
+import enemies
 from colorama import Fore, Back, Style, init
 # init colorama
 init()
@@ -79,5 +80,7 @@ ROOMS = {
         'object_choices': objects.OBJECTS_SECOND_LAYER,
         'door_choices': ['left', 'right'],
         'flavor_text': "You find yourself in a new room...",
+        'common_enemies': enemies.COMMON_ENEMIES,
+        'specific_enemies': enemies.SPECIFIC_ENEMIES,
     },
 }
