@@ -1,3 +1,5 @@
+import objects
+
 ROOMS_SECOND_LAYER = [
     {
         "name": "Torture Chamber",
@@ -27,3 +29,23 @@ ROOMS_SECOND_LAYER = [
                         " beneath the surface.")
     }
 ]
+
+rooms = {
+    'first_layer': {
+        'starting_room': {
+            'object_choices': objects.OBJECTS_FIRST_LAYER,
+            'door_choices': ['left', 'right'],
+            'flavor_text_intro': (
+                "A strange chill fills the room, and your eyes are drawn to a"
+                " faint glow. Upon closer inspection, it's a {weapon_name}"
+                " lying at your feet. {weapon_description}"
+            ),
+        },
+    },
+    'second_layer': {
+        'rooms': ROOMS_SECOND_LAYER,
+        'object_choices': objects.OBJECTS_SECOND_LAYER,
+        'door_choices': ['left', 'right'],
+        'flavor_text': "You find yourself in a new room...",
+    },
+}

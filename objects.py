@@ -1,5 +1,5 @@
 # Weapons without Skill Check
-WEAPONS_FIRST_LAYER = [
+OBJECTS_FIRST_LAYER = [
     {
         "name": "Broomstick",
         "description": "A rickety old broomstick, surprisingly balanced.",
@@ -16,4 +16,6 @@ WEAPONS_FIRST_LAYER = [
         "description": "A jagged glass shard, crude but sharp.",
         "stat_changes": {"Strength": + 1, "Dexterity": - 1}
     }
+]
+OBJECTS_SECOND_LAYER = [
 ]
