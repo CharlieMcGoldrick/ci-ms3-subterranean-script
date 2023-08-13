@@ -8,6 +8,21 @@ from colorama import Fore, Back, Style, init
 init()
 
 
+class Entity:
+    def __init__(self, name, strength, dexterity, constitution, intelligence, wisdom, charisma):
+        self.name = name
+        self.strength = strength
+        self.dexterity = dexterity
+        self.constitution = constitution
+        self.intelligence = intelligence
+        self.wisdom = wisdom
+        self.charisma = charisma
+        self.weapon = None
+
+    def attack(self):
+        # Code for basic attack here
+        pass
+
 class Character:
     def __init__(self, name=None):
         """
