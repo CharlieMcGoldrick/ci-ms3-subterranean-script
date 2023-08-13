@@ -30,7 +30,7 @@ ROOMS_SECOND_LAYER = [
     }
 ]
 
-rooms = {
+ROOMS = {
     'first_layer': {
         'starting_room': {
             'object_choices': objects.OBJECTS_FIRST_LAYER,

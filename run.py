@@ -1,6 +1,6 @@
 import game_states
-import weapons
-import rooms
+import dungeon_areas
+import objects
 import utilities
 import random
 from colorama import Fore, Back, Style, init
@@ -119,7 +119,8 @@ def print_help(current_state, previous_state):
     print("\nYou whispered for help... The shadows respond:")
     print("'Return': Resume your previous action.")
     print("'Exit' : Wake from the dream and return to reality.")
-    if previous_state == game_states.STATE_NAME:
+    if previous_state == \
+       game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']:
         print("\nType your name to continue, a name is more than just an"
               "identity here...")
     # ... More states will go here!
@@ -143,7 +144,7 @@ def handle_universal_commands(user_input, current_state,
     """
     if user_input == 'help':
         print_help(current_state, previous_state)
-        return game_states.STATE_HELP
+        return game_states.GENERAL_GAME_STATES['HELP']
     elif user_input == 'exit':
         print("\nMaybe it's all just a dream...")
         exit(0)
@@ -178,7 +179,7 @@ def handle_start_state(user_input):
     print("to view on your arm, " + Fore.WHITE +
           Back.RED + "etched" + Fore.RESET + Back.RESET +
           " crudely by an apparent blade.")
-    return game_states.STATE_NAME
+    return game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']
 
 
 def handle_name_state(character, user_input):
@@ -220,18 +221,18 @@ def handle_name_state(character, user_input):
 
     # Flavour Text for next function
     if not character.weapon_picked:
-        weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
+        weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
         character.weapon = weapon_choice
         print(f"\nA strange chill fills the room, and your eyes are drawn to a"
               " faint glow.")
         print(f"Upon closer inspection, it's a {weapon_choice['name']} lying"
               " at your feet.")
         print(weapon_choice['description'])
-    return game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER
+    return game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']
 
 
 def handle_pick_up_weapon_first_layer(character, user_input):
-    weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
+    weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
     if user_input == 'pick up':
         print("\nYour hand trembles as you approach the object, memories"
               " and emotions swirling within you.")
@@ -258,7 +259,7 @@ def handle_pick_up_weapon_first_layer(character, user_input):
     print("\nTwo doors, faintly illuminated by candlelight, beckon from"
           " the darkness.")
     print("A mysterious force urges you to make a choice.")
-    return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
+    return game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']
 
 
 def handle_direction_decision_first_layer(character, user_input):
@@ -267,7 +268,7 @@ def handle_direction_decision_first_layer(character, user_input):
     print("A mysterious force urges you to make a choice.")
 
     if user_input.lower() in ['left', 'right']:
-        room_choice = random.choice(rooms.ROOMS_SECOND_LAYER)
+        room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
         print(f"You chose the {user_input} door and discover the"
               f" {room_choice['name']}...")
         print(room_choice['description'])
@@ -305,23 +306,26 @@ def main_game_loop():
            handle_name_state, etc., to manage specific states.
     """
     character = Character()
-    current_state = game_states.STATE_START
-    # Store the previous state to return to
+    current_state = game_states.FIRST_LAYER_STATES['INTRO']
     previous_state = None
     while True:
-        if current_state == game_states.STATE_HELP:
-            prompt = "What do you demand of the shadows? Type 'return' to go"
-            "back."
-        elif current_state == game_states.STATE_STATS:
+        if current_state == game_states.GENERAL_GAME_STATES['HELP']:
+            prompt = ("What do you demand of the shadows? Type 'return' to"
+                      " go back.")
+        elif (current_state ==
+              game_states.GENERAL_GAME_STATES['CHARACTER_STATS']):
             prompt = "If you've finished looking at yourself, type 'return'"
-        elif current_state == game_states.STATE_START:
+        elif current_state == game_states.FIRST_LAYER_STATES['INTRO']:
             prompt = ("\nReady to step into the unknown? Type 'Enter' if you"
                       " dare." + Fore.RESET)
-        elif current_state == game_states.STATE_NAME:
+        elif (current_state ==
+              game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']):
             prompt = "\nWhat does it say on your arm?"
-        elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
+        elif (current_state ==
+              game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
             prompt = "\nDo you 'Pick Up' or 'Leave' the weapon?"
-        elif current_state == game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
+        elif (current_state ==
+              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
             prompt = "\nDo you go 'left', or go 'right'?"
         else:
             prompt = "What do you do?"
@@ -330,7 +334,6 @@ def main_game_loop():
             user_input = input(f"{prompt}\n").lower()
             print(f"\n" + utilities.return_divider())
 
-            # Check for universal commands
             new_state = handle_universal_commands(user_input, current_state,
                                                   previous_state, character)
             if new_state is not None:
@@ -340,26 +343,27 @@ def main_game_loop():
                 continue
 
             if (user_input == 'return' and current_state in
-               (game_states.STATE_HELP, game_states.STATE_STATS)):
-                # return to the previous state or a default state
-                current_state = previous_state or game_states.STATE_NAME
+                (game_states.GENERAL_GAME_STATES['HELP'],
+                 game_states.GENERAL_GAME_STATES['CHARACTER_STATS'])):
+                current_state = (previous_state or
+                                 game_states.FIRST_LAYER_STATES
+                                 ['ENTER_CHARACTER_NAME'])
                 continue
 
-            # Handle State Inputs
-            if current_state == game_states.STATE_START:
+            if current_state == game_states.FIRST_LAYER_STATES['INTRO']:
                 current_state = handle_start_state(user_input)
-            elif current_state == game_states.STATE_NAME:
+            elif (current_state ==
+                  game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']):
                 current_state = handle_name_state(character, user_input)
-            elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
-                current_state = \
-                    handle_pick_up_weapon_first_layer(character, user_input)
-            elif (
-                current_state
-                == game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
-            ):
+            elif (current_state ==
+                  game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
+                current_state = handle_pick_up_weapon_first_layer(
+                    character, user_input)
+            elif (current_state
+                  == game_states.FIRST_LAYER_STATES
+                  ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
                 current_state = handle_direction_decision_first_layer(
-                    character, user_input
-                )
+                    character, user_input)
 
         except ValueError as e:
             print(f"{e}")
