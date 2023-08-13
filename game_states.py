@@ -15,7 +15,7 @@ FIRST_LAYER_STATES = {
   'ROOM_DOOR_CHOICE_FIRST_LAYER': 'room_door_choice_first_layer'
 }
 SECOND_LAYER_STATES = {
-  'INTRO SECOND LAYER': 'second_room_intro',
+  'FIGHT_SECOND_LAYER': 'fight_second_layer',
   'ROOM_PICKUP_SECOND_LAYER': 'room_pickup_second_layer',
   'ROOM_DOOR_CHOICE_SECOND_LAYER': 'room_door_choice_second_layer'
 }

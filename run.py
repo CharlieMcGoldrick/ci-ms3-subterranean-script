@@ -379,9 +379,9 @@ class Game:
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
             self.handle_room_door_choice(user_input)
-        # elif (self.state ==
-        #       game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
-        #     self.handle_fight(user_input)
+        elif (self.state ==
+              game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
+            self.handle_fight(user_input)
 
     def handle_start_state(self, user_input):
         """
@@ -500,7 +500,24 @@ class Game:
             raise ValueError("The shadows whisper:"
                              "'Make a choice: left or right.'")
 
-    # def handle_fight(self, user_input)
+    def handle_fight(self, user_input):
+        try:
+            # Check if the user input is valid for a fight action
+            if user_input not in ['attack', 'defend', 'flee']:
+                raise ValueError("Invalid action! Choose 'attack',"
+                                 "'defend', or 'flee'.")
+            # Implement logic for the user's choice
+            if user_input == 'attack':
+                return "You attacked the enemy!"
+            elif user_input == 'defend':
+                return "You defended against the enemy's attack!"
+            elif user_input == 'dodge':
+                return "You successfully fled from the fight!"
+        except ValueError as e:
+            return str(e)
+
+        # Return a default message if something unexpected occurs
+        return "An unexpected error occurred in the fight."
 
 
 game = Game()
