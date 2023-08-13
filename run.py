@@ -336,7 +336,7 @@ class Game:
             prompt_text = (
                 "\nTwo doors, faintly illuminated by candlelight, beckon from"
                 " the darkness."
-                "\nA mysterious force urges you to make a choice."
+                "\nA mysterious force urges you to make a choice.\n"
                 "\nDo you go 'left', or go 'right'?"
             )
             return prompt_text
@@ -480,9 +480,10 @@ class Game:
     def handle_room_door_choice(self, user_input):
         if user_input.lower() in ['left', 'right']:
             room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
-            print(f"You chose the {user_input} door and discover the"
+            print(f"You chose the {user_input} door and discover a"
                   f" {room_choice['name']}...")
             print(room_choice['description'])
+            print(room_choice['prompt'])
 
             return game_states.SECOND_LAYER_STATES['INTRO SECOND LAYER']
         else:

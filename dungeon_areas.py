@@ -3,33 +3,56 @@ from colorama import Fore, Back, Style, init
 # init colorama
 init()
 
+entering_room_flavour_text = (
+    "a chill runs down your spine. The ominous\n"
+    "creaking of metal reverberates  through the air,"
+    " and with a thunderous crash,\n"
+    "bars slide down, sealing the doors behind you shut.\n"
+    "\nYour heart pounds in your chest as you notice two other doors in the"
+    " shadowy\n"
+    "corners of the room, only to watch as they too are sealed shut"
+    " by sliding\n"
+    "metal bars."
+)
+
 ROOMS_SECOND_LAYER = [
     {
-        "name": "Torture Chamber",
+        "name": "torture chamber",
         "description": ("A grim room filled with instruments of pain and"
-                        "torment, echoes of past suffering linger in the air.")
+                        " torment, echoes of past\n"
+                        "suffering linger in the air."),
+        "prompt": (f"\nAs you step into the chamber,"
+                   f"{entering_room_flavour_text}")
     },
     {
-        "name": "Alchemist's Lab",
+        "name": "alchemist's lab",
         "description": ("Shelves lined with mysterious potions and alchemical"
-                        " tools. The scent of strange chemicals fills the"
-                        " room.")
+                        " tools.\n"
+                        "The scent of strange chemicals fills the room."),
+        "prompt": (f"\nAs you step into the lab,"
+                   f"{entering_room_flavour_text}")
     },
     {
-        "name": "Guard Barracks",
+        "name": "guard barracks",
         "description": ("A room containing bunks and personal belongings of"
-                        " the dungeon's guards. It's eerily quiet.")
+                        " the dungeon's guards.\n It's eerily quiet."),
+        "prompt": (f"\nAs you step into the barracks,"
+                   f"{entering_room_flavour_text}")
     },
     {
-        "name": "Crypt of Forgotten Souls",
+        "name": "crypt of forgotten souls",
         "description": ("A dimly lit crypt, filled with ancient coffins and"
-                        " marked by an unsettling stillness.")
+                        " marked by an unsettling\nstillness."),
+        "prompt": (f"\nAs you step into the crypt,"
+                   f"{entering_room_flavour_text}")
     },
     {
-        "name": "Underground Lake",
+        "name": "underground lake",
         "description": ("A subterranean lake, its dark waters reflecting"
-                        " the flicker of distant torches. Something moves"
-                        " beneath the surface.")
+                        " the flicker of distant torches.\n"
+                        "Something moves beneath the surface."),
+        "prompt": (f"\nAs you step into the cavern,"
+                   f"{entering_room_flavour_text}")
     }
 ]
 
