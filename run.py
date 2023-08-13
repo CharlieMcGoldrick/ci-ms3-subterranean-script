@@ -21,6 +21,11 @@ class Entity:
         self.charisma = charisma
         self.weapon = None
 
+        # Calculate for hit points
+        base_hit_points = 10
+        constitution_modifier = (self.constitution - 10) // 2
+        self.hit_points = base_hit_points + constitution_modifier
+
     def attack(self):
         # Code for basic attack here
         pass
