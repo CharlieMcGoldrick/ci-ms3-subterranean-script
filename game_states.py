@@ -1,10 +1,15 @@
-# States
-STATE_START = 1
-STATE_NAME = 2
-STATE_STATS = 3
-STATE_PICK_UP_WEAPON_FIRST_LAYER = 4
-STATE_DIRECTION_DECISION_FIRST_LAYER = 5
-STATE_ROOM_SECOND_LAYER = 6
-# ... More states will be added here
-STATE_HELP = 'help'
-STATE_STATS = 'stats'
+# General game states
+game_states = {
+  'HELP': 'help',
+  'CHARACTER_STATS': 'stats',
+  'COMBAT': 'combat',
+  'GAME_OVER': 'game_over'
+}
+
+# Layer States
+first_layer_states = {
+  'INTRO': 'game_intro',
+  'ENTER_CHARACTER_NAME': 'enter_character_name',
+  'ROOM_PICKUP_FIRST_LAYER': 'room_pickup_first_layer',
+  'ROOM_DOOR_CHOICE_FIRST_LAYER': 'room_door_choice_first_layer'
+}
