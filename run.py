@@ -108,6 +108,19 @@ class Character(Entity):
             setattr(self, attribute.lower(), sum(rolls))
 
 
+class Enemy(Entity):
+    def __init__(self, name, strength, dexterity, constitution, intelligence,
+                 wisdom, charisma, enemy_type):
+        super().__init__(name, strength, dexterity, constitution,
+                         intelligence, wisdom, charisma)
+        self.enemy_type = enemy_type
+        # Other enemy-specific attributes and methods
+
+    def special_attack(self):
+        # Code for a special attack that only enemies can do
+        pass
+
+
 class Game:
     def __init__(self):
         """
