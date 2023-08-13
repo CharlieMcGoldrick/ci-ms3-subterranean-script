@@ -340,6 +340,13 @@ class Game:
                 "\nDo you go 'left', or go 'right'?"
             )
             return prompt_text
+        # PROMPT - GAME STATE - SECOND LAYER - FIGHT
+        elif (self.state ==
+              game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
+            prompt_text = (
+                "\n"
+            )
+            return prompt_text
 
     def handle_input(self, user_input):
         """
@@ -372,6 +379,9 @@ class Game:
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
             self.handle_room_door_choice(user_input)
+        # elif (self.state ==
+        #       game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
+        #     self.handle_fight(user_input)
 
     def handle_start_state(self, user_input):
         """
@@ -485,10 +495,12 @@ class Game:
             print(room_choice['description'])
             print(room_choice['prompt'])
 
-            return game_states.SECOND_LAYER_STATES['INTRO SECOND LAYER']
+            return game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']
         else:
             raise ValueError("The shadows whisper:"
                              "'Make a choice: left or right.'")
+
+    # def handle_fight(self, user_input)
 
 
 game = Game()
