@@ -232,7 +232,7 @@ def handle_name_state(character, user_input):
 
 def handle_pick_up_weapon_first_layer(character, user_input):
     weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
-    if user_input == 'Pick Up':
+    if user_input == 'pick up':
         print("\nYour hand trembles as you approach the object, memories"
               " and emotions swirling within you.")
         print("The air feels thick, and a voice in the back of your mind"
@@ -246,7 +246,7 @@ def handle_pick_up_weapon_first_layer(character, user_input):
         # Mark the weapon as picked up
         character.weapon_picked = True
 
-    elif user_input == 'Leave':
+    elif user_input == 'leave':
         print("\nYou decide to leave the weapon, feeling a strange sense"
               " of resolve as you move forward.")
 
