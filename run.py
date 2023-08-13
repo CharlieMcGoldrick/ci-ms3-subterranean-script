@@ -1,5 +1,6 @@
 import game_states
 import weapons
+import rooms
 import utilities
 import random
 from colorama import Fore, Back, Style, init
@@ -257,19 +258,20 @@ def handle_pick_up_weapon_first_layer(character, user_input):
 
 
 def handle_direction_decision_first_layer(character, user_input):
-    if character.weapon_picked:
-        print("\nTwo doors, faintly illuminated by candlelight, beckon from"
-              " the darkness.")
-        print("A mysterious force urges you to make a choice.")
+    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
+          " the darkness.")
+    print("A mysterious force urges you to make a choice.")
 
-        if user_input == 'left':
-            print("You chose the left door...")
-            return game_states.STATE_LEFT_ROOM
-        elif user_input == 'right':
-            print("You chose the right door...")
-            return game_states.STATE_RIGHT_ROOM
-        else:
-            raise ValueError("The shadows whisper: 'Make a choice.'")
+    if user_input.lower() in ['left', 'right']:
+        room_choice = random.choice(rooms.ROOMS_SECOND_LAYER)
+        print(f"You chose the {user_input} door and discover the"
+              f" {room_choice['name']}...")
+        print(room_choice['description'])
+
+        return game_states.STATE_ROOM_SECOND_LAYER
+    else:
+        raise ValueError("The shadows whisper:"
+                         "'Make a choice: left or right.'")
 
     return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
 
@@ -347,10 +349,13 @@ def main_game_loop():
             elif current_state == game_states.STATE_PICK_UP_WEAPON_FIRST_LAYER:
                 current_state = \
                     handle_pick_up_weapon_first_layer(character, user_input)
-            elif current_state == \
-                    game_states.STATE_DIRECTION_DECISION_FIRST_LAYER:
-                current_state = \
-                    handle_direction_decision_first_layer(user_input)
+            elif (
+                current_state
+                == game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
+            ):
+                current_state = handle_direction_decision_first_layer(
+                    character, user_input
+                )
 
         except ValueError as e:
             print(f"{e}")
