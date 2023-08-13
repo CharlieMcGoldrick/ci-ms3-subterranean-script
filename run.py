@@ -344,7 +344,8 @@ class Game:
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
             prompt_text = (
-                "\n"
+                "\nYou are in a fight! Do you want to 'attack', 'defend', or"
+                " 'flee'?"
             )
             return prompt_text
 
@@ -494,8 +495,8 @@ class Game:
                   f" {room_choice['name']}...")
             print(room_choice['description'])
             print(room_choice['prompt'])
-
-            return game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']
+            # Transition to next state
+            self.state = game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']
         else:
             raise ValueError("The shadows whisper:"
                              "'Make a choice: left or right.'")
