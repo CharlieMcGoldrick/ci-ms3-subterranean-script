@@ -318,14 +318,13 @@ class Game:
         # PROMPT - GAME STATE - FIRST LAYER - ROOM PICKUP
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
-            weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
-            self.character.weapon = weapon_choice
+            self.weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
             prompt_text = (
                 "\nA strange chill fills the room, and your eyes are drawn to"
                 " a faint glow.\n"
-                f"\nUpon closer inspection, it's a {weapon_choice['name']}"
-                f" lying at your feet."
-                f"\n{weapon_choice['description']}\n"
+                f"\nUpon closer inspection, it's a"
+                f" {self.weapon_choice['name']} lying at your feet."
+                f"\n{self.weapon_choice['description']}\n"
                 "\nDo you 'Pick Up' or 'Leave' the weapon?"
             )
             return prompt_text
@@ -454,7 +453,7 @@ class Game:
             print("The air feels thick, and a voice in the back of your mind"
                   " urges you to make a choice.")
             print(f"\nYou have picked up the {weapon_choice['name']}!")
-            self.character.weapon = weapon_choice
+            self.character.weapon = self.weapon_choice
             print("\nAs you grasp the weapon, you feel its power infusing your"
                   " very being:")
             self.character.print_stats(stat_changes=weapon_choice
