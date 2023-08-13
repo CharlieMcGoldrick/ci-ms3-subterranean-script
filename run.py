@@ -23,7 +23,8 @@ class Entity:
         # Code for basic attack here
         pass
 
-class Character:
+
+class Character(Entity):
     def __init__(self, name=None):
         """
         Initializes a Character object with default attributes and a given
@@ -31,13 +32,7 @@ class Character:
 
         :param name: (Optional) The name of the character. Defaults to None.
         """
-        self.name = name
-        self.strength = 0
-        self.dexterity = 0
-        self.constitution = 0
-        self.intelligence = 0
-        self.wisdom = 0
-        self.charisma = 0
+        super().__init__(name, 0, 0, 0, 0, 0, 0)
         self.weapon = {
             "name": "Fists",
             "description": "Your own bare hands."
@@ -107,12 +102,10 @@ class Character:
         """
         attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
                       'Wisdom', 'Charisma']
-        attribute_values = {}
         for attribute in attributes:
             rolls = [random.randint(1, 6) for _ in range(4)]
             rolls.remove(min(rolls))
-            attribute_values[attribute] = sum(rolls)
-        return attribute_values
+            setattr(self, attribute.lower(), sum(rolls))
 
 
 class Game:
