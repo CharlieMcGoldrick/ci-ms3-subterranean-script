@@ -481,7 +481,7 @@ class Game:
                 print("The air feels thick, and a voice in the back of your"
                       " mind urges you to make a choice.")
                 print(f"\nYou have picked up the {object_choice['name']}!")
-                self.character.weapon = self.object_choice
+                self.character.weapon = object_choice
                 print("\nAs you grasp the weapon, you feel its power infusing"
                       " your very being:")
                 self.character.print_stats(stat_changes=object_choice
