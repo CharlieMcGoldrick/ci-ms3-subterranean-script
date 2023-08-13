@@ -221,7 +221,6 @@ class Game:
         elif user_input == 'stats' and character.name is not None:
             character.print_stats()
             return game_states.GENERAL_GAME_STATES['CHARACTER_STATS']
-            return previous_state
         elif user_input == 'exit':
             print("\nMaybe it's all just a dream...")
             exit(0)
