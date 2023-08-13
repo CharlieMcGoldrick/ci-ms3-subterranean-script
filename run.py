@@ -219,7 +219,7 @@ def handle_name_state(character, user_input):
     character.print_stats()
 
     # Flavour Text for next function
-    if not hasattr(character, 'weapon_picked'):
+    if not character.weapon_picked:
         weapon_choice = random.choice(weapons.WEAPONS_FIRST_LAYER)
         character.weapon = weapon_choice
         print(f"\nA strange chill fills the room, and your eyes are drawn to a"
@@ -254,6 +254,10 @@ def handle_pick_up_weapon_first_layer(character, user_input):
         raise ValueError("\nThe shadows whisper: 'Make a choice:"
                          " Pick up or Leave.'")
 
+    # Flavour Text for next function
+    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
+          " the darkness.")
+    print("A mysterious force urges you to make a choice.")
     return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
 
 
