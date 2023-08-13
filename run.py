@@ -461,13 +461,7 @@ class Game:
             print("I suppose that's as good a start as any.\n")
 
             # Roll the stats here
-            rolled_stats = self.character.roll_stats()
-            self.character.strength = rolled_stats['Strength']
-            self.character.dexterity = rolled_stats['Dexterity']
-            self.character.constitution = rolled_stats['Constitution']
-            self.character.intelligence = rolled_stats['Intelligence']
-            self.character.wisdom = rolled_stats['Wisdom']
-            self.character.charisma = rolled_stats['Charisma']
+            self.character.roll_stats()
             # Print the stats here
             self.character.print_stats()
 
