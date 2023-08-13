@@ -8,8 +8,9 @@ GENERAL_GAME_STATES = {
 
 # Layer States
 FIRST_LAYER_STATES = {
-  'INTRO': 'game_intro',
-  'ENTER_CHARACTER_NAME': 'enter_character_name',
+  'INITIALISE': 'game_initialise',
+  'GAME_START': 'game_start',
+  'CHARACTER_CREATION': 'create_character_stats',
   'ROOM_PICKUP_FIRST_LAYER': 'room_pickup_first_layer',
   'ROOM_DOOR_CHOICE_FIRST_LAYER': 'room_door_choice_first_layer'
 }

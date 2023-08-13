@@ -27,7 +27,7 @@ class Character:
             "name": "Fists",
             "description": "Your own bare hands."
         }
-        self.weapon_picked = False
+        self.object_picked_FL = False
 
     def print_stats(self, stat_changes=None):
         """
@@ -100,326 +100,394 @@ class Character:
         return attribute_values
 
 
-def print_help(current_state, previous_state):
-    """
-    Prints a help message describing the available commands based on the
-    current state and previous state of the game.
+class Game:
+    def __init__(self):
+        """
+        Initializes a new instance of the Game class.
 
-    This function provides contextual guidance to the player, offering
-    different commands and information depending on the current state of
-    the game. The help message may include basic commands like
-    'Return' and 'Exit', and specific guidance based on the player's current
-    location or situation within the game.
+        The constructor sets up the initial state of the game, including:
+        - previous_state: Set to None, representing no previous state.
+        - character: A new Character object, representing the player's
+                     character.
+        - current_room: Set to 'starting_room', the initial location within
+                        the game.
+        - handle_initialise: A method call to handle the game's initialization
+                             logic, including displaying the title and
+                             introduction.
 
-    :param current_state: The current state of the game, used to determine
-           what specific guidance should be provided.
-    :param previous_state: The previous state of the game, also used to
-           provide context-specific help.
-    """
-    print("\nYou whispered for help... The shadows respond:")
-    print("'Return': Resume your previous action.")
-    print("'Exit' : Wake from the dream and return to reality.")
-    if previous_state == \
-       game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']:
-        print("\nType your name to continue, a name is more than just an"
-              "identity here...")
-    # ... More states will go here!
+        This method sets the stage for the game to begin and prepares the
+        player to enter the mysterious and all-encompassing darkness of the
+        game world.
+        """
+        self.previous_state = None
+        self.character = Character()
+        self.current_room = dungeon_areas.ROOMS['first_layer']['starting_room']
+        self.handle_initialise()
 
+    def run(self):
+        """
+        Executes the main game loop, handling user input and transitions
+        between game states.
 
-def handle_universal_commands(user_input, current_state,
-                              previous_state, character):
-    """
-    Handles universal commands that are available in multiple states of the
-    game.
+        The method does the following in a continuous loop:
+        1. Retrieves the current prompt based on the game's state by calling
+           the get_prompt method.
+        2. Waits for the user's input and converts it to lowercase.
+        3. Prints a divider using a utility function.
+        4. Calls handle_universal_commands to check for any universal commands
+           (e.g., 'help', 'exit').
+        5. If a universal command is detected, updates the state and continues
+           to the next iteration.
+        6. If no universal command is detected, calls handle_input to handle
+           state-specific input.
 
-    :param user_input: The input provided by the user.
-    :param current_state: The current state of the game.
-    :param previous_state: The previous state of the game.
-    :param character: The character object for the player.
-    :return: The next game state if a universal command is recognized and
-             handled, or None if the user input does not correspond to a
-             universal command. The 'stats' command is only recognized if
-             both the name and stats attributes of the character are
-             initialized.
-    """
-    if user_input == 'help':
-        print_help(current_state, previous_state)
-        return game_states.GENERAL_GAME_STATES['HELP']
-    elif user_input == 'exit':
-        print("\nMaybe it's all just a dream...")
-        exit(0)
-    elif user_input == 'stats' and character.name is not None:
-        character.print_stats()
-        return previous_state
-    return None
-
-
-def handle_start_state(user_input):
-    """
-    Handles the starting state of the game where the player is prompted to
-    enter the game.
-
-    :param user_input: The input provided by the user. It must be the string
-                       'enter'.
-
-    :return: The next game state, which is the state for entering the
-             character's name, if the user types 'enter'.
-
-    :raises ValueError: If the user input is not 'enter', an error message
-                        is raised to prompt the player to type 'Enter'.
-    """
-    if user_input != 'enter':
-        raise ValueError("\nThe shadows were quite explicit. Type 'Enter'.")
-    print("\nAwakening in a room, a sense of déjà vu strikes you...")
-    print("Have you visited this place before?")
-    print("A shroud of darkness wraps the space, its cold grip")
-    print("only punctuated by the echoing drip of " + Fore.WHITE +
-          Back.BLUE + "water" + Fore.RESET + Back.RESET + " against")
-    print("stone walls. In the feeble light, an inscription comes")
-    print("to view on your arm, " + Fore.WHITE +
-          Back.RED + "etched" + Fore.RESET + Back.RESET +
-          " crudely by an apparent blade.")
-    return game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']
-
-
-def handle_name_state(character, user_input):
-    """
-    Handles the state where the player is prompted to enter their character's
-    name.
-
-    :param user_input: The input provided by the user. It must be a valid name
-                       consisting of alphabetic characters, not exceeding 20
-                       characters.
-
-    :return: The next game state, which is the state following the entry of,
-              the name if the user provides a valid name.
-
-    :raises ValueError: If the user input contains numbers or symbols, is
-                        empty, or exceeds 20 characters, an error message
-                        is raised to guide the player to input a valid name.
-    """
-    if not user_input.isalpha() or user_input.lower() == 'exit':
-        raise ValueError("\nThese appear to be letters, not numbers"
-                         " or symbols, on your arm.")
-    elif len(user_input) > 20:
-        raise ValueError("\nThe etching on your arm can't be that"
-                         " long.")
-    character.name = user_input
-    print(f"\n{user_input}, that appears to be my name...")
-    print("I suppose that's as good a start as any.\n")
-
-    # Roll the stats here
-    rolled_stats = character.roll_stats()
-    character.strength = rolled_stats['Strength']
-    character.dexterity = rolled_stats['Dexterity']
-    character.constitution = rolled_stats['Constitution']
-    character.intelligence = rolled_stats['Intelligence']
-    character.wisdom = rolled_stats['Wisdom']
-    character.charisma = rolled_stats['Charisma']
-    # Print the stats here
-    character.print_stats()
-
-    # Flavour Text for next function
-    if not character.weapon_picked:
-        weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
-        character.weapon = weapon_choice
-        print(f"\nA strange chill fills the room, and your eyes are drawn to a"
-              " faint glow.")
-        print(f"Upon closer inspection, it's a {weapon_choice['name']} lying"
-              " at your feet.")
-        print(weapon_choice['description'])
-    return game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']
-
-
-def handle_pick_up_weapon_first_layer(character, user_input):
-    weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
-    if user_input == 'pick up':
-        print("\nYour hand trembles as you approach the object, memories"
-              " and emotions swirling within you.")
-        print("The air feels thick, and a voice in the back of your mind"
-              " urges you to make a choice.")
-        print(f"\nYou have picked up the {weapon_choice['name']}!")
-        character.weapon = weapon_choice
-        print("\nAs you grasp the weapon, you feel its power infusing your"
-              " very being:")
-        character.print_stats(stat_changes=weapon_choice["stat_changes"])
-
-        # Mark the weapon as picked up
-        character.weapon_picked = True
-
-    elif user_input == 'leave':
-        print("\nYou decide to leave the weapon, feeling a strange sense"
-              " of resolve as you move forward.")
-
-    else:
-        raise ValueError("\nThe shadows whisper: 'Make a choice:"
-                         " Pick up or Leave.'")
-
-    # Flavour Text for next function
-    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
-          " the darkness.")
-    print("A mysterious force urges you to make a choice.")
-    return game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']
-
-
-def handle_direction_decision_first_layer(character, user_input):
-    print("\nTwo doors, faintly illuminated by candlelight, beckon from"
-          " the darkness.")
-    print("A mysterious force urges you to make a choice.")
-
-    if user_input.lower() in ['left', 'right']:
-        room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
-        print(f"You chose the {user_input} door and discover the"
-              f" {room_choice['name']}...")
-        print(room_choice['description'])
-
-        return game_states.STATE_ROOM_SECOND_LAYER
-    else:
-        raise ValueError("The shadows whisper:"
-                         "'Make a choice: left or right.'")
-
-    return game_states.STATE_DIRECTION_DECISION_FIRST_LAYER
-
-
-def main_game_loop():
-    """
-    Manages the main gameplay loop, orchestrating the progression between
-    different game states.
-
-    This function maintains a loop that keeps the game running, managing
-    transitions between different states according to user inputs and
-    current game conditions. It prompts the player for inputs based
-    on the current state and manages how the game responds.
-
-    The game states handled by this loop include:
-        - Help state (providing help and guidance)
-        - Stats state (displaying character's statistics)
-        - Start state (initial entry into the game)
-        - Name state (naming the character)
-
-    Exceptions such as ValueError will be caught and handled, allowing for
-    the game loop to continue.
-
-    :note: The user can type 'return' in specific states to go back to a
-           previous state.
-    :note: The function utilizes helper functions like handle_start_state,
-           handle_name_state, etc., to manage specific states.
-    """
-    character = Character()
-    current_state = game_states.FIRST_LAYER_STATES['INTRO']
-    previous_state = None
-    while True:
-        if current_state == game_states.GENERAL_GAME_STATES['HELP']:
-            prompt = ("What do you demand of the shadows? Type 'return' to"
-                      " go back.")
-        elif (current_state ==
-              game_states.GENERAL_GAME_STATES['CHARACTER_STATS']):
-            prompt = "If you've finished looking at yourself, type 'return'"
-        elif current_state == game_states.FIRST_LAYER_STATES['INTRO']:
-            prompt = ("\nReady to step into the unknown? Type 'Enter' if you"
-                      " dare." + Fore.RESET)
-        elif (current_state ==
-              game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']):
-            prompt = "\nWhat does it say on your arm?"
-        elif (current_state ==
-              game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
-            prompt = "\nDo you 'Pick Up' or 'Leave' the weapon?"
-        elif (current_state ==
-              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
-            prompt = "\nDo you go 'left', or go 'right'?"
-        else:
-            prompt = "What do you do?"
-
-        try:
+        This method drives the core gameplay, ensuring smooth transitions
+        between different stages of the game, and responding appropriately to
+        the player's choices and commands.
+        """
+        while True:
+            prompt = self.get_prompt()
             user_input = input(f"{prompt}\n").lower()
-            print(f"\n" + utilities.return_divider())
-
-            new_state = handle_universal_commands(user_input, current_state,
-                                                  previous_state, character)
+            print("\n" + utilities.return_divider())
+            new_state = (self.handle_universal_commands(user_input, self.state,
+                         self.previous_state, self.character))
             if new_state is not None:
-                if current_state != new_state:
-                    previous_state = current_state
-                current_state = new_state
+                # Save the current state before updating
+                self.previous_state = self.state
+                self.state = new_state
                 continue
+            self.handle_input(user_input)
 
-            if (user_input == 'return' and current_state in
-                (game_states.GENERAL_GAME_STATES['HELP'],
-                 game_states.GENERAL_GAME_STATES['CHARACTER_STATS'])):
-                current_state = (previous_state or
-                                 game_states.FIRST_LAYER_STATES
-                                 ['ENTER_CHARACTER_NAME'])
-                continue
+    def print_help(self, current_state, previous_state):
+        """
+        Prints a help message describing the available commands based on the
+        current state and previous state of the game.
 
-            if current_state == game_states.FIRST_LAYER_STATES['INTRO']:
-                current_state = handle_start_state(user_input)
-            elif (current_state ==
-                  game_states.FIRST_LAYER_STATES['ENTER_CHARACTER_NAME']):
-                current_state = handle_name_state(character, user_input)
-            elif (current_state ==
-                  game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
-                current_state = handle_pick_up_weapon_first_layer(
-                    character, user_input)
-            elif (current_state
-                  == game_states.FIRST_LAYER_STATES
-                  ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
-                current_state = handle_direction_decision_first_layer(
-                    character, user_input)
+        This function provides contextual guidance to the player, offering
+        different commands and information depending on the current state of
+        the game. The help message may include basic commands like
+        'Return' and 'Exit', and specific guidance based on the player's
+        current location or situation within the game.
 
+        :param current_state: The current state of the game, used to determine
+            what specific guidance should be provided.
+        :param previous_state: The previous state of the game, also used to
+            provide context-specific help.
+        """
+        if current_state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
+            print("\nIf you've finished looking at yourself then 'return'")
+        else:
+            print("\nYou whispered for help... The shadows respond:")
+            print("'Return': Resume your previous action.")
+            print("'Exit' : Wake from the dream and return to reality.")
+            if current_state == (game_states.FIRST_LAYER_STATES
+                                 ['CHARACTER_CREATION']):
+                print("Type what you see on your arm to continue")
+        # ... More states will go here!
+
+    def handle_universal_commands(self, user_input, current_state,
+                                  previous_state, character):
+        """
+        Handles universal commands that can be invoked in multiple game states.
+
+        This method is responsible for managing the common commands that can
+        be executed at various stages of the game. The recognized universal
+        commands include:
+        - 'help': Prints the help menu.
+        - 'stats': Displays the character's statistics if the name has been
+                   initialized, and provides the option to 'return' to the
+                   previous state.
+        - 'exit': Exits the game.
+        - 'return': Allows the player to return to the previous state from the
+                    'help' or 'stats' screens.
+
+        :param user_input: The input provided by the user (string).
+        :param current_state: The current state of the game, used to determine
+                            specific behavior in some commands.
+        :param previous_state: The previous state of the game, can be used in
+                            'return' command to return to a previous game
+                            state.
+        :param character: The character object for the player, used to handle
+                        character-specific commands.
+
+        :return: The next game state if a universal command is recognized and
+                handled, or None if the user input does not correspond to a
+                universal command.
+        """
+        if user_input == 'help':
+            self.print_help(current_state, previous_state)
+            return game_states.GENERAL_GAME_STATES['HELP']
+        elif user_input == 'stats' and character.name is not None:
+            character.print_stats()
+            return game_states.GENERAL_GAME_STATES['CHARACTER_STATS']
+            return previous_state
+        elif user_input == 'exit':
+            print("\nMaybe it's all just a dream...")
+            exit(0)
+        elif user_input == 'return' and current_state in (
+                game_states.GENERAL_GAME_STATES['HELP'],
+                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']):
+            return previous_state
+        return None
+
+    def handle_initialise(self):
+        """
+        Initiates the text-based adventure game 'Subterranean Script'.
+
+        This function displays the game's title, a brief introduction, and a
+        welcome message to guide players into the mysterious and
+        all-encompassing darkness of the game world.
+
+        :note: Whisper 'help' anytime in the game to view a list of commands.
+        """
+        lines = [
+            " __       _     _                                               ",
+            "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __               ",
+            "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\         ",
+            "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |            ",
+            "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|        ",
+            " __           _       _                                         ",
+            "/ _\\ ___ _ __(_)_ __ | |_                                      ",
+            "\\ \\ / __| '__| | '_ \\| __|                                   ",
+            "_\\ \\ (__| |  | | |_) | |_                                     ",
+            "\\__/\\___|_|  |_| .__/ \\__|                                   ",
+            "               |_|                                              ",
+            "                                                                ",
+            "Welcome to the depths of 'Subterranean Script'!                 ",
+            "This is a text-based, choice-driven adventure game,             ",
+            "inspired by classic Choose-Your-Own-Adventure books.            ",
+            "and D&D. Navigate through the all-encompassing darkness         ",
+            "of the mysterious dungeon environment, where every door         ",
+            "opens a new path, a new destiny.                                ",
+            "                                                                ",
+            "Whisper 'help' anytime to conjure the command list.             "
+        ]
+
+        # Find the maximum length of the lines
+        max_length = max(len(line) for line in lines)
+
+        # Print each line with a background color
+        for line in lines:
+            # Fill the line with spaces to the maximum length
+            filled_line = line.ljust(max_length)
+            # Print with the desired foreground and background colors
+            print(Fore.RED + filled_line)
+        self.state = game_states.FIRST_LAYER_STATES['GAME_START']
+
+    def get_prompt(self):
+        """
+        Returns a prompt text based on the current state of the game.
+
+        The method checks the current state of the game and returns a string
+        containing the appropriate prompt for the player. The prompt may
+        include instructions, questions, or descriptions designed to guide the
+        player's choices and actions within the game.
+
+        :return: A string containing the appropriate prompt text for the
+                 current game state. This may include:
+            - An introductory challenge for the 'GAME_START' state.
+            - A description and question regarding the character's surroundings
+              for the 'CHARACTER_CREATION' state.
+            - A decision-making scenario for picking up objects in the
+              'ROOM_PICKUP_FIRST_LAYER' state.
+            - A navigation decision between doors for the
+              'ROOM_DOOR_CHOICE_FIRST_LAYER' state.
+
+        The returned text is used to solicit user input and move the game
+        forward based on the current state.
+        """
+        # PROMPT - GAME STATE - GENERAL - HELP
+        if self.state == game_states.GENERAL_GAME_STATES['HELP']:
+            return "\nYou whispered for help... The shadows respond"
+        # PROMPT - GAME STATE - GENERAL - CHARACTER STATS
+        elif self.state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
+            return "\nIf you've finished looking at yourself then 'Return'"
+        # PROMPT - GAME STATE - FIRST LAYER - GAME START
+        elif self.state == game_states.FIRST_LAYER_STATES['GAME_START']:
+            return (f"\nReady to step into the unknown?"
+                    " Type 'Enter' if you dare.")
+        # PROMPT - GAME STATE - FIRST LAYER - CHARACTER CREATION
+        elif self.state == (game_states.FIRST_LAYER_STATES
+                            ['CHARACTER_CREATION']):
+            flavor_text_intro = self.current_room['flavor_text_intro']
+            prompt_text = (
+                flavor_text_intro +
+                "\nWhat does it say on your arm?"
+            )
+            return prompt_text
+        # PROMPT - GAME STATE - FIRST LAYER - ROOM PICKUP
+        elif (self.state ==
+              game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
+            weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+            self.character.weapon = weapon_choice
+            prompt_text = (
+                "\nA strange chill fills the room, and your eyes are drawn to"
+                " a faint glow.\n"
+                f"\nUpon closer inspection, it's a {weapon_choice['name']}"
+                f" lying at your feet."
+                f"\n{weapon_choice['description']}\n"
+                "\nDo you 'Pick Up' or 'Leave' the weapon?"
+            )
+            return prompt_text
+        # PROMPT - GAME STATE - FIRST LAYER - ROOM DOOR CHOICE
+        elif (self.state ==
+              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+            prompt_text = (
+                "\nTwo doors, faintly illuminated by candlelight, beckon from"
+                " the darkness."
+                "\nA mysterious force urges you to make a choice."
+                "\nDo you go 'left', or go 'right'?"
+            )
+            return prompt_text
+
+    def handle_input(self, user_input):
+        """
+        Processes user input based on the current game state.
+
+        This method is responsible for handling user input and calling the
+        appropriate method based on the current game state. The game state
+        will determine the specific action to be taken in response to the
+        user's input.
+
+        The handled states include:
+        - 'INITIALISE': Calls the initialization method.
+        - 'GAME_START': Handles the game start state.
+        - 'CHARACTER_CREATION': Handles the character stats state.
+        - 'ROOM_PICKUP_FIRST_LAYER': Handles the pickup of an object in a room.
+        - 'ROOM_DOOR_CHOICE_FIRST_LAYER': Handles the door choice in a room.
+
+        :param user_input: The input provided by the user (string).
+        """
+        if self.state == game_states.FIRST_LAYER_STATES['INITIALISE']:
+            self.handle_initialise()
+        elif self.state == game_states.FIRST_LAYER_STATES['GAME_START']:
+            self.handle_start_state(user_input)
+        elif self.state == (game_states.FIRST_LAYER_STATES
+                            ['CHARACTER_CREATION']):
+            self.handle_character_state(user_input)
+        elif (self.state ==
+              game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
+            self.handle_room_pickup(user_input)
+        elif (self.state ==
+              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+            self.handle_room_door_choice(user_input)
+
+    def handle_start_state(self, user_input):
+        """
+        Handles the input for the game's start state.
+
+        This method processes the user's input during the game's starting
+        state. If the input is 'enter', the game progresses to the character
+        stats state. Any other input will raise a ValueError, and a message
+        will be printed to inform the user that they must type 'Enter'.
+
+        :param user_input: The input provided by the user (string), expected
+                           to be 'enter' to proceed.
+        :raises ValueError: If the input is anything other than 'enter'.
+        """
+        try:
+            if user_input == 'enter':
+                print("\nGood luck. You'll need it...")
+                # Save the current state before updating
+                self.previous_state = self.state
+                # Transition to next state
+                self.state = (game_states.FIRST_LAYER_STATES
+                              ['CHARACTER_CREATION'])
+            else:
+                raise ValueError("\nThe shadows were quite explicit."
+                                 " Type 'Enter'.")
         except ValueError as e:
-            print(f"{e}")
-            continue
-        # Transition to the next state...
-        # current_state = STATE_NEXT
+            print(e)
+
+    def handle_character_state(self, user_input):
+        """
+        Handles the state where the player is prompted to enter their
+        character's name.
+
+        :param user_input: The input provided by the user. It must be a valid
+                        name consisting of alphabetic characters and not
+                        exceeding 20 characters. If the input is 'exit' or
+                        contains non-alphabetic characters, a ValueError will
+                        be raised.
+
+        :raises ValueError: If the user input contains numbers or symbols, is
+                            empty, or exceeds 20 characters, an error message
+                            is raised to guide the player to input a valid
+                            name.
+        """
+        try:
+            if not user_input.isalpha() or user_input.lower() == 'exit':
+                raise ValueError("\nThese appear to be letters, not numbers"
+                                 " or symbols, on your arm.")
+            elif len(user_input) > 20:
+                raise ValueError("\nThe etching on your arm can't be that"
+                                 " long.")
+            self.character.name = user_input
+            print(f"\n{user_input}, that appears to be my name...")
+            print("I suppose that's as good a start as any.\n")
+
+            # Roll the stats here
+            rolled_stats = self.character.roll_stats()
+            self.character.strength = rolled_stats['Strength']
+            self.character.dexterity = rolled_stats['Dexterity']
+            self.character.constitution = rolled_stats['Constitution']
+            self.character.intelligence = rolled_stats['Intelligence']
+            self.character.wisdom = rolled_stats['Wisdom']
+            self.character.charisma = rolled_stats['Charisma']
+            # Print the stats here
+            self.character.print_stats()
+
+            # Transition to next state
+            self.state = (game_states.FIRST_LAYER_STATES
+                          ['ROOM_PICKUP_FIRST_LAYER'])
+        except ValueError as e:
+            # Print the error message that was raised
+            print(e)
+
+    def handle_room_pickup(self, user_input):
+        print(f"Handling room pickup with input: {user_input}")
+
+        weapon_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+        if user_input == 'pick up':
+            print("\nYour hand trembles as you approach the object, memories"
+                  " and emotions swirling within you.")
+            print("The air feels thick, and a voice in the back of your mind"
+                  " urges you to make a choice.")
+            print(f"\nYou have picked up the {weapon_choice['name']}!")
+            self.character.weapon = weapon_choice
+            print("\nAs you grasp the weapon, you feel its power infusing your"
+                  " very being:")
+            self.character.print_stats(stat_changes=weapon_choice
+                                       ["stat_changes"])
+
+            # Mark the weapon as picked up
+            self.character.object_picked_FL = True
+
+            # Transition to next state
+            self.state = (game_states.FIRST_LAYER_STATES
+                          ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
+        elif user_input == 'leave':
+            print("\nYou decide to leave the weapon, feeling a strange sense"
+                  " of resolve as you move forward.")
+            # Transition to next state
+            self.state = (game_states.FIRST_LAYER_STATES
+                          ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
+        else:
+            raise ValueError("\nThe shadows whisper: 'Make a choice:"
+                             " Pick up or Leave.'")
+
+    def handle_room_door_choice(self, user_input):
+        if user_input.lower() in ['left', 'right']:
+            room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
+            print(f"You chose the {user_input} door and discover the"
+                  f" {room_choice['name']}...")
+            print(room_choice['description'])
+
+            return game_states.SECOND_LAYER_STATES['INTRO SECOND LAYER']
+        else:
+            raise ValueError("The shadows whisper:"
+                             "'Make a choice: left or right.'")
 
 
-def start_game():
-    """
-    Initiates the text-based adventure game 'Subterranean Script'.
-
-    This function displays the game's title, a brief introduction, and a
-    welcome message to guide players into the mysterious and all-encompassing
-    darkness of the game world.
-
-    It then calls the main_game_loop() function to start the gameplay.
-
-    :note: Whisper 'help' anytime in the game to view a list of commands.
-    """
-    lines = [
-        "                                                                  ",
-        "                                                                  ",
-        "                                                                  ",
-        " __       _     _                                                 ",
-        "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __                 ",
-        "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\           ",
-        "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |              ",
-        "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|          ",
-        " __           _       _                                           ",
-        "/ _\\ ___ _ __(_)_ __ | |_                                        ",
-        "\\ \\ / __| '__| | '_ \\| __|                                     ",
-        "_\\ \\ (__| |  | | |_) | |_                                       ",
-        "\\__/\\___|_|  |_| .__/ \\__|                                     ",
-        "               |_|                                                ",
-        "                                                                  ",
-        "Welcome to the depths of 'Subterranean Script'!                   ",
-        "This is a text-based, choice-driven adventure game.               ",
-        "Navigate through the all-encompassing darkness where every door   ",
-        "opens a new path, a new destiny.                                  ",
-        "                                                                  ",
-        "Whisper 'help' anytime to conjure the command list.               "
-    ]
-
-    # Find the maximum length of the lines
-    max_length = max(len(line) for line in lines)
-
-    # Print each line with a background color
-    for line in lines:
-        # Fill the line with spaces to the maximum length
-        filled_line = line.ljust(max_length)
-        # Print with the desired foreground and background colors
-        print(Fore.RED + filled_line)
-
-    # Call Main Game Loop
-    main_game_loop()
-
-
-start_game()
+game = Game()
+game.run()
