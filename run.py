@@ -12,6 +12,7 @@ init()
 class Entity:
     def __init__(self, name, strength, dexterity, constitution,
                  intelligence, wisdom, charisma):
+        self.entity_type = entity_type
         self.name = name
         self.strength = strength
         self.dexterity = dexterity
@@ -20,11 +21,31 @@ class Entity:
         self.wisdom = wisdom
         self.charisma = charisma
         self.weapon = None
+        self.calculate_hit_points()
 
-        # Calculate for hit points
+    def calculate_hit_points(self):
+        # Base hit points
         base_hit_points = 10
         constitution_modifier = (self.constitution - 10) // 2
-        self.hit_points = base_hit_points + constitution_modifier
+
+        # Additional hit points based on type
+        type_modifier = 0
+        if self.entity_type == "beast":
+            type_modifier = 5
+        elif self.entity_type == "humanoid":
+            type_modifier = 3
+        elif self.entity_type == "spirit":
+            type_modifier = 2
+        elif self.entity_type == "undead":
+            type_modifier = 4
+        elif self.entity_type == "wraith":
+            type_modifier = 1
+        elif self.entity_type == "aquatic":
+            type_modifier = 6
+
+        # Total hit points
+        self.hit_points = (base_hit_points + constitution_modifier
+                           + type_modifier)
 
     def attack(self):
         # Code for basic attack here
