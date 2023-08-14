@@ -161,7 +161,7 @@ class Enemy(Entity):
         possible_enemies = (dungeon_areas.ROOMS['second_layer']
                             ['common_enemies'])
         specific_enemy = (dungeon_areas.ROOMS['second_layer']
-                          ['specific_enemies'])
+                          ['specific_enemies'].get(current_room))
         if specific_enemy:
             possible_enemies.append(specific_enemy)
 
@@ -207,6 +207,7 @@ class Game:
         self.current_room = dungeon_areas.ROOMS['first_layer']['starting_room']
         self.handle_initialise()
         self.object_choice = None
+        self.room_choice_name = None
         self.enemy_instance = None
 
     def run(self):
@@ -435,7 +436,8 @@ class Game:
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
             if self.enemy_instance is None:
-                self.enemy_instance = Enemy.generate_enemy(self.room_choice)
+                self.enemy_instance = Enemy.generate_enemy(self.
+                                                           room_choice_name)
             prompt_text = (
                 "\nA sinister growl echoes through the room, and your eyes"
                 f" lock with a {self.enemy_instance.entity_type}.\n"
@@ -597,12 +599,13 @@ class Game:
     def handle_room_door_choice(self, user_input):
         try:
             if user_input in ['left', 'right']:
-                self.room_choice = random.choice(dungeon_areas.
+                room_choice_dict = random.choice(dungeon_areas.
                                                  ROOMS_SECOND_LAYER)
+                self.room_choice_name = room_choice_dict['name']
                 print(f"You chose the {user_input} door and discover a"
-                      f" {self.room_choice['name']}...")
-                print(self.room_choice['description'])
-                print(self.room_choice['prompt'])
+                      f" {self.room_choice_name}...")
+                print(room_choice_dict['description'])
+                print(room_choice_dict['prompt'])
                 # Transition to next state
                 self.state = (game_states.SECOND_LAYER_STATES
                               ['FIGHT_SECOND_LAYER'])
