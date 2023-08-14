@@ -26,34 +26,20 @@ class Entity:
         self.shield_bonus = None
         self.other_bonuses = None
 
+    def calculate_modifier(self, ability_score):
+        return (ability_score - 5) // 2
+
     def calculate_hit_points(self):
         # Base hit points
         base_hit_points = 10
-        constitution_modifier = (self.constitution - 10) // 2
+        constitution_modifier = self.calculate_modifier(self.constitution)
 
         # Additional hit points based on type
-        type_modifier = 0
-        if self.entity_type == "hero":
-            type_modifier = 30
-        elif self.entity_type == "beast":
-            type_modifier = 5
-        elif self.entity_type == "humanoid":
-            type_modifier = 3
-        elif self.entity_type == "spirit":
-            type_modifier = 2
-        elif self.entity_type == "undead":
-            type_modifier = 4
-        elif self.entity_type == "wraith":
-            type_modifier = 1
-        elif self.entity_type == "aquatic":
-            type_modifier = 6
+        type_modifier = utilities.HP_TYPE_MODIFIERS.get(self.entity_type, 0)
 
         # Total hit points
         self.hit_points = (base_hit_points + constitution_modifier
                            + type_modifier)
-
-    def calculate_modifier(self, ability_score):
-        return (ability_score - 5) // 2
 
     def calculate_ac(self):
         # Base AC
