@@ -96,20 +96,20 @@ class Character(Entity):
         if stat_changes is None:
             stat_changes = self.stat_changes
 
-        print(f"{self.name}, your current stats are:")
-        print(f"Your Health         is {self.hit_points}")
-        print(f"Your Armour Class   is {self.calculate_ac()}")
-        print(f"Your Strength       is {self.strength}" +
+        print(f"\n{self.name.capitalize()}, your current stats are:")
+        print(f"Health       is {self.hit_points}")
+        print(f"Armour Class is {self.calculate_ac()}")
+        print(f"Strength     is {self.strength}" +
               f"{self.format_stat_change(stat_changes, 'Strength')}")
-        print(f"Your Dexterity      is {self.dexterity}" +
+        print(f"Dexterity    is {self.dexterity}" +
               f"{self.format_stat_change(stat_changes, 'Dexterity')}")
-        print(f"Your Constitution   is {self.constitution}" +
+        print(f"Constitution is {self.constitution}" +
               f"{self.format_stat_change(stat_changes, 'Constitution')}")
-        print(f"Your Intelligence   is {self.intelligence}" +
+        print(f"Intelligence is {self.intelligence}" +
               f"{self.format_stat_change(stat_changes, 'Intelligence')}")
-        print(f"Your Wisdom         is {self.wisdom}" +
+        print(f"Wisdom       is {self.wisdom}" +
               f"{self.format_stat_change(stat_changes, 'Wisdom')}")
-        print(f"Your Charisma       is {self.charisma}" +
+        print(f"Charisma     is {self.charisma}" +
               f"{self.format_stat_change(stat_changes, 'Charisma')}")
 
         weapon_details = self.weapon
@@ -615,7 +615,9 @@ class Game:
                 raise ValueError("\nThe etching on your arm can't be that"
                                  " long.")
             self.character.name = user_input
-            print(f"\n{user_input}, that appears to be my name...")
+            print(f"\n{user_input.capitalize()},"
+                  " that appears to be my name...")
+
             print("I suppose that's as good a start as any.\n")
 
             # Roll the stats here

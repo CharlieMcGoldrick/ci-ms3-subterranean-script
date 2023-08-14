@@ -23,7 +23,7 @@ ROOMS_SECOND_LAYER = [
                         " torment, echoes of past\n"
                         "suffering linger in the air."),
         "prompt": (f"\nAs you step into the chamber,"
-                   f"{entering_room_flavour_text}")
+                   f" {entering_room_flavour_text}")
     },
     {
         "name": "alchemist's lab",
