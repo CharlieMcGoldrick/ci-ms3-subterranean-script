@@ -20,8 +20,11 @@ class Entity:
         self.intelligence = intelligence
         self.wisdom = wisdom
         self.charisma = charisma
-        self.weapon = None
         self.calculate_hit_points()
+        self.weapon = None
+        self.armor_bonus = None
+        self.shield_bonus = None
+        self.other_bonuses = None
 
     def calculate_hit_points(self):
         # Base hit points
@@ -48,6 +51,28 @@ class Entity:
         # Total hit points
         self.hit_points = (base_hit_points + constitution_modifier
                            + type_modifier)
+
+    def calculate_modifier(self, ability_score):
+        return (ability_score - 5) // 2
+
+    def calculate_ac(self):
+        # Base AC
+        ac = 10
+        # Add Dexterity modifier
+        ac += self.calculate_modifier(self.dexterity)
+        # Entity type-based AC
+        type_modifier = utilities.AC_TYPE_MODIFIERS.get(self.entity_type, 0)
+        ac += type_modifier
+        # Add Armor Bonus if available
+        if self.armor_bonus is not None:
+            ac += self.armor_bonus
+        # Add Shield Bonus if available
+        if self.shield_bonus is not None:
+            ac += self.shield_bonus
+        # Add Other Bonuses if available
+        if self.other_bonuses is not None:
+            ac += self.other_bonuses
+        return ac
 
     def attack(self):
         # Code for basic attack here
@@ -89,8 +114,9 @@ class Character(Entity):
         if stat_changes is None:
             stat_changes = self.stat_changes
 
-        print(f"\n{self.name}, your current stats are:")
+        print(f"{self.name}, your current stats are:")
         print(f"Your Health         is {self.hit_points}")
+        print(f"Your Armour Class   is {self.calculate_ac()}")
         print(f"Your Strength       is {self.strength}" +
               f"{self.format_stat_change(stat_changes, 'Strength')}")
         print(f"Your Dexterity      is {self.dexterity}" +
