@@ -434,6 +434,10 @@ class Game:
             if self.enemy_instance is None:
                 self.enemy_instance = Enemy.generate_enemy(self.room_choice)
             prompt_text = (
+                "\nA sinister growl echoes through the room, and your eyes"
+                f" lock with a {self.enemy_instance.entity_type}"
+                f" named {self.enemy_instance.name}"
+                f" wielding a {self.enemy_instance.weapon}.\n"
                 "\nYou are in a fight! Do you 'Attack', 'Defend',"
                 " or 'Dodge'?"
             )
