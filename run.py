@@ -60,10 +60,6 @@ class Entity:
             ac += self.other_bonuses
         return ac
 
-    def attack(self):
-        # Code for basic attack here
-        pass
-
 
 class Character(Entity):
     """
@@ -190,9 +186,14 @@ class Enemy(Entity):
             enemy_dict['charisma']
         )
 
-    def special_attack(self):
-        # Code for a special attack that only enemies can do
-        pass
+
+class Fight:
+    def __init__(self, attacker, defender):
+        self.attacker = attacker
+        self.defender = defender
+
+    def roll_die(self, sides=20):
+        return random.randint(1, sides)
 
 
 class Game:
