@@ -521,8 +521,8 @@ class Game:
                 f" lock with a {self.enemy_instance.entity_type}.\n"
                 f"It's a {self.enemy_instance.name},"
                 f" I should be wary of it's {self.enemy_instance.weapon}.\n"
-                "\nYou are in a fight! Do you 'Attack', 'Defend',"
-                " or 'Dodge'?"
+                "\nYou are in a fight! Choose to 'quick' attack, 'heavy'"
+                "\n attack, or 'dodge' the enemies attack."
             )
             return prompt_text
 
@@ -559,7 +559,7 @@ class Game:
             self.handle_room_door_choice(user_input)
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
-            self.handle_fight(user_input)
+            self.handle_battle(user_input)
 
     def handle_start_state(self, user_input):
         """
@@ -694,22 +694,44 @@ class Game:
             # Print the error message that was raised
             print(e)
 
-    def handle_fight(self, user_input):
-        try:
-            # Check if the user input is valid for a fight action
-            if user_input not in ['attack', 'dodge']:
-                raise ValueError("Invalid action! Choose 'attack'"
-                                 " or 'dodge'.")
-            # Implement logic for the user's choice
-            if user_input == 'attack':
-                return "You attacked the enemy!"
-            elif user_input == 'dodge':
-                return "You successfully fled from the fight!"
-        except ValueError as e:
-            return str(e)
+    def handle_battle(self, user_input, player, enemy):
+        # Create a Fight object
+        fight = Fight(player, enemy)
 
-        # Return a default message if something unexpected occurs
-        return "An unexpected error occurred in the fight."
+        # Determine who goes first based on initiative
+        current_attacker = fight.initiative()
+        current_defender = (fight.defender if current_attacker ==
+                            fight.attacker else fight.attacker)
+
+        # Continue the fight until one of the characters is defeated
+        while player.hit_points > 0 and enemy.hit_points > 0:
+            # Get the user's choice if the player is the attacker
+            if current_attacker == player:
+                if user_input == 'dodge':
+                    print(f"{player.name} prepares to dodge the next attack!")
+                elif user_input in ['quick', 'heavy']:
+                    fight.attack(attack_type=user_input)
+                else:
+                    print("Choose to 'quick' attack, 'heavy' attack,"
+                          "or 'dodge' the enemies attack.")
+            # Enemy's turn
+            else:
+                enemy_action = random.choice(['quick', 'heavy', 'dodge'])
+                if enemy_action == 'dodge':
+                    print(f"{enemy.name} prepares to dodge the next attack!")
+                else:
+                    defender_dodging = (user_input ==
+                                        'dodge' if current_defender ==
+                                        player else False)
+                    fight.attack(attack_type=enemy_action,
+                                 defender_dodging=defender_dodging)
+            # Check if the fight has ended
+            if fight.check_death(player) or fight.check_death(enemy):
+                print("The fight is over!")
+                break
+            # Switch attacker and defender for the next turn
+            current_attacker, current_defender = (current_defender,
+                                                  current_attacker)
 
 
 game = Game()
