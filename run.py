@@ -30,7 +30,9 @@ class Entity:
 
         # Additional hit points based on type
         type_modifier = 0
-        if self.entity_type == "beast":
+        if self.entity_type == "hero":
+            type_modifier = 30
+        elif self.entity_type == "beast":
             type_modifier = 5
         elif self.entity_type == "humanoid":
             type_modifier = 3
@@ -60,7 +62,7 @@ class Character(Entity):
     :param name: (Optional) The name of the character. Defaults to None.
     """
     def __init__(self, name=None):
-        super().__init__(entity_type="humanoid", name=name, strength=0,
+        super().__init__(entity_type="hero", name=name, strength=0,
                          dexterity=0, constitution=0, intelligence=0,
                          wisdom=0, charisma=0)
         self.weapon = {
