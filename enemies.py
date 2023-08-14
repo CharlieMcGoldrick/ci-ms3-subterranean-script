@@ -10,7 +10,7 @@ ENEMIES = {
             "wisdom": 1,
             "charisma": 1,
             "weapon": {
-                "name": "Teeth",
+                "name": "teeth",
                 "description": "Sharp little teeth."
             }
         },
@@ -24,7 +24,7 @@ ENEMIES = {
             "wisdom": 2,
             "charisma": 1,
             "weapon": {
-                "name": "Venomous Bite",
+                "name": "venomous bite",
                 "description": "A bite that injects painful venom."
             }
         },
@@ -38,7 +38,7 @@ ENEMIES = {
             "wisdom": 2,
             "charisma": 2,
             "weapon": {
-                "name": "Crude Club",
+                "name": "crude club",
                 "description": "A simple and roughly-made wooden club."
                 }
         }
@@ -53,7 +53,7 @@ ENEMIES = {
         "wisdom": 5,
         "charisma": 1,
         "weapon": {
-            "name": "Chains",
+            "name": "ethereal chains",
             "description": "Ethereal chains that bind and choke."
         }
     },
@@ -67,7 +67,7 @@ ENEMIES = {
         "wisdom": 4,
         "charisma": 2,
         "weapon": {
-            "name": "Potion Bombs",
+            "name": "potion bombs",
             "description": "Explosive concoctions with various effects."
         }
     },
@@ -81,7 +81,7 @@ ENEMIES = {
         "wisdom": 2,
         "charisma": 1,
         "weapon": {
-            "name": "Rusty Sword",
+            "name": "rusty sword",
             "description": "A sword worn with age and neglect."
         }
     },
@@ -95,7 +95,7 @@ ENEMIES = {
         "wisdom": 5,
         "charisma": 4,
         "weapon": {
-            "name": "Chill Touch",
+            "name": "chill touch",
             "description": "A ghostly touch that freezes the soul."
         }
     },
@@ -109,7 +109,7 @@ ENEMIES = {
         "wisdom": 1,
         "charisma": 1,
         "weapon": {
-            "name": "Tentacles",
+            "name": "tentacles",
             "description": "Long, slimy tentacles that grab and constrict."
         }
     }

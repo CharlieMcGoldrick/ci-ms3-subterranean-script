@@ -435,9 +435,9 @@ class Game:
                 self.enemy_instance = Enemy.generate_enemy(self.room_choice)
             prompt_text = (
                 "\nA sinister growl echoes through the room, and your eyes"
-                f" lock with a {self.enemy_instance.entity_type}"
-                f" named {self.enemy_instance.name}"
-                f" wielding a {self.enemy_instance.weapon}.\n"
+                f" lock with a {self.enemy_instance.entity_type}.\n"
+                f"It's a {self.enemy_instance.name},"
+                f" I should be wary of it's {self.enemy_instance.weapon}.\n"
                 "\nYou are in a fight! Do you 'Attack', 'Defend',"
                 " or 'Dodge'?"
             )
