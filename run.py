@@ -213,27 +213,39 @@ class Fight:
             print(f"{self.defender.name} goes first!")
             return self.defender
 
+    def dodge(self, entity):
+        # Define how the dodge bonus is calculated
+        dodge_bonus = (self.roll_die(sides=6) +
+                       entity.calculate_modifier(entity.dexterity))
+        return dodge_bonus
+
     def check_death(self, entity):
         if entity.hit_points <= 0:
             print(f"{entity.name} has been defeated!")
             return True
         return False
 
-    def attack(self, attack_type="quick"):
+    def attack(self, attack_type="quick", defender_dodging=False):
         try:
             if attack_type == "quick":
-                modifier = self.attacker.calculate_modifier(
-                    self.attacker.dexterity)
+                modifier = (self.attacker.calculate_modifier
+                            (self.attacker.dexterity))
                 base_damage = 5
             elif attack_type == "heavy":
-                modifier = self.attacker.calculate_modifier(
-                    self.attacker.strength)
+                modifier = (self.attacker.calculate_modifier
+                            (self.attacker.strength))
                 base_damage = 10
             else:
                 raise ValueError(f"You must use a 'quick' or 'heavy' attack")
 
             attack_roll = self.roll_die() + modifier
-            if attack_roll >= self.defender.calculate_ac():
+
+            dodge_bonus = 0
+            if defender_dodging:
+                dodge_bonus = self.dodge(self.defender)
+                print(f"{self.defender.name} attempts to dodge!")
+
+            if attack_roll >= (self.defender.calculate_ac() + dodge_bonus):
                 damage = base_damage + modifier
                 self.defender.hit_points -= damage
                 print(f"{self.attacker.name} attacks"
@@ -685,14 +697,12 @@ class Game:
     def handle_fight(self, user_input):
         try:
             # Check if the user input is valid for a fight action
-            if user_input not in ['attack', 'defend', 'dodge']:
-                raise ValueError("Invalid action! Choose 'attack',"
-                                 "'defend', or 'dodge'.")
+            if user_input not in ['attack', 'dodge']:
+                raise ValueError("Invalid action! Choose 'attack'"
+                                 " or 'dodge'.")
             # Implement logic for the user's choice
             if user_input == 'attack':
                 return "You attacked the enemy!"
-            elif user_input == 'defend':
-                return "You defended against the enemy's attack!"
             elif user_input == 'dodge':
                 return "You successfully fled from the fight!"
         except ValueError as e:
