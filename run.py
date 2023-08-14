@@ -10,7 +10,7 @@ init()
 
 
 class Entity:
-    def __init__(self, name, strength, dexterity, constitution,
+    def __init__(self, entity_type, name, strength, dexterity, constitution,
                  intelligence, wisdom, charisma):
         self.entity_type = entity_type
         self.name = name
@@ -53,15 +53,16 @@ class Entity:
 
 
 class Character(Entity):
-    def __init__(self, name=None):
-        """
-        Initializes a Character object with default attributes and a given
-        name.
+    """
+    Initializes a Character object with default attributes and a given
+    name.
 
-        :param name: (Optional) The name of the character. Defaults to None.
-        """
-        super().__init__(name, 0, 0, 0, 0, 0, 0)
-        self.type = "humanoid"
+    :param name: (Optional) The name of the character. Defaults to None.
+    """
+    def __init__(self, name=None):
+        super().__init__(entity_type="humanoid", name=name, strength=0,
+                         dexterity=0, constitution=0, intelligence=0,
+                         wisdom=0, charisma=0)
         self.weapon = {
             "name": "Fists",
             "description": "Your own bare hands."
@@ -138,9 +139,9 @@ class Character(Entity):
 
 
 class Enemy(Entity):
-    def __init__(self, name, strength, dexterity, constitution, intelligence,
-                 wisdom, charisma, enemy_type):
-        super().__init__(name, strength, dexterity, constitution,
+    def __init__(self, enemy_type, name, strength, dexterity, constitution,
+                 intelligence, wisdom, charisma):
+        super().__init__(enemy_type, name, strength, dexterity, constitution,
                          intelligence, wisdom, charisma)
         self.enemy_type = enemy_type
         # Other enemy-specific attributes and methods
