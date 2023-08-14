@@ -2,7 +2,7 @@ ENEMIES = {
     "common_enemies": [
         {
             "name": "Dungeon Rat",
-            "type": "beast",
+            "entity_type": "beast",
             "strength": 2,
             "dexterity": 3,
             "constitution": 2,
@@ -16,7 +16,7 @@ ENEMIES = {
         },
         {
             "name": "Cave Spider",
-            "type": "beast",
+            "entity_type": "beast",
             "strength": 3,
             "dexterity": 5,
             "constitution": 3,
@@ -30,7 +30,7 @@ ENEMIES = {
         },
         {
             "name": "Dungeon Goblin",
-            "type": "humanoid",
+            "entity_type": "humanoid",
             "strength": 4,
             "dexterity": 4,
             "constitution": 4,
@@ -45,7 +45,7 @@ ENEMIES = {
     ],
     "torture chamber": {
         "name": "Tortured Spirit",
-        "type": "spirit",
+        "entity_type": "spirit",
         "strength": 4,
         "dexterity": 4,
         "constitution": 3,
@@ -59,7 +59,7 @@ ENEMIES = {
     },
     "alchemist's lab": {
         "name": "Mutated Alchemist",
-        "type": "humanoid",
+        "entity_type": "humanoid",
         "strength": 3,
         "dexterity": 4,
         "constitution": 5,
@@ -73,7 +73,7 @@ ENEMIES = {
     },
     "guard barracks": {
         "name": "Undead Guard",
-        "type": "undead",
+        "entity_type": "undead",
         "strength": 5,
         "dexterity": 3,
         "constitution": 4,
@@ -87,7 +87,7 @@ ENEMIES = {
     },
     "crypt of forgotten souls": {
         "name": "Restless Wraith",
-        "type": "wraith",
+        "entity_type": "wraith",
         "strength": 3,
         "dexterity": 5,
         "constitution": 3,
@@ -101,7 +101,7 @@ ENEMIES = {
     },
     "underground lake": {
         "name": "Water Horror",
-        "type": "aquatic",
+        "entity_type": "aquatic",
         "strength": 6,
         "dexterity": 3,
         "constitution": 5,

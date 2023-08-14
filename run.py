@@ -165,7 +165,7 @@ class Enemy(Entity):
         enemy_dict = random.choice(possible_enemies)
         # Create Enemy instance
         return Enemy(
-            enemy_dict['type'],
+            enemy_dict['entity_type'],
             enemy_dict['name'],
             enemy_dict['strength'],
             enemy_dict['dexterity'],
