@@ -234,7 +234,15 @@ class Game:
             print("'Exit' : Wake from the dream and return to reality.")
             if current_state == (game_states.FIRST_LAYER_STATES
                                  ['CHARACTER_CREATION']):
-                print("Type what you see on your arm to continue")
+                print("'Name' : Type what you see on your arm to continue")
+            elif current_state == (game_states.FIRST_LAYER_STATES
+                                 ['ROOM_PICKUP_FIRST_LAYER']):
+                print("'Pick Up' : Pick the object up")
+                print("'Leave' : Leave the object")
+            elif current_state == (game_states.FIRST_LAYER_STATES
+                                 ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+                print("'Left' : Choose the left door")
+                print("'Right' : Choose the right door")
         # ... More states will go here!
 
     def handle_universal_commands(self, user_input, current_state,
