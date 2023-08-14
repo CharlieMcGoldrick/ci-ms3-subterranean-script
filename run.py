@@ -147,12 +147,33 @@ class Character(Entity):
 
 
 class Enemy(Entity):
-    def __init__(self, enemy_type, name, strength, dexterity, constitution,
+    def __init__(self, entity_type, name, strength, dexterity, constitution,
                  intelligence, wisdom, charisma):
-        super().__init__(enemy_type, name, strength, dexterity, constitution,
+        super().__init__(entity_type, name, strength, dexterity, constitution,
                          intelligence, wisdom, charisma)
-        self.enemy_type = enemy_type
-        # Other enemy-specific attributes and methods
+
+    @staticmethod
+    def generate_enemy(current_room):
+        # Select random enemy
+        possible_enemies = (dungeon_areas.ROOMS['second_layer']
+                            ['common_enemies'])
+        specific_enemy = (dungeon_areas.ROOMS['second_layer']
+                          ['specific_enemies'])
+        if specific_enemy:
+            possible_enemies.append(specific_enemy)
+
+        enemy_dict = random.choice(possible_enemies)
+        # Create Enemy instance
+        return Enemy(
+            enemy_dict['type'],
+            enemy_dict['name'],
+            enemy_dict['strength'],
+            enemy_dict['dexterity'],
+            enemy_dict['constitution'],
+            enemy_dict['intelligence'],
+            enemy_dict['wisdom'],
+            enemy_dict['charisma']
+        )
 
     def special_attack(self):
         # Code for a special attack that only enemies can do
@@ -183,6 +204,7 @@ class Game:
         self.current_room = dungeon_areas.ROOMS['first_layer']['starting_room']
         self.handle_initialise()
         self.object_choice = None
+        self.enemy_instance = None
 
     def run(self):
         """
@@ -409,9 +431,11 @@ class Game:
         # PROMPT - GAME STATE - SECOND LAYER - FIGHT
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
+            if self.enemy_instance is None:
+                self.enemy_instance = Enemy.generate_enemy(self.room_choice)
             prompt_text = (
-                "\nYou are in a fight! Do you want to 'attack', 'defend', or"
-                " 'flee'?"
+                "\nYou are in a fight! Do you 'Attack', 'Defend',"
+                " or 'Dodge'?"
             )
             return prompt_text
 
@@ -569,11 +593,12 @@ class Game:
     def handle_room_door_choice(self, user_input):
         try:
             if user_input in ['left', 'right']:
-                room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
+                self.room_choice = random.choice(dungeon_areas.
+                                                 ROOMS_SECOND_LAYER)
                 print(f"You chose the {user_input} door and discover a"
-                    f" {room_choice['name']}...")
-                print(room_choice['description'])
-                print(room_choice['prompt'])
+                      f" {self.room_choice['name']}...")
+                print(self.room_choice['description'])
+                print(self.room_choice['prompt'])
                 # Transition to next state
                 self.state = (game_states.SECOND_LAYER_STATES
                               ['FIGHT_SECOND_LAYER'])
@@ -587,9 +612,9 @@ class Game:
     def handle_fight(self, user_input):
         try:
             # Check if the user input is valid for a fight action
-            if user_input not in ['attack', 'defend', 'flee']:
+            if user_input not in ['attack', 'defend', 'dodge']:
                 raise ValueError("Invalid action! Choose 'attack',"
-                                 "'defend', or 'flee'.")
+                                 "'defend', or 'dodge'.")
             # Implement logic for the user's choice
             if user_input == 'attack':
                 return "You attacked the enemy!"
