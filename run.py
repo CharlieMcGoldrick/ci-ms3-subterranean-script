@@ -221,7 +221,6 @@ class Fight:
 
     def check_death(self, entity):
         if entity.hit_points <= 0:
-            print(f"{entity.name} has been defeated!")
             return True
         return False
 
