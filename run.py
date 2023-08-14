@@ -551,9 +551,6 @@ class Game:
                 print("\nYour hand trembles as you approach the object,"
                       " memories and emotions swirling\n"
                       "within you.")
-                print("The air feels thick, and a voice in the back of your"
-                      " mind urges you to make a\n"
-                      "choice.")
                 print(f"\nYou have picked up the {object_choice['name']}!")
 
                 # Compute the stat changes
@@ -569,7 +566,7 @@ class Game:
                                                          change)
 
                 self.character.weapon = object_choice
-                print("\nAs you grasp the weapon, you feel its power infusing"
+                print("As you grasp the weapon, you feel its power infusing"
                       " your very being:")
                 self.character.print_stats(stat_changes=stat_changes)
 
