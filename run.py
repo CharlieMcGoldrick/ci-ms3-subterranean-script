@@ -88,6 +88,7 @@ class Character(Entity):
             stat_changes = self.stat_changes
 
         print(f"\n{self.name}, your current stats are:")
+        print(f"Your Health         is {self.hit_points}")
         print(f"Your Strength       is {self.strength}" +
               f"{self.format_stat_change(stat_changes, 'Strength')}")
         print(f"Your Dexterity      is {self.dexterity}" +
@@ -104,9 +105,9 @@ class Character(Entity):
         weapon_details = self.weapon
 
         if weapon_details['name'] == "Fists":
-            print("\nYou have no weapon... only your fists.")
+            print("You have no weapon... only your fists.")
         else:
-            print(f"\nYou are wielding a {weapon_details['name']}.")
+            print(f"You are wielding a {weapon_details['name']}.")
             print(weapon_details['description'])
 
     def format_stat_change(self, stat_changes, stat_name):
