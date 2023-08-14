@@ -559,7 +559,10 @@ class Game:
             self.handle_room_door_choice(user_input)
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
-            self.handle_battle(user_input)
+            if self.enemy_instance is None:
+                self.enemy_instance = Enemy.generate_enemy(self.
+                                                           room_choice_name)
+            self.handle_battle(user_input, self.character, self.enemy_instance)
 
     def handle_start_state(self, user_input):
         """
