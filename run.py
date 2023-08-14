@@ -519,7 +519,7 @@ class Game:
     def handle_room_pickup(self, user_input):
         try:
             object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
-            if user_input.lower() == 'pick up':
+            if user_input == 'pick up':
                 print("\nYour hand trembles as you approach the object,"
                       " memories and emotions swirling\n"
                       "within you.")
@@ -551,7 +551,7 @@ class Game:
                 # Transition to next state
                 self.state = (game_states.FIRST_LAYER_STATES
                               ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
-            elif user_input.lower() == 'leave':
+            elif user_input == 'leave':
                 print("\nYou decide to leave the weapon, feeling a strange"
                       " sense of resolve\n"
                       "as you move forward.")
@@ -567,7 +567,7 @@ class Game:
             print(e)
 
     def handle_room_door_choice(self, user_input):
-        if user_input.lower() in ['left', 'right']:
+        if user_input in ['left', 'right']:
             room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
             print(f"You chose the {user_input} door and discover a"
                   f" {room_choice['name']}...")
