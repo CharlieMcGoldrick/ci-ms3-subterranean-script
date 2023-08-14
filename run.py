@@ -67,6 +67,7 @@ class Character(Entity):
             "name": "Fists",
             "description": "Your own bare hands."
         }
+        self.stat_changes = {}
         self.object_picked_FL = False
 
     def print_stats(self, stat_changes=None):
@@ -75,10 +76,17 @@ class Character(Entity):
         Constitution, Intelligence, Wisdom, Charisma, and weapon details.
 
         :note: Assumes that all attributes are already set and prints them
-               in a formatted manner. If the character has no weapon, it will
-               print a special message indicating that they only have their
-               fists.
+            in a formatted manner. If the character has no weapon, it will
+            print a special message indicating that they only have their
+            fists.
         """
+        '''
+        If stat_changes is not provided,
+        Use the character's stored stat_changes
+        '''
+        if stat_changes is None:
+            stat_changes = self.stat_changes
+
         print(f"\n{self.name}, your current stats are:")
         print(f"Your Strength       is {self.strength}" +
               f"{self.format_stat_change(stat_changes, 'Strength')}")
@@ -113,7 +121,7 @@ class Character(Entity):
         """
         if stat_changes is None or stat_changes.get(stat_name) is None:
             return ""
-        change = stat_changes[stat_name]
+        change = stat_changes.get(stat_name, 0)
         if change != 0:
             sign = " +" if change > 0 else " -"
             return f"{sign} {abs(change)}"
@@ -236,11 +244,11 @@ class Game:
                                  ['CHARACTER_CREATION']):
                 print("'Name' : Type what you see on your arm to continue")
             elif current_state == (game_states.FIRST_LAYER_STATES
-                                 ['ROOM_PICKUP_FIRST_LAYER']):
+                                   ['ROOM_PICKUP_FIRST_LAYER']):
                 print("'Pick Up' : Pick the object up")
                 print("'Leave' : Leave the object")
             elif current_state == (game_states.FIRST_LAYER_STATES
-                                 ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+                                   ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
                 print("'Left' : Choose the left door")
                 print("'Right' : Choose the right door")
         # ... More states will go here!
@@ -519,11 +527,23 @@ class Game:
                       " mind urges you to make a\n"
                       "choice.")
                 print(f"\nYou have picked up the {object_choice['name']}!")
+
+                # Compute the stat changes
+                stat_changes = object_choice["stat_changes"]
+
+                # Apply the stat changes to the character
+                for stat, change in stat_changes.items():
+                    setattr(self.character, stat.lower(),
+                            getattr(self.character, stat.lower()) + change)
+                    # Add the new change to any existing change for this stat
+                    existing_change = self.character.stat_changes.get(stat, 0)
+                    self.character.stat_changes[stat] = (existing_change +
+                                                         change)
+
                 self.character.weapon = object_choice
                 print("\nAs you grasp the weapon, you feel its power infusing"
                       " your very being:")
-                self.character.print_stats(stat_changes=object_choice
-                                           ["stat_changes"])
+                self.character.print_stats(stat_changes=stat_changes)
 
                 # Mark the weapon as picked up
                 self.character.object_picked_FL = True
