@@ -79,7 +79,7 @@ class Character(Entity):
                print a special message indicating that they only have their
                fists.
         """
-        print(f"{self.name}, your current stats are:")
+        print(f"\n{self.name}, your current stats are:")
         print(f"Your Strength       is {self.strength}" +
               f"{self.format_stat_change(stat_changes, 'Strength')}")
         print(f"Your Dexterity      is {self.dexterity}" +
@@ -98,7 +98,7 @@ class Character(Entity):
         if weapon_details['name'] == "Fists":
             print("\nYou have no weapon... only your fists.")
         else:
-            print(f"\nYou are wielding a {weapon_details['name']}")
+            print(f"\nYou are wielding a {weapon_details['name']}.")
             print(weapon_details['description'])
 
     def format_stat_change(self, stat_changes, stat_name):
@@ -349,7 +349,7 @@ class Game:
         """
         # PROMPT - GAME STATE - GENERAL - HELP
         if self.state == game_states.GENERAL_GAME_STATES['HELP']:
-            return "\nYou whispered for help... The shadows respond"
+            return "\nYou whispered for help... The shadows respond."
         # PROMPT - GAME STATE - GENERAL - CHARACTER STATS
         elif self.state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
             return "\nIf you've finished looking at yourself then 'Return'"
@@ -505,9 +505,11 @@ class Game:
             object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
             if user_input.lower() == 'pick up':
                 print("\nYour hand trembles as you approach the object,"
-                      " memories and emotions swirling within you.")
+                      " memories and emotions swirling\n"
+                      "within you.")
                 print("The air feels thick, and a voice in the back of your"
-                      " mind urges you to make a choice.")
+                      " mind urges you to make a\n"
+                      "choice.")
                 print(f"\nYou have picked up the {object_choice['name']}!")
                 self.character.weapon = object_choice
                 print("\nAs you grasp the weapon, you feel its power infusing"
