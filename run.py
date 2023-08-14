@@ -195,6 +195,59 @@ class Fight:
     def roll_die(self, sides=20):
         return random.randint(1, sides)
 
+    def initiative(self):
+        attacker_initiative = (self.roll_die() +
+                               self.attacker.calculate_modifier
+                               (self.attacker.dexterity))
+        defender_initiative = (self.roll_die() +
+                               self.defender.calculate_modifier
+                               (self.defender.dexterity))
+        print(f"{self.attacker.name} rolls an"
+              f" initiative of {attacker_initiative}!")
+        print(f"{self.defender.name} rolls an"
+              f" initiative of {defender_initiative}!")
+        if attacker_initiative >= defender_initiative:
+            print(f"{self.attacker.name} goes first!")
+            return self.attacker
+        else:
+            print(f"{self.defender.name} goes first!")
+            return self.defender
+
+    def check_death(self, entity):
+        if entity.hit_points <= 0:
+            print(f"{entity.name} has been defeated!")
+            return True
+        return False
+
+    def attack(self, attack_type="quick"):
+        try:
+            if attack_type == "quick":
+                modifier = self.attacker.calculate_modifier(
+                    self.attacker.dexterity)
+                base_damage = 5
+            elif attack_type == "heavy":
+                modifier = self.attacker.calculate_modifier(
+                    self.attacker.strength)
+                base_damage = 10
+            else:
+                raise ValueError(f"You must use a 'quick' or 'heavy' attack")
+
+            attack_roll = self.roll_die() + modifier
+            if attack_roll >= self.defender.calculate_ac():
+                damage = base_damage + modifier
+                self.defender.hit_points -= damage
+                print(f"{self.attacker.name} attacks"
+                      f" {self.defender.name} with a {attack_type} attack,"
+                      f" dealing {damage} damage!")
+                # Check if defender is dead after the attack
+                if self.check_death(self.defender):
+                    return
+            else:
+                print(f"{self.attacker.name} swings at"
+                      f" {self.defender.name}, but misses!")
+        except ValueError as e:
+            print(e)
+
 
 class Game:
     def __init__(self):
