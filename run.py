@@ -567,17 +567,22 @@ class Game:
             print(e)
 
     def handle_room_door_choice(self, user_input):
-        if user_input in ['left', 'right']:
-            room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
-            print(f"You chose the {user_input} door and discover a"
-                  f" {room_choice['name']}...")
-            print(room_choice['description'])
-            print(room_choice['prompt'])
-            # Transition to next state
-            self.state = game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']
-        else:
-            raise ValueError("The shadows whisper:"
-                             "'Make a choice: left or right.'")
+        try:
+            if user_input in ['left', 'right']:
+                room_choice = random.choice(dungeon_areas.ROOMS_SECOND_LAYER)
+                print(f"You chose the {user_input} door and discover a"
+                    f" {room_choice['name']}...")
+                print(room_choice['description'])
+                print(room_choice['prompt'])
+                # Transition to next state
+                self.state = (game_states.SECOND_LAYER_STATES
+                              ['FIGHT_SECOND_LAYER'])
+            else:
+                raise ValueError("The shadows whisper:"
+                                 "'Make a choice: left or right.'")
+        except ValueError as e:
+            # Print the error message that was raised
+            print(e)
 
     def handle_fight(self, user_input):
         try:
