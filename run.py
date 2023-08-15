@@ -747,7 +747,7 @@ class Game:
                     if user_input in ['dodge', 'quick', 'heavy']:
                         break
                     else:
-                        print(f"\n{utilities.return_divider()}\n"
+                        print(f"\n{utilities.return_divider()}\n")
 
                     if user_input == 'dodge':
                         print(f"{player.name} prepares to dodge the next attack!")
