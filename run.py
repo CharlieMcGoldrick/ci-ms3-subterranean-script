@@ -312,15 +312,20 @@ class Game:
         """
         while True:
             prompt = self.get_prompt()
-            user_input = input(f"{prompt}\n").lower()
-            print("\n" + utilities.return_divider())
-            new_state = (self.handle_universal_commands(user_input, self.state,
-                         self.previous_state, self.character))
-            if new_state is not None:
-                # Save the current state before updating
-                self.previous_state = self.state
-                self.state = new_state
-                continue
+            # Only prompt for user input if the current state requires it
+            if self.state not in game_states.SECOND_LAYER_STATES.values():
+                user_input = input(f"{prompt}\n").lower()
+                print("\n" + utilities.return_divider())
+                new_state = (self.handle_universal_commands(user_input,
+                             self.state, self.previous_state, self.character))
+                if new_state is not None:
+                    # Save the current state before updating
+                    self.previous_state = self.state
+                    self.state = new_state
+                    continue
+            else:
+                user_input = None
+                print(prompt)
             self.handle_input(user_input)
 
     def print_help(self, current_state, previous_state):
