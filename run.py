@@ -528,7 +528,7 @@ class Game:
                 f"It's a {self.enemy_instance.name},"
                 " I should be wary of its"
                 f" {self.enemy_instance.weapon['name']}.\n"
-                "You're in a fight!\n"
+                "\nYou're in a fight!"
             )
             return prompt_text
 
@@ -716,18 +716,26 @@ class Game:
 
         # Continue the fight until one of the characters is defeated
         while player.hit_points > 0 and enemy.hit_points > 0:
+            # Reset user_input at the beginning of the loop
+            user_input = None
+
             # Get the user's choice if the player is the attacker
             if current_attacker == player:
-                user_input = input("Choose to 'quick' attack, 'heavy' attack,"
-                                   "or 'dodge' the enemies attack: \n")
+                # Keep asking until a valid input is entered
+                while True:
+                    user_input = input("Choose to 'quick' attack, 'heavy'"
+                                       " attack, or 'dodge' the enemies"
+                                       " attack: \n")
+                    if user_input in ['dodge', 'quick', 'heavy']:
+                        break
+                    else:
+                        print("Choose to 'quick' attack, 'heavy' attack,"
+                              "or 'dodge' the enemies attack.")
+
                 if user_input == 'dodge':
                     print(f"{player.name} prepares to dodge the next attack!")
                 elif user_input in ['quick', 'heavy']:
                     fight.attack(attack_type=user_input)
-                else:
-                    print("Choose to 'quick' attack, 'heavy' attack,"
-                          "or 'dodge' the enemies attack.")
-                    continue
             # Enemy's turn
             else:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
