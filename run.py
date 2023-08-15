@@ -190,31 +190,27 @@ class Enemy(Entity):
 
 
 class Fight:
-    def __init__(self, attacker, defender):
-        self.attacker = attacker
-        self.defender = defender
-        self.dodge_flags = {attacker: False, defender: False}
+    def __init__(self):
+        self.dodge_flags = {}
 
     def roll_die(self, sides=20):
         return random.randint(1, sides)
 
-    def initiative(self):
-        attacker_initiative = (self.roll_die() +
-                               self.attacker.calculate_modifier
-                               (self.attacker.dexterity))
-        defender_initiative = (self.roll_die() +
-                               self.defender.calculate_modifier
-                               (self.defender.dexterity))
-        print(f"{self.attacker.name} rolls an"
-              f" initiative of {attacker_initiative}!")
-        print(f"{self.defender.name} rolls an"
-              f" initiative of {defender_initiative}!")
-        if attacker_initiative >= defender_initiative:
-            print(f"{self.attacker.name} goes first!")
-            return self.attacker
+    def initiative(self, player, enemy):
+        player_initiative = (self.roll_die() +
+                             player.calculate_modifier(player.dexterity))
+        enemy_initiative = (self.roll_die() +
+                            enemy.calculate_modifier(enemy.dexterity))
+        print(f"{player.name} rolls an"
+              f" initiative of {player_initiative}!")
+        print(f"{enemy.name} rolls an"
+              f" initiative of {enemy_initiative}!")
+        if player_initiative >= enemy_initiative:
+            print(f"{player.name} goes first!")
+            return player
         else:
-            print(f"{self.defender.name} goes first!")
-            return self.defender
+            print(f"{enemy.name} goes first!")
+            return enemy
 
     def dodge(self, entity):
         # Define how the dodge bonus is calculated
@@ -227,17 +223,18 @@ class Fight:
             return True
         return False
 
-    def attack(self, attack_type="quick", defender_dodging=False):
-        if self.dodge_flags[self.attacker]:
+    def attack(self, attacker, defender, attack_type="quick",
+               defender_dodging=False):
+        if self.dodge_flags[attacker]:
             return
         try:
             if attack_type == "quick":
-                modifier = (self.attacker.calculate_modifier
-                            (self.attacker.dexterity))
+                modifier = (attacker.calculate_modifier
+                            (attacker.dexterity))
                 base_damage = 5
             elif attack_type == "heavy":
-                modifier = (self.attacker.calculate_modifier
-                            (self.attacker.strength))
+                modifier = (attacker.calculate_modifier
+                            (attacker.strength))
                 base_damage = 10
             else:
                 raise ValueError(f"You must use a 'quick' or 'heavy' attack")
@@ -246,23 +243,21 @@ class Fight:
 
             dodge_bonus = 0
             if defender_dodging:
-                dodge_bonus = self.dodge(self.defender)
-                print(f"{self.defender.name} attempts to dodge!")
-                # Reset the flag for the defender after checking
-                self.dodge_flags[self.defender] = False
-            if attack_roll >= (self.defender.calculate_ac() + dodge_bonus):
+                dodge_bonus = self.dodge(defender)
+                print(f"{defender.name} attempts to dodge!")
+            if attack_roll >= (defender.calculate_ac() + dodge_bonus):
                 damage = base_damage + modifier
-                self.defender.hit_points -= damage
-                print(f"{self.attacker.name} attacks"
-                      f" {self.defender.name} with a {attack_type} attack,"
+                defender.hit_points -= damage
+                print(f"{attacker.name} attacks"
+                      f" {defender.name} with a {attack_type} attack,"
                       f" dealing {damage} damage!")
                 print("\n" + utilities.return_divider())
                 # Check if defender is dead after the attack
-                if self.check_death(self.defender):
+                if self.check_death(defender):
                     return
             else:
-                print(f"{self.attacker.name} swings at"
-                      f" {self.defender.name}, but misses!")
+                print(f"{attacker.name} swings at"
+                      f" {defender.name}, but misses!")
         except ValueError as e:
             print(e)
 
@@ -712,10 +707,12 @@ class Game:
 
     def handle_battle(self, player, enemy):
         # Create a Fight object
-        fight = Fight(player, enemy)
+        fight = Fight()
+        fight.dodge_flags[player] = False
+        fight.dodge_flags[enemy] = False
 
         # Determine who goes first based on initiative
-        current_attacker = fight.initiative()
+        current_attacker = fight.initiative(player, enemy)
 
         # Continue the fight until one of the characters is defeated
         while player.hit_points > 0 and enemy.hit_points > 0:
@@ -731,29 +728,38 @@ class Game:
                     user_input = input("\nChoose to 'quick' attack, 'heavy'"
                                        " attack, or 'dodge' the enemies"
                                        " attack: \n").lower()
-                    print("\n" + utilities.return_divider())                   
+                    print("\n" + utilities.return_divider())
                     if user_input in ['dodge', 'quick', 'heavy']:
                         break
                     else:
-                        print(f"\n{utilities.return_divider()}\n")
+                        print()
 
                 if user_input == 'dodge':
                     fight.dodge_flags[player] = True
                     print(f"{player.name} prepares to dodge the next attack!")
                 else:
-                    fight.attack(attack_type=user_input,
-                                 defender_dodging=fight.dodge_flags[enemy])
+                    fight.attack(
+                        attacker=current_attacker,
+                        defender=(player if current_attacker ==
+                                  enemy else enemy),
+                        attack_type=user_input,
+                        defender_dodging=fight.dodge_flags[enemy]
+                    )
                     fight.dodge_flags[player] = False
             else:
                 # Enemy's turn
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
-                print(f"Enemy selected action: {enemy_action}")
                 if enemy_action == 'dodge':
                     fight.dodge_flags[enemy] = True
                     print(f"{enemy.name} prepares to dodge the next attack!")
                 else:
-                    fight.attack(attack_type=enemy_action,
-                                 defender_dodging=fight.dodge_flags[player])
+                    fight.attack(
+                        attacker=current_attacker,
+                        defender=(player if current_attacker ==
+                                  enemy else enemy),
+                        attack_type=enemy_action,
+                        defender_dodging=fight.dodge_flags[player]
+                    )
                     fight.dodge_flags[enemy] = False
 
             # Switch attacker and defender for the next turn
@@ -779,12 +785,12 @@ class Game:
             elif player.hit_points <= 0:
                 prompt_text = (
                     "Struggling to maintain your stance, you see"
-                    f"{self.enemy_instance.name} preparing for one last"
-                    "attack.\n"
+                    f"the {self.enemy_instance.name} preparing for\n"
+                    "one last attack.\n"
                     "Before you can react, a fatal blow lands,"
                     " darkens around you.\n"
                     "The last thing you hear is the triumphant cackle of your"
-                    " foe as you slip away,\ndefeated and broken.\n"
+                    " foe as you slip away,\ndefeated and broken."
                 )
             print(prompt_text)
             self.state = (game_states.FIRST_LAYER_STATES['CHARACTER_CREATION']
