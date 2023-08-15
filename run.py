@@ -43,7 +43,7 @@ class Entity:
 
     def calculate_ac(self):
         # Base AC
-        ac = 10
+        ac = 0
         # Add Dexterity modifier
         ac += self.calculate_modifier(self.dexterity)
         # Entity type-based AC
@@ -193,6 +193,7 @@ class Fight:
     def __init__(self, attacker, defender):
         self.attacker = attacker
         self.defender = defender
+        self.dodge_flags = {attacker: False, defender: False}
 
     def roll_die(self, sides=20):
         return random.randint(1, sides)
@@ -227,6 +228,8 @@ class Fight:
         return False
 
     def attack(self, attack_type="quick", defender_dodging=False):
+        if self.dodge_flags[self.attacker]:
+            return
         try:
             if attack_type == "quick":
                 modifier = (self.attacker.calculate_modifier
@@ -245,13 +248,15 @@ class Fight:
             if defender_dodging:
                 dodge_bonus = self.dodge(self.defender)
                 print(f"{self.defender.name} attempts to dodge!")
-
+                # Reset the flag for the defender after checking
+                self.dodge_flags[self.defender] = False
             if attack_roll >= (self.defender.calculate_ac() + dodge_bonus):
                 damage = base_damage + modifier
                 self.defender.hit_points -= damage
                 print(f"{self.attacker.name} attacks"
                       f" {self.defender.name} with a {attack_type} attack,"
                       f" dealing {damage} damage!")
+                print("\n" + utilities.return_divider())
                 # Check if defender is dead after the attack
                 if self.check_death(self.defender):
                     return
@@ -678,7 +683,7 @@ class Game:
                 self.state = (game_states.FIRST_LAYER_STATES
                               ['ROOM_DOOR_CHOICE_FIRST_LAYER'])
             else:
-                raise ValueError("\nThe shadows whisper: 'Make a choice:"
+                raise ValueError("\n\nThe shadows whisper: 'Make a choice:"
                                  " 'Pick Up' or 'Leave'.")
 
         except ValueError as e:
@@ -711,48 +716,51 @@ class Game:
 
         # Determine who goes first based on initiative
         current_attacker = fight.initiative()
-        current_defender = (fight.defender if current_attacker ==
-                            fight.attacker else fight.attacker)
 
         # Continue the fight until one of the characters is defeated
         while player.hit_points > 0 and enemy.hit_points > 0:
-            # Reset user_input at the beginning of the loop
-            user_input = None
-
-            # Print player and enemy HP once at the start of the turn
-            print(f"Player HP: {player.hit_points},"
-                  f"Enemy HP: {enemy.hit_points}")
             # Get the user's choice if the player is the attacker
             if current_attacker == player:
+                # Print player and enemy HP once at the start of the turn
+                print(f"Player HP: {player.hit_points},"
+                      f" Enemy HP: {enemy.hit_points}")
+                # Reset user_input at the beginning of the users turn
+                user_input = None
                 # Keep asking until a valid input is entered
                 while True:
                     user_input = input("\nChoose to 'quick' attack, 'heavy'"
                                        " attack, or 'dodge' the enemies"
-                                       " attack: \n")
-                    utilities.return_divider()
+                                       " attack: \n").lower()
+                    print("\n" + utilities.return_divider())                   
                     if user_input in ['dodge', 'quick', 'heavy']:
                         break
                     else:
                         print(f"\n{utilities.return_divider()}\n")
 
                 if user_input == 'dodge':
+                    fight.dodge_flags[player] = True
                     print(f"{player.name} prepares to dodge the next attack!")
-                elif user_input in ['quick', 'heavy']:
-                    fight.attack(attack_type=user_input)
-            # Enemy's turn
+                else:
+                    fight.attack(attack_type=user_input,
+                                 defender_dodging=fight.dodge_flags[enemy])
+                    fight.dodge_flags[player] = False
             else:
+                # Enemy's turn
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
+                print(f"Enemy selected action: {enemy_action}")
                 if enemy_action == 'dodge':
+                    fight.dodge_flags[enemy] = True
                     print(f"{enemy.name} prepares to dodge the next attack!")
                 else:
-                    defender_dodging = (user_input ==
-                                        'dodge' if current_defender ==
-                                        player else False)
                     fight.attack(attack_type=enemy_action,
-                                 defender_dodging=defender_dodging)
+                                 defender_dodging=fight.dodge_flags[player])
+                    fight.dodge_flags[enemy] = False
+
             # Switch attacker and defender for the next turn
-            current_attacker, current_defender = (current_defender,
-                                                  current_attacker)
+            current_attacker = player if current_attacker == enemy else enemy
+            # Reset dodge flags at the end of the turn
+            fight.dodge_flags[player] = False
+            fight.dodge_flags[enemy] = False
             # Check if the fight has ended
             prompt_text = ""
 

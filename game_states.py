@@ -18,4 +18,3 @@ SECOND_LAYER_STATES = {
 END_STATES = {
   'END': 'end_of_game'
 }
-
