@@ -201,15 +201,11 @@ class Fight:
                              player.calculate_modifier(player.dexterity))
         enemy_initiative = (self.roll_die() +
                             enemy.calculate_modifier(enemy.dexterity))
-        print(f"{player.name} rolls an"
-              f" initiative of {player_initiative}!")
-        print(f"{enemy.name} rolls an"
-              f" initiative of {enemy_initiative}!")
         if player_initiative >= enemy_initiative:
-            print(f"{player.name} goes first!")
+            print(f"Time to fight! {player.name} has the initiative")
             return player
         else:
-            print(f"{enemy.name} goes first!")
+            print(f"Time to fight! {enemy.name} has the initiative")
             return enemy
 
     def dodge(self, entity):
@@ -248,10 +244,9 @@ class Fight:
             if attack_roll >= (defender.calculate_ac() + dodge_bonus):
                 damage = base_damage + modifier
                 defender.hit_points -= damage
-                print(f"{attacker.name} attacks"
-                      f" {defender.name} with a {attack_type} attack,"
-                      f" dealing {damage} damage!")
-                print("\n" + utilities.return_divider())
+                print(f"\n{attacker.name.capitalize()} attacks"
+                      f" {defender.name.capitalize()} with a {attack_type}"
+                      f" attack, dealing {damage} damage!")
                 # Check if defender is dead after the attack
                 if self.check_death(defender):
                     return
@@ -546,7 +541,6 @@ class Game:
                 f"It's a {self.enemy_instance.name},"
                 " I should be wary of its"
                 f" {self.enemy_instance.weapon['name']}.\n"
-                "\nYou're in a fight!"
             )
             return prompt_text
 
@@ -663,7 +657,6 @@ class Game:
                 print("\nYour hand trembles as you approach the object,"
                       " memories and emotions swirling\n"
                       "within you.")
-                print(f"\nYou have picked up the {object_choice['name']}!")
 
                 # Compute the stat changes
                 stat_changes = object_choice["stat_changes"]
@@ -678,8 +671,8 @@ class Game:
                                                          change)
 
                 self.character.weapon = object_choice
-                print("As you grasp the weapon, you feel its power infusing"
-                      " your very being:")
+                print(f"As you grasp the {object_choice['name']}, you feel its"
+                      " power infusing your very being:")
                 self.character.print_stats(stat_changes=stat_changes)
 
                 # Mark the weapon as picked up
@@ -743,7 +736,7 @@ class Game:
                 user_input = None
                 # Keep asking until a valid input is entered
                 while True:
-                    user_input = input("\nChoose to 'quick' attack, 'heavy'"
+                    user_input = input("Choose to 'quick' attack, 'heavy'"
                                        " attack, or 'dodge' the enemies"
                                        " attack: \n").lower()
                     print("\n" + utilities.return_divider())
@@ -754,7 +747,8 @@ class Game:
 
                 if user_input == 'dodge':
                     fight.dodge_flags[player] = True
-                    print(f"{player.name} prepares to dodge the next attack!")
+                    print(f"\n{player.name} prepares to dodge the next"
+                          " attack!")
                 else:
                     fight.attack(
                         attacker=current_attacker,
@@ -769,7 +763,7 @@ class Game:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
                 if enemy_action == 'dodge':
                     fight.dodge_flags[enemy] = True
-                    print(f"{enemy.name} prepares to dodge the next attack!")
+                    print(f"\n{enemy.name} prepares to dodge the next attack!")
                 else:
                     fight.attack(
                         attacker=current_attacker,
@@ -795,10 +789,10 @@ class Game:
                     "breath.\n"
                     "The room falls silent except for the distant echoes of"
                     " the dungeon, and your\n"
-                    " mind begins to wander.\n"
+                    "mind begins to wander.\n"
                     "Slowly, your eyes close, and you feel a strange pull"
                     " towards the beginning,\nas if the very fabric "
-                    "of this place is beckoning you to start anew.\n"
+                    "of this place is beckoning you to start anew."
                 )
             elif player.hit_points <= 0:
                 prompt_text = (
