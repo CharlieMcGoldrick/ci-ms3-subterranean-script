@@ -520,8 +520,7 @@ class Game:
                 f" lock with a {self.enemy_instance.entity_type}.\n"
                 f"It's a {self.enemy_instance.name},"
                 f" I should be wary of it's {self.enemy_instance.weapon}.\n"
-                "\nYou are in a fight! Choose to 'quick' attack, 'heavy'"
-                "\n attack, or 'dodge' the enemies attack."
+                "You're in a fight!\n"
             )
             return prompt_text
 
@@ -561,7 +560,7 @@ class Game:
             if self.enemy_instance is None:
                 self.enemy_instance = Enemy.generate_enemy(self.
                                                            room_choice_name)
-            self.handle_battle(user_input, self.character, self.enemy_instance)
+            self.handle_battle(self.character, self.enemy_instance)
 
     def handle_start_state(self, user_input):
         """
@@ -698,7 +697,7 @@ class Game:
             # Print the error message that was raised
             print(e)
 
-    def handle_battle(self, user_input, player, enemy):
+    def handle_battle(self, player, enemy):
         # Create a Fight object
         fight = Fight(player, enemy)
 
@@ -711,6 +710,8 @@ class Game:
         while player.hit_points > 0 and enemy.hit_points > 0:
             # Get the user's choice if the player is the attacker
             if current_attacker == player:
+                user_input = input("Choose to 'quick' attack, 'heavy' attack,"
+                                   "or 'dodge' the enemies attack: \n")
                 if user_input == 'dodge':
                     print(f"{player.name} prepares to dodge the next attack!")
                 elif user_input in ['quick', 'heavy']:
@@ -718,6 +719,7 @@ class Game:
                 else:
                     print("Choose to 'quick' attack, 'heavy' attack,"
                           "or 'dodge' the enemies attack.")
+                    continue
             # Enemy's turn
             else:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
