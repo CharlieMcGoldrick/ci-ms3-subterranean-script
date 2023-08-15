@@ -2,8 +2,6 @@
 GENERAL_GAME_STATES = {
   'HELP': 'help',
   'CHARACTER_STATS': 'stats',
-  'COMBAT': 'combat',
-  'GAME_OVER': 'game_over'
 }
 
 # Layer States

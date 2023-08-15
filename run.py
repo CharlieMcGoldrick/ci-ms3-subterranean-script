@@ -531,20 +531,6 @@ class Game:
                 "\nYou're in a fight!"
             )
             return prompt_text
-        # PROMPT - GAME STATE = END STATE - END
-        elif (self.state ==
-              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
-            prompt_text = (
-                "Exhausted and panting after the intense battle, you take a"
-                " moment to catch your breath.\n"
-                " The room falls silent except for the distant echoes of the"
-                " dungeon, and your mind begins to wander."
-                "Slowly, your eyes close, and you feel a strange pull towards"
-                " the beginning,\nas if the very fabric "
-                "of this place is beckoning you to start anew.\n"
-            )
-            print(prompt_text)
-            self.state = game_states.GAME_START
 
     def handle_input(self, user_input):
         """
@@ -749,10 +735,10 @@ class Game:
                     else:
                         print(f"\n{utilities.return_divider()}\n")
 
-                    if user_input == 'dodge':
-                        print(f"{player.name} prepares to dodge the next attack!")
-                    elif user_input in ['quick', 'heavy']:
-                        fight.attack(attack_type=user_input)
+                if user_input == 'dodge':
+                    print(f"{player.name} prepares to dodge the next attack!")
+                elif user_input in ['quick', 'heavy']:
+                    fight.attack(attack_type=user_input)
             # Enemy's turn
             else:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
@@ -764,13 +750,38 @@ class Game:
                                         player else False)
                     fight.attack(attack_type=enemy_action,
                                  defender_dodging=defender_dodging)
-            # Check if the fight has ended
-            if fight.check_death(player) or fight.check_death(enemy):
-                print("The fight is over!")
-                self.state = game_states.END_STATES['END']
             # Switch attacker and defender for the next turn
             current_attacker, current_defender = (current_defender,
                                                   current_attacker)
+            # Check if the fight has ended
+            prompt_text = ""
+
+            if enemy.hit_points <= 0:
+                prompt_text = (
+                    "\nExhausted and panting after the intense battle,"
+                    " you take a moment to catch your"
+                    " breath.\n"
+                    "The room falls silent except for the distant echoes of"
+                    " the dungeon, and your mind\n"
+                    "begins to wander.\n"
+                    "Slowly, your eyes close, and you feel a strange pull"
+                    " towards the beginning,\nas if the very fabric "
+                    "of this place is beckoning you to start anew.\n"
+                )
+            elif player.hit_points <= 0:
+                prompt_text = (
+                    "Struggling to maintain your stance, you see"
+                    f"{self.enemy_instance.name} preparing for one last"
+                    "attack.\n"
+                    "Before you can react, a fatal blow lands,"
+                    " darkens around you.\n"
+                    "The last thing you hear is the triumphant cackle of your"
+                    " foe as you slip away,\ndefeated and broken.\n"
+                )
+            print(prompt_text)
+            self.state = (game_states.FIRST_LAYER_STATES['CHARACTER_CREATION']
+                          if fight.check_death(enemy) else
+                          game_states.FIRST_LAYER_STATES['CHARACTER_CREATION'])
 
 
 game = Game()
