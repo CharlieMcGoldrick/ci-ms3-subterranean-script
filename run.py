@@ -267,24 +267,42 @@ class Game:
         """
         Initializes a new instance of the Game class.
 
-        The constructor sets up the initial state of the game, including:
+        This constructor method calls the reset_game method to set all
+        game-related attributes to their initial values, ensuring a fresh
+        start. It then calls the handle_initialise method to handle the
+        specific initialization logic for the game, such as displaying
+        the title and introduction.
+
+        The combination of these methods sets the stage for the game to
+        begin and prepares the player to enter the game world.
+        """
+        self.reset_game()
+        self.handle_initialise()
+
+    def reset_game(self):
+        """
+        Resets the game to its initial state.
+
+        This method is responsible for resetting all relevant variables to
+        their initial values, effectively starting the game anew. It can be
+        called when the game is first initialized, or when a player chooses
+        to restart the game.
+
+        Attributes reset:
         - previous_state: Set to None, representing no previous state.
         - character: A new Character object, representing the player's
-                     character.
-        - current_room: Set to 'starting_room', the initial location within
-                        the game.
-        - handle_initialise: A method call to handle the game's initialization
-                             logic, including displaying the title and
-                             introduction.
+          character.
+        - current_room: Set to the initial location within the game.
+        - object_choice: Set to None, representing no selected object.
+        - room_choice_name: Set to None, representing no selected room.
+        - enemy_instance: Set to None, representing no current enemy.
 
         This method sets the stage for the game to begin and prepares the
-        player to enter the mysterious and all-encompassing darkness of the
-        game world.
+        player to re-enter the game world.
         """
         self.previous_state = None
         self.character = Character()
         self.current_room = dungeon_areas.ROOMS['first_layer']['starting_room']
-        self.handle_initialise()
         self.object_choice = None
         self.room_choice_name = None
         self.enemy_instance = None
@@ -773,11 +791,11 @@ class Game:
             if enemy.hit_points <= 0:
                 prompt_text = (
                     "\nExhausted and panting after the intense battle,"
-                    " you take a moment to catch your"
-                    " breath.\n"
+                    " you take a moment to catch your\n"
+                    "breath.\n"
                     "The room falls silent except for the distant echoes of"
-                    " the dungeon, and your mind\n"
-                    "begins to wander.\n"
+                    " the dungeon, and your\n"
+                    " mind begins to wander.\n"
                     "Slowly, your eyes close, and you feel a strange pull"
                     " towards the beginning,\nas if the very fabric "
                     "of this place is beckoning you to start anew.\n"
@@ -792,6 +810,7 @@ class Game:
                     "The last thing you hear is the triumphant cackle of your"
                     " foe as you slip away,\ndefeated and broken."
                 )
+            self.reset_game()
             print(prompt_text)
             self.state = (game_states.FIRST_LAYER_STATES['CHARACTER_CREATION']
                           if fight.check_death(enemy) else
