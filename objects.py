@@ -1,4 +1,4 @@
-# Weapons without Skill Check
+# Objects without Skill Check
 OBJECTS_FIRST_LAYER = [
     {
         "name": "Broomstick",
@@ -17,5 +17,9 @@ OBJECTS_FIRST_LAYER = [
         "stat_changes": {"Strength": + 1, "Dexterity": - 1}
     }
 ]
+# Objects that require a skill Check
+OBJECTS_SC_FIRST_LAYER = [
+]
+
 OBJECTS_SECOND_LAYER = [
 ]

@@ -91,7 +91,7 @@ class Character(Entity):
         """
         '''
         If stat_changes is not provided,
-        Use the character's stored stat_changes
+        use the character's stored stat_changes
         '''
         if stat_changes is None:
             stat_changes = self.stat_changes

@@ -4,6 +4,10 @@ from colorama import Fore, Back, Style, init
 # init colorama
 init()
 
+'''
+A description that encapsulates the sensation of entering a room,
+emphasizing the closing of doors and the feeling of entrapment.
+'''
 entering_room_flavour_text = (
     "a chill runs down your spine. The ominous\n"
     "creaking of metal reverberates  through the air,"
@@ -16,6 +20,11 @@ entering_room_flavour_text = (
     "metal bars."
 )
 
+'''
+Definition of rooms in the second layer of the dungeon. Each room contains a
+unique name and description, and a prompt that combines the specific setting
+with the shared flavor text for entering a room.
+'''
 ROOMS_SECOND_LAYER = [
     {
         "name": "torture chamber",
@@ -57,8 +66,10 @@ ROOMS_SECOND_LAYER = [
     }
 ]
 
+# Room dictionary that will contain all layers
 ROOMS = {
     'first_layer': {
+        # Details for the starting room in the first layer
         'starting_room': {
             'object_choices': objects.OBJECTS_FIRST_LAYER,
             'door_choices': ['left', 'right'],
@@ -76,6 +87,7 @@ ROOMS = {
         },
     },
     'second_layer': {
+        # Details for rooms in the second layer
         'rooms': ROOMS_SECOND_LAYER,
         'object_choices': objects.OBJECTS_SECOND_LAYER,
         'door_choices': ['left', 'right'],

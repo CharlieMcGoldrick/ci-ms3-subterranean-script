@@ -1,5 +1,7 @@
+# Enemy dictionary that will contain all enemies
 ENEMIES = {
     "common_enemies": [
+        # Common enemies that can be encountered in various locations
         {
             "name": "Dungeon Rat",
             "entity_type": "beast",
@@ -43,6 +45,7 @@ ENEMIES = {
                 }
         }
     ],
+    # Specific enemies associated with particular locations
     "torture chamber": {
         "name": "Tortured Spirit",
         "entity_type": "spirit",
