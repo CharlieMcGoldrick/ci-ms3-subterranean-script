@@ -652,14 +652,13 @@ class Game:
 
     def handle_room_pickup(self, user_input):
         try:
-            object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
             if user_input == 'pick up':
                 print("\nYour hand trembles as you approach the object,"
                       " memories and emotions swirling\n"
                       "within you.")
 
                 # Compute the stat changes
-                stat_changes = object_choice["stat_changes"]
+                stat_changes = self.object_choice["stat_changes"]
 
                 # Apply the stat changes to the character
                 for stat, change in stat_changes.items():
@@ -670,9 +669,9 @@ class Game:
                     self.character.stat_changes[stat] = (existing_change +
                                                          change)
 
-                self.character.weapon = object_choice
-                print(f"As you grasp the {object_choice['name']}, you feel its"
-                      " power infusing your very being:")
+                self.character.weapon = self.object_choice
+                print(f"As you grasp the {self.object_choice['name']}, you"
+                      " feel its power infusing your very being:")
                 self.character.print_stats(stat_changes=stat_changes)
 
                 # Mark the weapon as picked up

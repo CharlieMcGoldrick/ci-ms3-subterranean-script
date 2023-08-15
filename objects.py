@@ -8,7 +8,7 @@ OBJECTS_FIRST_LAYER = [
     {
         "name": "Rusty Spoon",
         "description": "An ancient spoon, tinged with the wisdom of countless"
-                       "meals.",
+                       " meals.",
         "stat_changes": {"Strength": 0, "Wisdom": + 1}
     },
     {
