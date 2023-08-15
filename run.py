@@ -473,17 +473,17 @@ class Game:
         The returned text is used to solicit user input and move the game
         forward based on the current state.
         """
-        # PROMPT - GAME STATE - GENERAL - HELP
+        # PROMPT - GAME STATE = GENERAL - HELP
         if self.state == game_states.GENERAL_GAME_STATES['HELP']:
             return "\nYou whispered for help... The shadows respond."
-        # PROMPT - GAME STATE - GENERAL - CHARACTER STATS
+        # PROMPT - GAME STATE = GENERAL - CHARACTER STATS
         elif self.state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
             return "\nIf you've finished looking at yourself then 'Return'"
-        # PROMPT - GAME STATE - FIRST LAYER - GAME START
+        # PROMPT - GAME STATE = FIRST LAYER - GAME START
         elif self.state == game_states.FIRST_LAYER_STATES['GAME_START']:
             return (f"\nReady to step into the unknown?"
                     " Type 'Enter' if you dare.")
-        # PROMPT - GAME STATE - FIRST LAYER - CHARACTER CREATION
+        # PROMPT - GAME STATE = FIRST LAYER - CHARACTER CREATION
         elif self.state == (game_states.FIRST_LAYER_STATES
                             ['CHARACTER_CREATION']):
             flavor_text_intro = self.current_room['flavor_text_intro']
@@ -492,7 +492,7 @@ class Game:
                 "\nWhat does it say on your arm?"
             )
             return prompt_text
-        # PROMPT - GAME STATE - FIRST LAYER - ROOM PICKUP
+        # PROMPT - GAME STATE = FIRST LAYER - ROOM PICKUP
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
             if self.object_choice is None:
@@ -506,7 +506,7 @@ class Game:
                 "\nDo you 'Pick Up' or 'Leave' the weapon?"
             )
             return prompt_text
-        # PROMPT - GAME STATE - FIRST LAYER - ROOM DOOR CHOICE
+        # PROMPT - GAME STATE = FIRST LAYER - ROOM DOOR CHOICE
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
             prompt_text = (
@@ -516,7 +516,7 @@ class Game:
                 "\nDo you go 'left', or go 'right'?"
             )
             return prompt_text
-        # PROMPT - GAME STATE - SECOND LAYER - FIGHT
+        # PROMPT - GAME STATE = SECOND LAYER - FIGHT
         elif (self.state ==
               game_states.SECOND_LAYER_STATES['FIGHT_SECOND_LAYER']):
             if self.enemy_instance is None:
@@ -531,6 +531,20 @@ class Game:
                 "\nYou're in a fight!"
             )
             return prompt_text
+        # PROMPT - GAME STATE = END STATE - END
+        elif (self.state ==
+              game_states.FIRST_LAYER_STATES['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+            prompt_text = (
+                "Exhausted and panting after the intense battle, you take a"
+                " moment to catch your breath.\n"
+                " The room falls silent except for the distant echoes of the"
+                " dungeon, and your mind begins to wander."
+                "Slowly, your eyes close, and you feel a strange pull towards"
+                " the beginning,\nas if the very fabric "
+                "of this place is beckoning you to start anew.\n"
+            )
+            print(prompt_text)
+            self.state = game_states.GAME_START
 
     def handle_input(self, user_input):
         """
@@ -734,13 +748,11 @@ class Game:
                         break
                     else:
                         print(f"\n{utilities.return_divider()}\n"
-                              "\nChoose to 'quick' attack, 'heavy' attack,"
-                              "or 'dodge' the enemies attack.")
 
-                if user_input == 'dodge':
-                    print(f"{player.name} prepares to dodge the next attack!")
-                elif user_input in ['quick', 'heavy']:
-                    fight.attack(attack_type=user_input)
+                    if user_input == 'dodge':
+                        print(f"{player.name} prepares to dodge the next attack!")
+                    elif user_input in ['quick', 'heavy']:
+                        fight.attack(attack_type=user_input)
             # Enemy's turn
             else:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
