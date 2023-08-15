@@ -159,9 +159,10 @@ class Character(Entity):
 
 class Enemy(Entity):
     def __init__(self, entity_type, name, strength, dexterity, constitution,
-                 intelligence, wisdom, charisma):
+                 intelligence, wisdom, charisma, weapon):
         super().__init__(entity_type, name, strength, dexterity, constitution,
                          intelligence, wisdom, charisma)
+        self.weapon = weapon
 
     @staticmethod
     def generate_enemy(current_room):
@@ -183,7 +184,8 @@ class Enemy(Entity):
             enemy_dict['constitution'],
             enemy_dict['intelligence'],
             enemy_dict['wisdom'],
-            enemy_dict['charisma']
+            enemy_dict['charisma'],
+            enemy_dict['weapon']
         )
 
 
@@ -519,7 +521,8 @@ class Game:
                 "\nA sinister growl echoes through the room, and your eyes"
                 f" lock with a {self.enemy_instance.entity_type}.\n"
                 f"It's a {self.enemy_instance.name},"
-                f" I should be wary of it's {self.enemy_instance.weapon}.\n"
+                " I should be wary of its"
+                f" {self.enemy_instance.weapon['name']}.\n"
                 "You're in a fight!\n"
             )
             return prompt_text
@@ -683,7 +686,7 @@ class Game:
                 room_choice_dict = random.choice(dungeon_areas.
                                                  ROOMS_SECOND_LAYER)
                 self.room_choice_name = room_choice_dict['name']
-                print(f"You chose the {user_input} door and discover a"
+                print(f"\nYou chose the {user_input} door and discover a"
                       f" {self.room_choice_name}...")
                 print(room_choice_dict['description'])
                 print(room_choice_dict['prompt'])

@@ -45,7 +45,7 @@ ROOMS_SECOND_LAYER = [
     {
         "name": "guard barracks",
         "description": ("A room containing bunks and personal belongings of"
-                        " the dungeon's guards.\n It's eerily quiet."),
+                        " the dungeon's guards.\nIt's eerily quiet."),
         "prompt": (f"\nAs you step into the barracks,"
                    f"{entering_room_flavour_text}")
     },
