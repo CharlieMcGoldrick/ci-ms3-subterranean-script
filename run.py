@@ -244,7 +244,7 @@ class Fight:
             if attack_roll >= (defender.calculate_ac() + dodge_bonus):
                 damage = base_damage + modifier
                 defender.hit_points -= damage
-                print(f"\n{attacker.name.capitalize()} attacks"
+                print(f"{attacker.name.capitalize()} attacks"
                       f" {defender.name.capitalize()} with a {attack_type}"
                       f" attack, dealing {damage} damage!")
                 # Check if defender is dead after the attack
@@ -716,6 +716,8 @@ class Game:
             print(e)
 
     def handle_battle(self, player, enemy):
+        print("Character:", self.character)
+        print("Enemy instance:", self.enemy_instance)
         # Create a Fight object
         fight = Fight()
         fight.dodge_flags[player] = False
@@ -762,7 +764,7 @@ class Game:
                 enemy_action = random.choice(['quick', 'heavy', 'dodge'])
                 if enemy_action == 'dodge':
                     fight.dodge_flags[enemy] = True
-                    print(f"\n{enemy.name} prepares to dodge the next attack!")
+                    print(f"{enemy.name} prepares to dodge the next attack!")
                 else:
                     fight.attack(
                         attacker=current_attacker,
@@ -796,7 +798,7 @@ class Game:
             elif player.hit_points <= 0:
                 prompt_text = (
                     "Struggling to maintain your stance, you see"
-                    f"the {self.enemy_instance.name} preparing for\n"
+                    f"the {enemy.name} preparing for\n"
                     "one last attack.\n"
                     "Before you can react, a fatal blow lands,"
                     " darkens around you.\n"
