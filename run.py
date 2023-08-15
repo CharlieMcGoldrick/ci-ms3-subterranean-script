@@ -202,10 +202,11 @@ class Fight:
         enemy_initiative = (self.roll_die() +
                             enemy.calculate_modifier(enemy.dexterity))
         if player_initiative >= enemy_initiative:
-            print(f"Time to fight! {player.name} has the initiative")
+            print(f"Time to fight! {player.name.capitalize()} has the"
+                  " initiative.")
             return player
         else:
-            print(f"Time to fight! {enemy.name} has the initiative")
+            print(f"Time to fight! {enemy.name} has the initiative.")
             return enemy
 
     def dodge(self, entity):
@@ -716,8 +717,6 @@ class Game:
             print(e)
 
     def handle_battle(self, player, enemy):
-        print("Character:", self.character)
-        print("Enemy instance:", self.enemy_instance)
         # Create a Fight object
         fight = Fight()
         fight.dodge_flags[player] = False
@@ -731,8 +730,8 @@ class Game:
             # Get the user's choice if the player is the attacker
             if current_attacker == player:
                 # Print player and enemy HP once at the start of the turn
-                print(f"Player HP: {player.hit_points},"
-                      f" Enemy HP: {enemy.hit_points}")
+                print(f"{player.name.capitalize()} HP: {player.hit_points},"
+                      f" {enemy.name} HP: {enemy.hit_points}")
                 # Reset user_input at the beginning of the users turn
                 user_input = None
                 # Keep asking until a valid input is entered
@@ -748,8 +747,8 @@ class Game:
 
                 if user_input == 'dodge':
                     fight.dodge_flags[player] = True
-                    print(f"\n{player.name} prepares to dodge the next"
-                          " attack!")
+                    print(f"\n{player.name.capitalize()} prepares to dodge the"
+                          " next attack!")
                 else:
                     fight.attack(
                         attacker=current_attacker,
