@@ -624,7 +624,7 @@ class Game:
             print(f"\n{user_input.capitalize()},"
                   " that appears to be my name...")
 
-            print("I suppose that's as good a start as any.\n")
+            print("I suppose that's as good a start as any.")
 
             # Roll the stats here
             self.character.roll_stats()
@@ -716,6 +716,8 @@ class Game:
 
         # Continue the fight until one of the characters is defeated
         while player.hit_points > 0 and enemy.hit_points > 0:
+            print(f"Player HP: {player.hit_points},"
+                  f"Enemy HP: {enemy.hit_points}")
             # Reset user_input at the beginning of the loop
             user_input = None
 
@@ -723,13 +725,15 @@ class Game:
             if current_attacker == player:
                 # Keep asking until a valid input is entered
                 while True:
-                    user_input = input("Choose to 'quick' attack, 'heavy'"
+                    user_input = input("\nChoose to 'quick' attack, 'heavy'"
                                        " attack, or 'dodge' the enemies"
                                        " attack: \n")
+                    utilities.return_divider()
                     if user_input in ['dodge', 'quick', 'heavy']:
                         break
                     else:
-                        print("Choose to 'quick' attack, 'heavy' attack,"
+                        print(f"\n{utilities.return_divider()}\n"
+                              "\nChoose to 'quick' attack, 'heavy' attack,"
                               "or 'dodge' the enemies attack.")
 
                 if user_input == 'dodge':
@@ -750,7 +754,7 @@ class Game:
             # Check if the fight has ended
             if fight.check_death(player) or fight.check_death(enemy):
                 print("The fight is over!")
-                break
+                self.state = game_states.END_STATES['END']
             # Switch attacker and defender for the next turn
             current_attacker, current_defender = (current_defender,
                                                   current_attacker)
