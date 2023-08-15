@@ -716,11 +716,12 @@ class Game:
 
         # Continue the fight until one of the characters is defeated
         while player.hit_points > 0 and enemy.hit_points > 0:
-            print(f"Player HP: {player.hit_points},"
-                  f"Enemy HP: {enemy.hit_points}")
             # Reset user_input at the beginning of the loop
             user_input = None
 
+            # Print player and enemy HP once at the start of the turn
+            print(f"Player HP: {player.hit_points},"
+                  f"Enemy HP: {enemy.hit_points}")
             # Get the user's choice if the player is the attacker
             if current_attacker == player:
                 # Keep asking until a valid input is entered
