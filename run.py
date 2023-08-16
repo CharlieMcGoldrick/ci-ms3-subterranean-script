@@ -326,15 +326,15 @@ class Game:
         """
         while True:
             prompt = self.get_prompt()
-            # Only prompt for user input if the current state requires it
             if self.state not in game_states.SECOND_LAYER_STATES.values():
                 user_input = input(f"{prompt}\n").lower()
                 print("\n" + utilities.return_divider())
-                new_state = (self.handle_universal_commands(user_input,
-                             self.state, self.previous_state, self.character))
-                if new_state is not None:
-                    # Save the current state before updating
-                    self.previous_state = self.state
+                new_state = self.handle_universal_commands(user_input, self.state, self.previous_state, self.character)
+                if new_state == 'INVALID_COMMAND':
+                    self.print_help(self.state, self.previous_state) # Print the help information again
+                    continue
+                elif new_state is not None:
+                    self.previous_state = self.state # Remember to update the previous_state
                     self.state = new_state
                     continue
             else:
@@ -407,10 +407,16 @@ class Game:
                 universal command.
         """
         if user_input == 'help':
-            self.print_help(current_state, previous_state)
+            self.print_help(current_state, self.previous_state)
+            self.previous_state = current_state if current_state not in (
+                game_states.GENERAL_GAME_STATES['HELP'],
+                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']) else self.previous_state
             return game_states.GENERAL_GAME_STATES['HELP']
         elif user_input == 'stats' and character.name is not None:
             character.print_stats()
+            self.previous_state = current_state if current_state not in (
+                game_states.GENERAL_GAME_STATES['HELP'],
+                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']) else self.previous_state
             return game_states.GENERAL_GAME_STATES['CHARACTER_STATS']
         elif user_input == 'exit':
             print("\nMaybe it's all just a dream...")
@@ -419,7 +425,7 @@ class Game:
                 game_states.GENERAL_GAME_STATES['HELP'],
                 game_states.GENERAL_GAME_STATES['CHARACTER_STATS']):
             return previous_state
-        return None
+        return 'INVALID_COMMAND'
 
     def handle_initialise(self):
         """
