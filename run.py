@@ -10,8 +10,34 @@ init()
 
 
 class Entity:
+    """
+    Represents a generic entity in a game, including attributes such as
+    strength, dexterity, and hit points.
+    """
     def __init__(self, entity_type, name, strength, dexterity, constitution,
                  intelligence, wisdom, charisma):
+        """
+        Initialises the Entity with the given attributes.
+
+        Parameters
+        ----------
+        entity_type : str
+            The type of the entity.
+        name : str
+            The name of the entity.
+        strength : int
+            The entity's strength attribute.
+        dexterity : int
+            The entity's dexterity attribute.
+        constitution : int
+            The entity's constitution attribute.
+        intelligence : int
+            The entity's intelligence attribute.
+        wisdom : int
+            The entity's wisdom attribute.
+        charisma : int
+            The entity's charisma attribute.
+        """
         self.entity_type = entity_type
         self.name = name
         self.strength = strength
@@ -27,9 +53,26 @@ class Entity:
         self.other_bonuses = None
 
     def calculate_modifier(self, ability_score):
+        """
+        Calculates the ability modifier based on the given ability score.
+
+        Parameters
+        ----------
+        ability_score : int
+            The ability score to calculate the modifier for.
+
+        Returns
+        -------
+        int
+            The calculated ability modifier.
+        """
         return (ability_score - 5) // 2
 
     def calculate_hit_points(self):
+        """
+        Calculates the total hit points of the entity based on base hit
+        points, constitution modifier, and entity type.
+        """
         # Base hit points
         base_hit_points = 10
         constitution_modifier = self.calculate_modifier(self.constitution)
@@ -42,6 +85,15 @@ class Entity:
                            + type_modifier)
 
     def calculate_ac(self):
+        """
+        Calculates the armor class (AC) of the entity based on dexterity,
+        entity type, and bonuses from equipped items.
+
+        Returns
+        -------
+        int
+            The calculated armor class.
+        """
         # Base AC
         ac = 0
         # Add Dexterity modifier
@@ -63,12 +115,21 @@ class Entity:
 
 class Character(Entity):
     """
-    Initializes a Character object with default attributes and a given
-    name.
-
-    :param name: (Optional) The name of the character. Defaults to None.
+    Represents a specific character in a game, extending the Entity class
+    with additional properties related to the character's stats, weapon, and
+    behavior.
     """
+
     def __init__(self, name=None):
+        """
+        Initialises a Character object with default attributes and a given
+        name.
+
+        Parameters
+        ----------
+        name : str, optional
+            The name of the character. Defaults to None.
+        """
         super().__init__(entity_type="hero", name=name, strength=0,
                          dexterity=0, constitution=0, intelligence=0,
                          wisdom=0, charisma=0)
@@ -84,10 +145,17 @@ class Character(Entity):
         Prints the current character's stats, including Strength, Dexterity,
         Constitution, Intelligence, Wisdom, Charisma, and weapon details.
 
-        :note: Assumes that all attributes are already set and prints them
-            in a formatted manner. If the character has no weapon, it will
-            print a special message indicating that they only have their
-            fists.
+        Parameters
+        ----------
+        stat_changes : dict, optional
+            Changes to the character's stats. Defaults to None.
+
+        Notes
+        -----
+        Assumes that all attributes are already set and prints them in a
+        formatted manner.
+        If the character has no weapon, it will print a message indicating
+        that they only have their fists.
         """
         '''
         If stat_changes is not provided,
@@ -124,11 +192,18 @@ class Character(Entity):
         """
         Formats a stat change to include in the printed stat display.
 
-        :param stat_changes: A dictionary containing changes to the
-                            character's stats.
-        :param stat_name: The name of the stat to format the change for.
-        :return: A string representing the change to the stat, or an empty
-                string if there is no change.
+        Parameters
+        ----------
+        stat_changes : dict
+            A dictionary containing changes to the character's stats.
+        stat_name : str
+            The name of the stat to format the change for.
+
+        Returns
+        -------
+        str
+            A string representing the change to the stat, or an empty
+            string if there is no change.
         """
         if stat_changes is None or stat_changes.get(stat_name) is None:
             return ""
@@ -147,7 +222,10 @@ class Character(Entity):
         lowest roll, and sums the remaining three to generate the value for
         that attribute.
 
-        :return: A dictionary containing the rolled values for each attribute.
+        Returns
+        -------
+        dict
+            A dictionary containing the rolled values for each attribute.
         """
         attributes = ['Strength', 'Dexterity', 'Constitution', 'Intelligence',
                       'Wisdom', 'Charisma']
@@ -158,14 +236,57 @@ class Character(Entity):
 
 
 class Enemy(Entity):
+    """
+    Represents an enemy character in the game, extending the Entity class
+    with specific properties related to the enemy's weapon.
+    """
     def __init__(self, entity_type, name, strength, dexterity, constitution,
                  intelligence, wisdom, charisma, weapon):
+        """
+        Initialises an Enemy object with specific attributes and a given
+        weapon.
+
+        Parameters
+        ----------
+        entity_type : str
+            The type of entity.
+        name : str
+            The name of the enemy.
+        strength : int
+            The strength of the enemy.
+        dexterity : int
+            The dexterity of the enemy.
+        constitution : int
+            The constitution of the enemy.
+        intelligence : int
+            The intelligence of the enemy.
+        wisdom : int
+            The wisdom of the enemy.
+        charisma : int
+            The charisma of the enemy.
+        weapon : dict
+            The weapon of the enemy.
+        """
         super().__init__(entity_type, name, strength, dexterity, constitution,
                          intelligence, wisdom, charisma)
         self.weapon = weapon
 
     @staticmethod
     def generate_enemy(current_room):
+        """
+        Generates a random enemy based on the current room and available enemy
+        templates.
+
+        Parameters
+        ----------
+        current_room : str
+            The identifier of the current room within the dungeon.
+
+        Returns
+        -------
+        Enemy
+            An instance of the Enemy class representing the generated enemy.
+        """
         # Select random enemy
         possible_enemies = (dungeon_areas.ROOMS['second_layer']
                             ['common_enemies'])
@@ -190,13 +311,49 @@ class Enemy(Entity):
 
 
 class Fight:
+    """
+    Represents a fight between characters in the game, managing the mechanics
+    of combat such as initiative, dodging, attacking, and checking for death.
+    """
     def __init__(self):
+        """
+        Initialises a Fight object with flags for dodging.
+        """
         self.dodge_flags = {}
 
     def roll_die(self, sides=20):
+        """
+        Rolls a die with a given number of sides.
+
+        Parameters
+        ----------
+        sides : int, optional
+            The number of sides on the die. Defaults to 20.
+
+        Returns
+        -------
+        int
+            The result of the die roll.
+        """
         return random.randint(1, sides)
 
     def initiative(self, player, enemy):
+        """
+        Determines which combatant goes first in a fight based on a die roll
+        and dexterity modifiers.
+
+        Parameters
+        ----------
+        player : Entity
+            The player's character.
+        enemy : Entity
+            The enemy character.
+
+        Returns
+        -------
+        Entity
+            The entity that has the initiative and will go first.
+        """
         player_initiative = (self.roll_die() +
                              player.calculate_modifier(player.dexterity))
         enemy_initiative = (self.roll_die() +
@@ -210,18 +367,64 @@ class Fight:
             return enemy
 
     def dodge(self, entity):
+        """
+        Calculates a dodge bonus for a given entity.
+
+        Parameters
+        ----------
+        entity : Entity
+            The entity attempting to dodge.
+
+        Returns
+        -------
+        int
+            The dodge bonus value.
+        """
         # Define how the dodge bonus is calculated
         dodge_bonus = (self.roll_die(sides=6) +
                        entity.calculate_modifier(entity.dexterity))
         return dodge_bonus
 
     def check_death(self, entity):
+        """
+        Checks if a given entity is dead.
+
+        Parameters
+        ----------
+        entity : Entity
+            The entity to check.
+
+        Returns
+        -------
+        bool
+            True if the entity is dead, False otherwise.
+        """
         if entity.hit_points <= 0:
             return True
         return False
 
     def attack(self, attacker, defender, attack_type="quick",
                defender_dodging=False):
+        """
+        Simulates an attack between two entities, calculating hit, damage, and
+        checking for death.
+
+        Parameters
+        ----------
+        attacker : Entity
+            The entity initiating the attack.
+        defender : Entity
+            The entity defending against the attack.
+        attack_type : str, optional
+            The type of attack ("quick" or "heavy"). Defaults to "quick".
+        defender_dodging : bool, optional
+            Whether the defender is attempting to dodge. Defaults to False.
+
+        Raises
+        ------
+        ValueError
+            If an invalid attack_type is provided.
+        """
         if self.dodge_flags[attacker]:
             return
         try:
@@ -259,42 +462,44 @@ class Fight:
 
 
 class Game:
+    """
+    Represents the main game control and logic, handling initialisation,
+    state transitions, user input, and overall game flow. It maintains
+    the game state and facilitates transitions between different parts
+    of the game, including interactions with characters, navigation through
+    rooms, and combat with enemies.
+    """
     def __init__(self):
         """
-        Initializes a new instance of the Game class.
-
-        This constructor method calls the reset_game method to set all
-        game-related attributes to their initial values, ensuring a fresh
-        start. It then calls the handle_initialise method to handle the
-        specific initialization logic for the game, such as displaying
-        the title and introduction.
-
-        The combination of these methods sets the stage for the game to
-        begin and prepares the player to enter the game world.
+        Initializes a new instance of the Game class. This method calls the
+        reset_game method to set all game-related attributes to their initial
+        values, ensuring a fresh start. It then calls the handle_initialise
+        method to display the game's title, introduction, and prepare the
+        player to enter the game world.
         """
         self.reset_game()
         self.handle_initialise()
 
     def reset_game(self):
         """
-        Resets the game to its initial state.
+        Resets the game to its initial state, clearing any previous game
+        progress and resetting all relevant attributes. This allows for a new
+        game to start or a current game to restart.
 
-        This method is responsible for resetting all relevant variables to
-        their initial values, effectively starting the game anew. It can be
-        called when the game is first initialized, or when a player chooses
-        to restart the game.
-
-        Attributes reset:
-        - previous_state: Set to None, representing no previous state.
-        - character: A new Character object, representing the player's
-          character.
-        - current_room: Set to the initial location within the game.
-        - object_choice: Set to None, representing no selected object.
-        - room_choice_name: Set to None, representing no selected room.
-        - enemy_instance: Set to None, representing no current enemy.
-
-        This method sets the stage for the game to begin and prepares the
-        player to re-enter the game world.
+        Attributes
+        ----------
+        previous_state : None
+            Resets to None for starting the game fresh.
+        character : Character
+            Resets the player's character to a new instance.
+        current_room : str
+            Resets to the starting room identifier.
+        object_choice : None
+            Resets to None for starting the game fresh.
+        room_choice_name : None
+            Resets to None for starting the game fresh.
+        enemy_instance : None
+            Resets to None for starting the game fresh.
         """
         self.previous_state = None
         self.character = Character()
@@ -305,24 +510,19 @@ class Game:
 
     def run(self):
         """
-        Executes the main game loop, handling user input and transitions
-        between game states.
+        Executes the main game loop, constantly reading user input and
+        responding accordingly. The method handles transitions between
+        different game states, including navigation, combat, dialogue, and
+        more.
 
-        The method does the following in a continuous loop:
-        1. Retrieves the current prompt based on the game's state by calling
-           the get_prompt method.
-        2. Waits for the user's input and converts it to lowercase.
-        3. Prints a divider using a utility function.
-        4. Calls handle_universal_commands to check for any universal commands
-           (e.g., 'help', 'exit').
-        5. If a universal command is detected, updates the state and continues
-           to the next iteration.
-        6. If no universal command is detected, calls handle_input to handle
-           state-specific input.
-
-        This method drives the core gameplay, ensuring smooth transitions
-        between different stages of the game, and responding appropriately to
-        the player's choices and commands.
+        Attributes
+        ----------
+        prompt : str
+            The prompt or message to be displayed to the user.
+        user_input : str or None
+            The user's input, or None if no input is required.
+        new_state : str or None
+            The new game state if a state transition occurs.
         """
         while True:
             prompt = self.get_prompt()
@@ -349,14 +549,20 @@ class Game:
 
         This function provides contextual guidance to the player, offering
         different commands and information depending on the current state of
-        the game. The help message may include basic commands like
-        'Return' and 'Exit', and specific guidance based on the player's
-        current location or situation within the game.
+        the game. The help message may include basic commands like 'Return' and
+        'Exit', and specific guidance based on the player's current location or
+        situation within the game.
 
-        :param current_state: The current state of the game, used to determine
-            what specific guidance should be provided.
-        :param previous_state: The previous state of the game, also used to
-            provide context-specific help.
+        Parameters
+        ----------
+        previous_state : str
+            The previous state of the game, used to provide context-specific
+             elp.
+
+        Returns
+        -------
+        str
+            The help text to be displayed to the player.
         """
         help_text = "\nYou whispered for help... The shadows respond:"
         help_text += "\n'Return'  : Resume your previous action."
@@ -398,28 +604,37 @@ class Game:
         Handles universal commands that can be invoked in multiple game states.
 
         This method is responsible for managing the common commands that can
-        be executed at various stages of the game. The recognized universal
+        be executed at various stages of the game. The recognised universal
         commands include:
-        - 'help': Prints the help menu.
-        - 'stats': Displays the character's statistics if the name has been
-                   initialized, and provides the option to 'return' to the
-                   previous state.
-        - 'exit': Exits the game.
+        - 'help'  : Prints the help menu.
+        - 'stats' : Displays the character's statistics if the name has been
+                    initialised, and provides the option to 'return' to the
+                    previous state.
+        - 'exit'  : Exits the game.
         - 'return': Allows the player to return to the previous state from the
                     'help' or 'stats' screens.
 
-        :param user_input: The input provided by the user (string).
-        :param current_state: The current state of the game, used to determine
-                            specific behavior in some commands.
-        :param previous_state: The previous state of the game, can be used in
-                            'return' command to return to a previous game
-                            state.
-        :param character: The character object for the player, used to handle
-                        character-specific commands.
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user.
+        current_state : str
+            The current state of the game, used to determine specific behavior
+            in some commands.
+        previous_state : str
+            The previous state of the game, can be used in 'return' command to
+            return to a previous game state.
+        character : Character
+            The character object for the player, used to handle
+            character-specific commands.
 
-        :return: The next game state if a universal command is recognized and
-                handled, or None if the user input does not correspond to a
-                universal command.
+        Returns
+        -------
+        str or None
+            The next game state if a universal command is recognised and
+            handled,
+            or None if the user input does not correspond to a universal
+            command.
         """
         if user_input == 'help':
             '''
@@ -456,7 +671,9 @@ class Game:
         welcome message to guide players into the mysterious and
         all-encompassing darkness of the game world.
 
-        :note: Whisper 'help' anytime in the game to view a list of commands.
+        Notes
+        -----
+        Whisper 'help' anytime in the game to view a list of commands.
         """
         lines = [
             " __       _     _                                               ",
@@ -496,23 +713,29 @@ class Game:
         """
         Returns a prompt text based on the current state of the game.
 
-        The method checks the current state of the game and returns a string
-        containing the appropriate prompt for the player. The prompt may
-        include instructions, questions, or descriptions designed to guide the
-        player's choices and actions within the game.
+        Depending on the game's current state, the method returns a string
+        containing the appropriate prompt for the player. This can include
+        various scenarios such as:
+            - Prompting for help and displaying character stats.
+            - Introducing the game and creating the character.
+            - Choosing objects to pick up or leave.
+            - Making navigation decisions between doors.
+            - Initiating a fight with an enemy.
 
-        :return: A string containing the appropriate prompt text for the
-                 current game state. This may include:
-            - An introductory challenge for the 'GAME_START' state.
-            - A description and question regarding the character's surroundings
-              for the 'CHARACTER_CREATION' state.
-            - A decision-making scenario for picking up objects in the
-              'ROOM_PICKUP_FIRST_LAYER' state.
-            - A navigation decision between doors for the
-              'ROOM_DOOR_CHOICE_FIRST_LAYER' state.
-
-        The returned text is used to solicit user input and move the game
-        forward based on the current state.
+        Returns
+        -------
+        str
+            A string containing the prompt text for the current game state.
+            The text may include:
+            - A help message if the state is 'HELP'.
+            - A return or help option if the state is 'CHARACTER_STATS'.
+            - An introductory challenge if the state is 'GAME_START'.
+            - A character creation prompt if the state is 'CHARACTER_CREATION'.
+            - A decision-making scenario for objects if the state is
+              'ROOM_PICKUP_FIRST_LAYER'.
+            - A navigation decision between doors if the state is
+              'ROOM_DOOR_CHOICE_FIRST_LAYER'.
+            - A fight initiation prompt if the state is 'FIGHT_SECOND_LAYER'.
         """
         # PROMPT - GAME STATE = GENERAL - HELP
         if self.state == game_states.GENERAL_GAME_STATES['HELP']:
@@ -577,19 +800,15 @@ class Game:
         """
         Processes user input based on the current game state.
 
-        This method is responsible for handling user input and calling the
-        appropriate method based on the current game state. The game state
-        will determine the specific action to be taken in response to the
-        user's input.
+        This method receives the user's input and takes the appropriate action
+        based on the current game state. It calls specific handling methods
+        that correspond to the current state of the game.
 
-        The handled states include:
-        - 'INITIALISE': Calls the initialization method.
-        - 'GAME_START': Handles the game start state.
-        - 'CHARACTER_CREATION': Handles the character stats state.
-        - 'ROOM_PICKUP_FIRST_LAYER': Handles the pickup of an object in a room.
-        - 'ROOM_DOOR_CHOICE_FIRST_LAYER': Handles the door choice in a room.
-
-        :param user_input: The input provided by the user (string).
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user. Depending on the game state,
+            different strings will be expected to perform various actions.
         """
         if self.state == game_states.FIRST_LAYER_STATES['INITIALISE']:
             self.handle_initialise()
@@ -613,16 +832,29 @@ class Game:
 
     def handle_start_state(self, user_input):
         """
-        Handles the input for the game's start state.
+        Handles the state where the player is prompted to enter their
+        character's name.
 
-        This method processes the user's input during the game's starting
-        state. If the input is 'enter', the game progresses to the character
-        stats state. Any other input will raise a ValueError, and a message
-        will be printed to inform the user that they must type 'Enter'.
+        This method processes the user's input for naming their character.
+        The name must consist of alphabetic characters, not exceed 20
+        characters, and not be 'exit'. If the input is valid, the
+        character's name is set, stats are rolled, and the game progresses
+        to the room pickup state.
 
-        :param user_input: The input provided by the user (string), expected
-                           to be 'enter' to proceed.
-        :raises ValueError: If the input is anything other than 'enter'.
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user. It must be a valid name
+            consisting of alphabetic characters and not exceeding 20
+            characters. If the input is 'exit' or contains non-alphabetic
+            characters, a ValueError will be raised.
+
+        Raises
+        ------
+        ValueError
+            If the user input contains numbers or symbols, is empty, or
+            exceeds 20 characters, this exception is raised, and an error
+            message is printed to guide the player to input a valid name.
         """
         try:
             if user_input == 'enter':
@@ -643,16 +875,25 @@ class Game:
         Handles the state where the player is prompted to enter their
         character's name.
 
-        :param user_input: The input provided by the user. It must be a valid
-                        name consisting of alphabetic characters and not
-                        exceeding 20 characters. If the input is 'exit' or
-                        contains non-alphabetic characters, a ValueError will
-                        be raised.
+        This method processes the user's input for naming their character.
+        The name must consist of alphabetic characters, not exceed 20
+        characters, and not be 'exit'. If the input is valid, the character's
+        name is set, and further actions may be taken based on the game logic.
 
-        :raises ValueError: If the user input contains numbers or symbols, is
-                            empty, or exceeds 20 characters, an error message
-                            is raised to guide the player to input a valid
-                            name.
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user. It must be a valid name consisting
+            of alphabetic characters and not exceeding 20 characters. If the
+            input is 'exit' or contains non-alphabetic characters, a ValueError
+            will be raised.
+
+        Raises
+        ------
+        ValueError
+            If the user input contains numbers or symbols, is empty, or exceeds
+            20 characters, an error message is raised to guide the player to
+            input a valid name.
         """
         try:
             if not user_input.isalpha() or user_input.lower() == 'exit':
@@ -680,6 +921,30 @@ class Game:
             print(e)
 
     def handle_room_pickup(self, user_input):
+        """
+        Handles the room pickup state of the game.
+
+        This method processes the user's input when they encounter an object
+        that can be picked up. The player can either 'pick up' or 'leave' the
+        object. If the user picks up the object, it may change the character's
+        stats and mark the object as picked up, then transition to the room
+        door choice state. If the player leaves the object, it transitions
+        directly to the room door choice state. If the input is neither
+        'pick up' nor 'leave', a ValueError is raised.
+
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user, expected to be either 'pick up' or
+            'leave'. Other inputs will raise a ValueError.
+
+        Raises
+        ------
+        ValueError
+            If the user input is anything other than 'pick up' or 'leave', this
+            exception is raised, and an error message is printed to guide the
+            player.
+        """
         try:
             if user_input == 'pick up':
                 print("\nYour hand trembles as you approach the object,"
@@ -725,6 +990,28 @@ class Game:
             print(e)
 
     def handle_room_door_choice(self, user_input):
+        """
+        Handles the room door choice state of the game.
+
+        This method processes the user's input when faced with a choice of
+        doors to enter, either 'left' or 'right'. Upon making a valid choice,
+        the player discovers a room, and the game transitions to the fight
+        state. If the user's input is neither 'left' nor 'right', a ValueError
+        is raised.
+
+        Parameters
+        ----------
+        user_input : str
+            The input provided by the user, expected to be either 'left' or
+            'right'. Other inputs will raise a ValueError.
+
+        Raises
+        ------
+        ValueError
+            If the user input is anything other than 'left' or 'right', this
+            exception is raised, and an error message is printed to guide the
+            player.
+        """
         try:
             if user_input in ['left', 'right']:
                 room_choice_dict = random.choice(dungeon_areas.
@@ -745,6 +1032,34 @@ class Game:
             print(e)
 
     def handle_battle(self, player, enemy):
+        """
+        Handles the battle sequence between the player and an enemy.
+
+        This method manages the turn-based combat between the player and an
+        enemy, utilising the Fight class. It continues until one character is
+        defeated. The battle includes actions such as 'quick' attack, 'heavy'
+        attack, and 'dodge', and the user will be prompted for input if the
+        player is the attacker.
+
+        Parameters
+        ----------
+        player : Character
+            The player's character, participating in the battle as one of the
+            combatants.
+        enemy : Character
+            The enemy character, participating in the battle against the
+            player.
+
+        Notes
+        -----
+        The battle is conducted in turns, and the initiative is determined at
+        the start. Both characters have hit points, and the battle continues
+        until one of them reaches 0. The user's choices dictate the player's
+        actions, while the enemy's actions are randomly chosen from the same
+        set of actions. If the player's hit points reach 0, a defeat message
+        is printed and the game resets. If the enemy's hit points reach 0, a
+        victory message is printed.
+        """
         # Create a Fight object
         fight = Fight()
         fight.dodge_flags[player] = False
