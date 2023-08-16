@@ -10,7 +10,7 @@ emphasizing the closing of doors and the feeling of entrapment.
 '''
 entering_room_flavour_text = (
     "a chill runs down your spine. The ominous\n"
-    "creaking of metal reverberates  through the air,"
+    "creaking of metal reverberates through the air,"
     " and with a thunderous crash,\n"
     "bars slide down, sealing the doors behind you shut.\n"
     "\nYour heart pounds in your chest as you notice two other doors in the"
@@ -40,7 +40,7 @@ ROOMS_SECOND_LAYER = [
                         " tools.\n"
                         "The scent of strange chemicals fills the room."),
         "prompt": (f"\nAs you step into the lab,"
-                   f"{entering_room_flavour_text}")
+                   f" {entering_room_flavour_text}")
     },
     {
         "name": "guard barracks",

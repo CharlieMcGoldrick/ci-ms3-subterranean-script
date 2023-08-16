@@ -326,15 +326,15 @@ class Game:
         """
         while True:
             prompt = self.get_prompt()
+            # Only prompt for user input if the current state requires it
             if self.state not in game_states.SECOND_LAYER_STATES.values():
                 user_input = input(f"{prompt}\n").lower()
                 print("\n" + utilities.return_divider())
-                new_state = self.handle_universal_commands(user_input, self.state, self.previous_state, self.character)
-                if new_state == 'INVALID_COMMAND':
-                    self.print_help(self.state, self.previous_state) # Print the help information again
-                    continue
-                elif new_state is not None:
-                    self.previous_state = self.state # Remember to update the previous_state
+                new_state = self.handle_universal_commands(user_input,
+                                                           self.state,
+                                                           self.previous_state,
+                                                           self.character)
+                if new_state is not None:
                     self.state = new_state
                     continue
             else:
@@ -342,7 +342,7 @@ class Game:
                 print(prompt)
             self.handle_input(user_input)
 
-    def print_help(self, current_state, previous_state):
+    def print_help(self, previous_state):
         """
         Prints a help message describing the available commands based on the
         current state and previous state of the game.
@@ -358,24 +358,39 @@ class Game:
         :param previous_state: The previous state of the game, also used to
             provide context-specific help.
         """
-        if current_state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
-            print("\nIf you've finished looking at yourself then 'return'")
-        else:
-            print("\nYou whispered for help... The shadows respond:")
-            print("'Return': Resume your previous action.")
-            print("'Exit' : Wake from the dream and return to reality.")
-            if current_state == (game_states.FIRST_LAYER_STATES
-                                 ['CHARACTER_CREATION']):
-                print("'Name' : Type what you see on your arm to continue")
-            elif current_state == (game_states.FIRST_LAYER_STATES
-                                   ['ROOM_PICKUP_FIRST_LAYER']):
-                print("'Pick Up' : Pick the object up")
-                print("'Leave' : Leave the object")
-            elif current_state == (game_states.FIRST_LAYER_STATES
-                                   ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
-                print("'Left' : Choose the left door")
-                print("'Right' : Choose the right door")
-        # ... More states will go here!
+        help_text = "\nYou whispered for help... The shadows respond:"
+        help_text += "\n'Return'  : Resume your previous action."
+        if previous_state not in [
+            game_states.FIRST_LAYER_STATES['GAME_START'],
+            game_states.FIRST_LAYER_STATES['CHARACTER_CREATION']
+        ]:
+            help_text += "\n'Stats'   : Understand what you're made of and"
+            "equipped with."
+
+        if previous_state == (game_states.GENERAL_GAME_STATES
+                              ['CHARACTER_STATS']):
+            help_text += "\nIf you've finished looking at yourself then"
+            " 'return'."
+        elif previous_state == (game_states.FIRST_LAYER_STATES
+                                ['CHARACTER_CREATION']):
+            help_text += "\n'Name'    : Type what you see on your arm to"
+            "continue."
+        elif previous_state == (game_states.FIRST_LAYER_STATES
+                                ['ROOM_PICKUP_FIRST_LAYER']):
+            help_text += "\n'Pick Up' : Pick the object up."
+            help_text += "\n'Leave'   : Leave the object."
+        elif previous_state == (game_states.FIRST_LAYER_STATES
+                                ['ROOM_DOOR_CHOICE_FIRST_LAYER']):
+            help_text += "\n'Left'    : Choose the left door."
+            help_text += "\n'Right'   : Choose the right door."
+        elif previous_state == (game_states.SECOND_LAYER_STATES
+                                ['FIGHT_SECOND_LAYER']):
+            help_text += "\n'Quick'   : Deftly strike with a quick attack."
+            help_text += "\n'Heavy'   : Unleash a powerful heavy attack."
+            help_text += "\n'Dodge'   : Focus on avoiding the next attack."
+        help_text += "\n'Exit'    : Wake from the dream and return to reality."
+
+        return help_text
 
     def handle_universal_commands(self, user_input, current_state,
                                   previous_state, character):
@@ -407,16 +422,22 @@ class Game:
                 universal command.
         """
         if user_input == 'help':
-            self.print_help(current_state, self.previous_state)
+            '''
+            Store the current state as the previous state if it's not a
+            'HELP' or 'CHARACTER_STATS' state
+            '''
             self.previous_state = current_state if current_state not in (
-                game_states.GENERAL_GAME_STATES['HELP'],
-                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']) else self.previous_state
+                game_states.GENERAL_GAME_STATES
+                ['HELP'],
+                game_states.GENERAL_GAME_STATES
+                ['CHARACTER_STATS']) else self.previous_state
             return game_states.GENERAL_GAME_STATES['HELP']
         elif user_input == 'stats' and character.name is not None:
             character.print_stats()
             self.previous_state = current_state if current_state not in (
                 game_states.GENERAL_GAME_STATES['HELP'],
-                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']) else self.previous_state
+                game_states.GENERAL_GAME_STATES['CHARACTER_STATS']) \
+                else self.previous_state
             return game_states.GENERAL_GAME_STATES['CHARACTER_STATS']
         elif user_input == 'exit':
             print("\nMaybe it's all just a dream...")
@@ -425,7 +446,7 @@ class Game:
                 game_states.GENERAL_GAME_STATES['HELP'],
                 game_states.GENERAL_GAME_STATES['CHARACTER_STATS']):
             return previous_state
-        return 'INVALID_COMMAND'
+        return None
 
     def handle_initialise(self):
         """
@@ -495,10 +516,11 @@ class Game:
         """
         # PROMPT - GAME STATE = GENERAL - HELP
         if self.state == game_states.GENERAL_GAME_STATES['HELP']:
-            return "\nYou whispered for help... The shadows respond."
+            return self.print_help(self.previous_state)
         # PROMPT - GAME STATE = GENERAL - CHARACTER STATS
         elif self.state == game_states.GENERAL_GAME_STATES['CHARACTER_STATS']:
-            return "\nIf you've finished looking at yourself then 'Return'"
+            return ("\nIf you've finished looking at yourself then 'Return'"
+                    " or ask for 'Help'")
         # PROMPT - GAME STATE = FIRST LAYER - GAME START
         elif self.state == game_states.FIRST_LAYER_STATES['GAME_START']:
             return (f"\nReady to step into the unknown?"
