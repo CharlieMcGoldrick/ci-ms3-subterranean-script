@@ -63,12 +63,46 @@ As a Command Line Application Owner, I want to be able to showcase the creative 
 
 ![Subterranean Script Tradeoff_Graph](assets/images/readme/uxd/strategy/subterranean_scipt_strategy_tradeoffs_graph.png)
 </details>
-
-
-
-
 </details>
 
+<details>
+<summary><h3>Scope</h3></summary>
 
+#### Sprint 1 Features ####
+- Intro to game
+- Player can pick up weapon
+- Player can choose a door to progress
+- Player can fight an enemy
+- Help text to educate the player
+#### Sprint 1 Requirement Types ####
+- Languages: Python
+- Library: Colorama
+
+#### Sprint 2 Features ####
+- Longer game with more choices
+- Sound such as music and attack sounds
+#### Sprint 2 Requirement Types ####
+- Languages: Python
+- Library: PyAudio
+
+#### Sprint 3 Features ####
+- Ability to save
+- Adaptive difficulty levels
+- Player choices affect other people's games
+- Social mnedia presense
+- Monetisation
+#### Sprint 3 Requirement Types ####
+- Languages: Python
+</details>
+
+<details>
+    <summary><h3>Structure</h3></summary>
+
+Touchpoints - Command Line Interface
+
+![Subterranean Script Information Architecture](assets/images/readme/uxd/structure/subterranean_script-information-architecture.png)
+
+Whilst the player has the choice of left and right, this choice will be populated by a dictionary. This design will help for expansion in later scripts. In the first sprint I plan to have the first room and then a choice to enter the second room, but this diagram is an example of how it would be in the future.
+</details>
 
 </details>
