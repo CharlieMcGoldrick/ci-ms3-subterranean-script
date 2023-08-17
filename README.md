@@ -129,9 +129,9 @@ Colours will be based on the [Colorma](https://pypi.org/project/colorama/) libra
 - [Github](https://github.com/) This was used as a remote repository.
 - [Heroku](https://heroku.com) I used this to deploy my app.
 - [PEP - Python](https://peps.python.org/pep-0008/) This was used to learn more about PEP-8.
+- [Python Tutor](https://pythontutor.com/) Used to test logic of my code.
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) Used to learn and stick to a conventional commit framework.
 - [Photoshop](https://www.adobe.com/uk/products/photoshop.html) Used for readme images.
-- [Python Docs](https://docs.python.org/3/) Used to learn more about Python.
 
 </details>
 </details>
@@ -394,5 +394,11 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
 <details>
 <summary><h2>Credits</h2></summary>
 
-
+- [Python Docs](https://docs.python.org/3/) Used to learn more about Python.
+    - [Python Docs - Random](https://docs.python.org/3/library/random.html) For help with the random module.
+    - [Python Docs - Exceptions](https://docs.python.org/3/library/exceptions.html) For help with try/except syntax.
+    - [Python Docs - @staticmethod](https://docs.python.org/3/library/functions.html#staticmethod) For help with @staticmethod.
+    - [Python Docs - Super](https://docs.python.org/3/library/functions.html#super) For help with super proxy object.
+- [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) For help with NumPy Style Docstrings.
+- [Colorama](https://pypi.org/project/colorama/) For help with Colorama Syntax.
 </details>
