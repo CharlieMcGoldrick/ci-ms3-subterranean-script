@@ -351,42 +351,42 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
 <details>
 <summary><h3>run.py</h3></summary>
 
-![run.py](assets/images/readme/features/example-of-stat-state.png)
+![run.py](assets/images/readme/validation/run_py-file-pep8-pass.png)
 
 </details>
 
 <details>
 <summary><h3>game_states.py</h3></summary>
 
-![game_states.py](assets/images/readme/features/example-of-stat-state.png)
+![game_states.py](assets/images/readme/validation/game-states_py-file-pep8-pass.png)
 
 </details>
 
 <details>
 <summary><h3>dungeon_areas.py</h3></summary>
 
-![dungeon_area.py](assets/images/readme/features/example-of-stat-state.png)
+![dungeon_area.py](assets/images/readme/validation/dungeon-areas_py-file-pep8-pass.png)
 
 </details>
 
 <details>
 <summary><h3>enemies.py</h3></summary>
 
-![enemies.py](assets/images/readme/features/example-of-stat-state.png)
+![enemies.py](assets/images/readme/validation/enemies_py-file-pep8-pass.png)
 
 </details>
 
 <details>
 <summary><h3>objects.py</h3></summary>
 
-![objects.py](assets/images/readme/features/example-of-stat-state.png)
+![objects.py](assets/images/readme/validation/objects_py-file-pep8-pass.png)
 
 </details>
 
 <details>
 <summary><h3>utilities.py</h3></summary>
 
-![utilities.py](assets/images/readme/features/example-of-stat-state.png)
+![utilities.py](assets/images/readme/validation/utilities_py-file-pep8-pass.png)
 
 </details>
 </details>
@@ -627,6 +627,7 @@ NOTE: You might want to turn on *Enable Automatic Deploys*
     - [Python Docs - Super](https://docs.python.org/3/library/functions.html#super) For help with super proxy object.
 - [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) For help with NumPy Style Docstrings.
 - [Colorama](https://pypi.org/project/colorama/) For help with Colorama Syntax.
+- [D&D](https://dnd.wizards.com/what-is-dnd/basic-rules) Inspiration for how to handle stats and rolls.
 </details>
 
 <details>
