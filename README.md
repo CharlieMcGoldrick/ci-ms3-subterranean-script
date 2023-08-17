@@ -392,6 +392,46 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
 </details>
 
 <details>
+<summary><h2>Deployment</h2></summary>
+
+***Clone a GitHub Repository***
+To make a clone of this repository, follow these steps:
+Login to your GitHub account.
+1. Go to the repository by visiting the link: [Charlie McGoldrick Github - Subterranean Script Repo](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script).
+2. Click the "Code" button and then use the copy button next to the link to copy the link.
+3. In your IDE of choice, open a new terminal and use the following clone command: git clone `https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script`.
+4. You will now have a copy of the repository in you local version.
+
+***Forking the GitHub Repository***
+To fork this repository, follow these steps:
+1. Log in to your GitHub account.
+2. Go to the repository you want to fork, which is located at: [Charlie McGoldrick Github - Subterranean Script Repo](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script).
+3. In the top-right corner of the repository page, click on the "Fork" button
+4. GitHub will prompt you to select where you want to fork the repository. Choose your personal account or organization.
+5. Wait for the forking process to complete. Once it's done, you will be redirected to your forked repository under your GitHub account.
+
+NOTE: Any changes pushed to the main branch automatically show up on the website.
+
+***Heroku***
+To host the app, I used Heroku. Follow the steps below for deployment:
+1. Clone or fork [Charlie McGoldrick Github - Subterranean Script Repo](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script).
+2. Log into your Heroku account.
+3. Click the *New* button and then click *Create new app*.
+4. Give the app a name, choose your desired region and click the *Create app* button.
+5. Navigate to *Settings* and click *Add buildpack*.
+6. Add *Python* and then *Nodejs*.
+7. Navigate to the *Deploy* tab and choose your *Deployment method*.
+8. Find the repository you want to use.
+9. Choose the correct branch
+10. Click the *Deploy Branch* button
+
+NOTE: You might want to turn on *Enable Automatic Deploys*
+
+</details>
+
+
+
+<details>
 <summary><h2>Credits</h2></summary>
 
 - [Python Docs](https://docs.python.org/3/) Used to learn more about Python.
@@ -401,4 +441,11 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
     - [Python Docs - Super](https://docs.python.org/3/library/functions.html#super) For help with super proxy object.
 - [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) For help with NumPy Style Docstrings.
 - [Colorama](https://pypi.org/project/colorama/) For help with Colorama Syntax.
+</details>
+
+<details>
+<summary><h2>Acknowledgements</h2></summary>
+
+- Thank you to my mentor; Graeme Taylor and Code Institute (including the Slack community), for the great support, advice, and guidance.
+- Thank you to my friends and family for their patience and understanding whilst working on this project.
 </details>
