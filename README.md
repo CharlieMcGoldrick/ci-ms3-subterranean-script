@@ -69,30 +69,34 @@ As a Command Line Application Owner, I want to be able to showcase the creative 
 <summary><h3>Scope</h3></summary>
 
 #### Sprint 1 Features ####
-- Intro to game
-- Player can pick up weapon
-- Player can choose a door to progress
-- Player can fight an enemy
-- Help text to educate the player
+- Intro to game.
+- Player can pick up weapon.
+- Player can choose a door to progress.
+- Player can fight an enemy.
+- Help text to educate the player.
 #### Sprint 1 Requirement Types ####
 - Languages: Python
-- Library: [Colorma](https://pypi.org/project/colorama/)
+- Library: [Colorma](https://pypi.org/project/colorama/).
 
 #### Sprint 2 Features ####
-- Longer game with more choices
-- Sound such as music and attack sounds
+- More dyanmic flavour text.
+- Defend battle option so player can *stay in the pocket* for a counter-attack.
+- Entities having special attack based off their *entiity_type*
+- Longer game with more choices.
+- Sound such as music and attack sounds.
+- Update to 3.10 so switch statements are available.
 #### Sprint 2 Requirement Types ####
-- Languages: Python
-- Library: [PyAudio](https://pypi.org/project/PyAudio/)
+- Languages: Python.
+- Library: [PyAudio](https://pypi.org/project/PyAudio/).
 
 #### Sprint 3 Features ####
-- Ability to save
-- Adaptive difficulty levels
-- Player choices affect other people's games
-- Social mnedia presense
-- Monetisation
+- Ability to save.
+- Adaptive difficulty levels.
+- Player choices affect other people's games.
+- Social mnedia presense.
+- Monetisation.
 #### Sprint 3 Requirement Types ####
-- Languages: Python
+- Languages: Python.
 </details>
 
 <details>
