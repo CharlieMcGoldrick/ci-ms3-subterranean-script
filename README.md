@@ -6,6 +6,8 @@ Drawing inspiration from the rich tradition of Dungeons & Dragons, Subterranean 
 
 At its core, Subterranean Script aims to capture players with its layered, immersive narrative and dynamic choice-driven gameplay, challenging their decision-making skills at every turn. It is meticulously crafted for those who appreciate the immersive allure of traditional text-based games but crave an additional level of interactive mystery and suspense, reminiscent of a well-rounded D&D adventure.
 
+![Subterranean Script Start Screen](assets/images/readme/features/start-screen.png)
+
 <details>
 <summary><h2>User Experience Design (UXD)</h2></summary>
 
