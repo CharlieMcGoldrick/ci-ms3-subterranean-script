@@ -76,14 +76,14 @@ As a Command Line Application Owner, I want to be able to showcase the creative 
 - Help text to educate the player
 #### Sprint 1 Requirement Types ####
 - Languages: Python
-- Library: Colorama
+- Library: [Colorma](https://pypi.org/project/colorama/)
 
 #### Sprint 2 Features ####
 - Longer game with more choices
 - Sound such as music and attack sounds
 #### Sprint 2 Requirement Types ####
 - Languages: Python
-- Library: PyAudio
+- Library: [PyAudio](https://pypi.org/project/PyAudio/)
 
 #### Sprint 3 Features ####
 - Ability to save
@@ -104,5 +104,39 @@ Touchpoints - Command Line Interface
 
 Whilst the player has the choice of left and right, this choice will be populated by a dictionary. This design will help for expansion in later scripts. In the first sprint I plan to have the first room and then a choice to enter the second room, but this diagram is an example of how it would be in the future.
 </details>
+
+<details>
+    <summary><h3>Surface</h3></summary>
+
+Colours will be based on the [Colorma](https://pypi.org/project/colorama/) library. They will be used to add to the atmosphere of the game.
+
+
+<summary><h4>Technologies Used</h4></summary>
+
+<details>
+<summary><h5>Language</h5></summary>
+
+- Python
+
+</details>
+
+<details>
+<summary><h5>Websites, Software & other Tools</h5></summary>
+
+- [Codeanywhere](https://codeanywhere.com/solutions/collaborate) This is was my IDE for the project.
+- [CodePen](codepen.io) I used this to test code outside of [Codeanywhere](https://codeanywhere.com/solutions/collaborate) so that I didn't use up hours unnecessarily.
+- [Git](https://git-scm.com/) Used to commit and push code to [Github](https://github.com/).
+- [Github](https://github.com/) This was used as a remote repository.
+- [Heroku](https://heroku.com) I used this to deploy my app.
+- [PEP - Python](https://peps.python.org/pep-0008/) This was used to learn more about PEP-8.
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) Used to learn and stick to a conventional commit framework.
+- [Photoshop](https://www.adobe.com/uk/products/photoshop.html) Used for readme images.
+- [Python Docs](https://docs.python.org/3/) Used to learn more about Python.
+
+</details>
+</details>
+
+<details>
+
 
 </details>
