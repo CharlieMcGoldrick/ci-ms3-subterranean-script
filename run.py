@@ -677,38 +677,7 @@ class Game:
         -----
         Whisper 'help' anytime in the game to view a list of commands.
         """
-        lines = [
-            " __       _     _                                              ",
-            "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __              ",
-            "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\        ",
-            "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |           ",
-            "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|       ",
-            " __           _       _                                        ",
-            "/ _\\ ___ _ __(_)_ __ | |_                                     ",
-            "\\ \\ / __| '__| | '_ \\| __|                                  ",
-            "_\\ \\ (__| |  | | |_) | |_                                    ",
-            "\\__/\\___|_|  |_| .__/ \\__|                                  ",
-            "               |_|                                             ",
-            "                                                               ",
-            "Welcome to the depths of 'Subterranean Script'!                ",
-            "This is a text-based, choice-driven adventure game,            ",
-            "inspired by classic Choose-Your-Own-Adventure books.           ",
-            "and D&D. Navigate through the all-encompassing darkness        ",
-            "of the mysterious dungeon environment, where every door        ",
-            "opens a new path, a new destiny.                               ",
-            "                                                               ",
-            "Whisper 'help' anytime to conjure the command list.            "
-        ]
-
-        # Find the maximum length of the lines
-        max_length = max(len(line) for line in lines)
-
-        # Print each line with a background color
-        for line in lines:
-            # Fill the line with spaces to the maximum length
-            filled_line = line.ljust(max_length)
-            # Print with the desired foreground and background colors
-            print(Fore.RED + filled_line)
+        utilities.display_intro(utilities.lines)
         self.state = game_states.FIRST_LAYER_STATES['GAME_START']
 
     def get_prompt(self):
