@@ -215,7 +215,7 @@ The Room Door Choice State serves as a metaphorical crossroads within "Subterran
 
 <details>
 
-<summary><h3>Battle State/h3></summary>
+<summary><h3>Battle State</h3></summary>
 
 The Battle State within "Subterranean Script" is an intense and dynamic part of the game that pits the player's character against an enemy in a turn-based combat scenario. This state encapsulates the heart-pounding action of the dungeon experience, providing an engaging gameplay loop that challenges the player's decision-making and strategy.
 
@@ -278,7 +278,7 @@ These universal commands add an extra layer of accessibility and usability, allo
 
 <details>
 
-<summary><h3>Scalable</h3></summary>
+<summary><h3>Built to be Scalable</h3></summary>
 
 The scalability of the project is largely derived from the thoughtful use of data structures, such as dictionaries to contain entities like enemies and dungeon areas, and classes to represent characters and enemies. By organising data into well-defined structures, it will easier to manage, expand, and modify various aspects of the game, as detailed below:
 
@@ -303,5 +303,43 @@ Another use of dictionaries can be found in defining the dungeon's rooms within 
 I've also used dictionaries to manage objects that can be found in different layers of the dungeon. These objects have specific attributes like "name" and "description," and even stat changes, making them vital to the gameplay. By organising these objects within dictionaries, I've made it simple to add new items or modify existing ones without altering the core game code.
 
 </details>
+</details>
+
+<details>
+<summary><h2>Bugs</h2></summary>
+
+<h3>Known Bugs</h3>
+
+<h3>Fixed Bugs</h3>
+
+- [Capitals would break the code](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/e0b020b549f640894155544333df3c019e52df51) - I added the `.lower()` method so that errors aren't raised if the player types in capitals.
+- [While loop when starting game](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/5f8982a29fd6b20bbdea8996b0b84b698e3fdbcb) - Start screen was stuck in an infinite loop due to being in `While True:`.
+- [ASCII escape sequence](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/ebc8f6959027033d0721d9ec553968c33d7ca977) - I added more characters to ensure the 'escape sequence' error wasn't displayed, whilst maintaing the shape of the text.
+- [Ensure player can't enter stat state until a certain point](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/cb7907dcd04ec04c59e6e82bfa6fb98123a42f0e) - Add logic so that the `stat` state can't be entered.
+- [Inifnite Loop](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/fced12a8a11efee073fada6819e530a2951ce7aa) - Conditional was looking for words with uppercase first letters, but the input was being converted to lowercase so there was a loop. Changing these words to be lowercase fixed this.
+- [Flavour text appearing after user input](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/a97b74195755d1d993146e209c102fc78dac0706) - Moved the order of the flavour text.
+- [Weapon wasn't being randomly selected](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/f1fe7925198d443264353799247d5a07fc341112) - `weapon_choice` was getting applied in the `get_prompt method`, so I changed it to being handled in the `handle_room_pickup` method.
+- [Weapon generated multiple times](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/0d4f7f5ec4bac23a2459069b4d0f15dd57b67075) - Weapon was being generated multiple times if the user went back to the `ROOM_PICKUP_FIRST_LAYER`, so I changed it to only generate a weapon from the dictionary randomly if the `self.object.choice` hadn't been made.
+- [Unreachable and redundant code](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/417a5cea6fd87bb1521b6d7d1e77e91a97e5d87d) - Code was unreachable and actually redundant, so I removed it.
+- [Unnecessary code in regards to Stat Rolling](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/df7528a81abbf576860b97454e248ec77f981560) - Removed unnecessary assignment of rolled stats. The method now directly modifies the character's attributes.
+- [Handle invalid room pickup input](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/b7585022bccd4cb787bc990a1f139ef83a3b0bd2) - Added error handling in the `handle_room_pickup` method to gracefully handle situations when the user enters an invalid choice. Instead of raising an exception, it now prints a meaningful error message, guiding the user to make a valid choice.
+- [Weapon assignment in room pickup](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/cead17bf4779ec30fefecf7d0815be913df837cf) - Removed the unnecessary use of `self` in object choice during room pickup handling. The weapon assignment now directly uses the randomly chosen object, ensuring that the character's weapon is correctly assigned.
+- [Stat changes not being applied](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/614e8d3a0144da6d749860ffd60b5d67b24a5d2e) - Stat changes from picking up objects were printing initially but weren't actually getting applied, so printing stats again wouldn't show them. Added attribute to ensure this is something that can be tracked throughout the game.
+- [Redunant .lower method](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/d7956f94b99c12d2dd1233e4d7ef59cbdcc29406) - The `.lower()` method is being handled elsewhere so having the method elsewhere for the `user_input` was redundant.
+- [Add try/except block to room choice](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/3363410c66ce07cd5e2a4bda9eda0c2a57a8be2d) - Added a try/except block to handle user inputs.
+- [Printed lines above 24](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/c18c49435b2959074893ce38bace913296c6c6af) - I removed some of the flavour text so that the printed lines didn't exceed 24 lines.
+- [Varied naming convention](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/ed4f748ee9f7341934b93740170027d0cc4287b6) - I had `type` instead of `entity_type`, in my enemies.py file. I added entity_ so that the naming convention is consistent.
+- [Enemies spawning incorrectly due to room choice handling](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/e3b63be6d469bc4d8929ae7bee2fb2d8cc583e5e) - Replaced `room_choice` with `room_choice_name' and `room_choice_dict` to correctly handle the room selection. Also modified the `specific_enemy` retrieval to correctly access the specific enemy according to the current room.
+- [Update battle handling logic](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/37d37bcff1d74ed041feee5be545f0245d62daa9) - Add appropriate code so if an enemy doesn't already exist, it generates a new one based on the current room's name. Then, it initiates or continues the battle by calling the handle_battle method with the user's input, player character, and the enemy instance.
+- [Ensure battle logic loops based on user input](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/9499e090b9b2c26d6605bbce13e1ab7d8c867fb6) - The battle logic would play out until one of the entities died, so I added user_input to be within the correct logic so that each phase of the battle waits for `user_input`.
+- [Unwanted user prompt in transition to fight state](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/0ea1c9062d7a751365e78b5a09b1a9ba16a38956) - Modified the main loop in the `class Game` to only prompt for user input when required based on the current game state. This fixes an issue where an extra newline was being printed when transitioning to the fight state, requiring the user to press enter before the fight started. Now, the fight prompt is printed directly to the console without requiring additional input from the user.
+- [Inf loop in battle func by resetting userinput](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/81910a4995aed8eb8789c1a88a2f96039474cbd4) - The infinite loop issue in the battle function was caused by the persistence of the `user_input` throughout the loop iterations. If the player chose to dodge once, the `defender_dodging` would always evaluate to `True` for all subsequent enemy turns.
+- [Entities health being double printing](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/86b97b2d3f86e10d7435026bd6d9e1f55b55c28e) - Moved the print statement for player and enemy HP outside the nested conditionals in the `handle_battle` method. This ensures that the HP values are printed only once per turn, correcting the previous behavior where they were printed twice when the dodge command was input.
+- [Missing parenthesis in battle func](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/20c33764b2c13cbad940e516cd426175c7746d30) - A missing parenthesis was found in the handle_battle function, which led to a syntax error.
+- [Ensure proper handling of dodging](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/b3c7cdd0114e6a10401b7eacbebd54f0955aeba3) - When dodge was typed the player would sometimes attack so I added flag to ensure this doesn't happen.
+- [Ensure object choice persits once chosen](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/43b0ed2d7e72e1ed48bb0fb618b241c68c07abc3) - In the original code, the object choice was randomly selected but not consistently referenced throughout the function, leading to potential inconsistencies in the user experience.
+- [Ensure reference to enemy is correct in battle func](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/b3c7cdd0114e6a10401b7eacbebd54f0955aeba3) - I was referencing the `enemy_instance` in my code instead of `enemy`.
+- [Ensure player doesn't get stuck in loop](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/4c40ac1b707297ccd7f2a3cce86d80a3b7bcb60e) - If the user went into the help state and then into the stat state and typed return they would go back to the help state but then return would move them back to the stat state, and so on. So I changed the way general game states states are handled to stop this from happening.
+
 
 </details>
