@@ -341,5 +341,53 @@ I've also used dictionaries to manage objects that can be found in different lay
 - [Ensure reference to enemy is correct in battle func](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/b3c7cdd0114e6a10401b7eacbebd54f0955aeba3) - I was referencing the `enemy_instance` in my code instead of `enemy`.
 - [Ensure player doesn't get stuck in loop](https://github.com/CharlieMcGoldrick/ci-ms3-subterranean-script/commit/4c40ac1b707297ccd7f2a3cce86d80a3b7bcb60e) - If the user went into the help state and then into the stat state and typed return they would go back to the help state but then return would move them back to the stat state, and so on. So I changed the way general game states states are handled to stop this from happening.
 
+</details>
+
+<details>
+<summary><h2>Python Validation</h2></summary>
+
+I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Python code used in this application. Below you can see the success of each file in the project.
+
+<details>
+<summary><h3>run.py</h3></summary>
+
+![run.py](assets/images/readme/features/example-of-stat-state.png)
 
 </details>
+
+<details>
+<summary><h3>game_states.py</h3></summary>
+
+![game_states.py](assets/images/readme/features/example-of-stat-state.png)
+
+</details>
+
+<details>
+<summary><h3>dungeon_areas.py</h3></summary>
+
+![dungeon_area.py](assets/images/readme/features/example-of-stat-state.png)
+
+</details>
+
+<details>
+<summary><h3>enemies.py</h3></summary>
+
+![enemies.py](assets/images/readme/features/example-of-stat-state.png)
+
+</details>
+
+<details>
+<summary><h3>objects.py</h3></summary>
+
+![objects.py](assets/images/readme/features/example-of-stat-state.png)
+
+</details>
+
+<details>
+<summary><h3>utilities.py</h3></summary>
+
+![utilities.py](assets/images/readme/features/example-of-stat-state.png)
+
+</details>
+</details>
+
