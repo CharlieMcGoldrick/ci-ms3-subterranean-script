@@ -549,9 +549,9 @@ class Game:
 
         This function provides contextual guidance to the player, offering
         different commands and information depending on the current state of
-        the game. The help message may include basic commands like 'Return' and
-        'Exit', and specific guidance based on the player's current location or
-        situation within the game.
+        the game. The help message may include basic commands like 'Return'
+        and 'Exit', and specific guidance based on the player's current
+        location or situation within the game.
 
         Parameters
         ----------
@@ -594,14 +594,16 @@ class Game:
             help_text += "\n'Quick'   : Deftly strike with a quick attack."
             help_text += "\n'Heavy'   : Unleash a powerful heavy attack."
             help_text += "\n'Dodge'   : Focus on avoiding the next attack."
-        help_text += "\n'Exit'    : Wake from the dream and return to reality."
+        help_text += "\n'Exit'    : Wake from the dream and return to"
+        "reality."
 
         return help_text
 
     def handle_universal_commands(self, user_input, current_state,
                                   previous_state, character):
         """
-        Handles universal commands that can be invoked in multiple game states.
+        Handles universal commands that can be invoked in multiple game
+        states.
 
         This method is responsible for managing the common commands that can
         be executed at various stages of the game. The recognised universal
@@ -676,26 +678,26 @@ class Game:
         Whisper 'help' anytime in the game to view a list of commands.
         """
         lines = [
-            " __       _     _                                               ",
-            "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __               ",
-            "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\         ",
-            "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |            ",
-            "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|        ",
-            " __           _       _                                         ",
-            "/ _\\ ___ _ __(_)_ __ | |_                                      ",
-            "\\ \\ / __| '__| | '_ \\| __|                                   ",
-            "_\\ \\ (__| |  | | |_) | |_                                     ",
-            "\\__/\\___|_|  |_| .__/ \\__|                                   ",
-            "               |_|                                              ",
-            "                                                                ",
-            "Welcome to the depths of 'Subterranean Script'!                 ",
-            "This is a text-based, choice-driven adventure game,             ",
-            "inspired by classic Choose-Your-Own-Adventure books.            ",
-            "and D&D. Navigate through the all-encompassing darkness         ",
-            "of the mysterious dungeon environment, where every door         ",
-            "opens a new path, a new destiny.                                ",
-            "                                                                ",
-            "Whisper 'help' anytime to conjure the command list.             "
+            " __       _     _                                              ",
+            "/ _\\_   _| |__ | |_ ___ _ __ _ __ ___  __ _ _ __              ",
+            "\\ \\| | | | '_ \\| __/ _ \\ '__| '__/ _ \\/ _` | '_ \\        ",
+            "_\\ \\ |_| | |_) | ||  __/ |  | | |  __/ (_| | | | |           ",
+            "\\__/\\__,_|_.__/ \\__\\___|_|  |_|  \\___|\\__,_|_| |_|       ",
+            " __           _       _                                        ",
+            "/ _\\ ___ _ __(_)_ __ | |_                                     ",
+            "\\ \\ / __| '__| | '_ \\| __|                                  ",
+            "_\\ \\ (__| |  | | |_) | |_                                    ",
+            "\\__/\\___|_|  |_| .__/ \\__|                                  ",
+            "               |_|                                             ",
+            "                                                               ",
+            "Welcome to the depths of 'Subterranean Script'!                ",
+            "This is a text-based, choice-driven adventure game,            ",
+            "inspired by classic Choose-Your-Own-Adventure books.           ",
+            "and D&D. Navigate through the all-encompassing darkness        ",
+            "of the mysterious dungeon environment, where every door        ",
+            "opens a new path, a new destiny.                               ",
+            "                                                               ",
+            "Whisper 'help' anytime to conjure the command list.            "
         ]
 
         # Find the maximum length of the lines
@@ -730,7 +732,8 @@ class Game:
             - A help message if the state is 'HELP'.
             - A return or help option if the state is 'CHARACTER_STATS'.
             - An introductory challenge if the state is 'GAME_START'.
-            - A character creation prompt if the state is 'CHARACTER_CREATION'.
+            - A character creation prompt if the state is
+              'CHARACTER_CREATION'.
             - A decision-making scenario for objects if the state is
               'ROOM_PICKUP_FIRST_LAYER'.
             - A navigation decision between doors if the state is
@@ -761,7 +764,8 @@ class Game:
         elif (self.state ==
               game_states.FIRST_LAYER_STATES['ROOM_PICKUP_FIRST_LAYER']):
             if self.object_choice is None:
-                self.object_choice = random.choice(objects.OBJECTS_FIRST_LAYER)
+                self.object_choice = (
+                    random.choice(objects.OBJECTS_FIRST_LAYER))
             prompt_text = (
                 "\nA strange chill fills the room, and your eyes are drawn to"
                 " a faint glow.\n"
@@ -885,15 +889,15 @@ class Game:
         user_input : str
             The input provided by the user. It must be a valid name consisting
             of alphabetic characters and not exceeding 20 characters. If the
-            input is 'exit' or contains non-alphabetic characters, a ValueError
-            will be raised.
+            input is 'exit' or contains non-alphabetic characters, a
+            ValueError will be raised.
 
         Raises
         ------
         ValueError
-            If the user input contains numbers or symbols, is empty, or exceeds
-            20 characters, an error message is raised to guide the player to
-            input a valid name.
+            If the user input contains numbers or symbols, is empty, or
+            exceeds 20 characters, an error message is raised to guide
+            the player to input a valid name.
         """
         try:
             if not user_input.isalpha() or user_input.lower() == 'exit':
@@ -941,9 +945,9 @@ class Game:
         Raises
         ------
         ValueError
-            If the user input is anything other than 'pick up' or 'leave', this
-            exception is raised, and an error message is printed to guide the
-            player.
+            If the user input is anything other than 'pick up' or 'leave',
+            this exception is raised, and an error message is printed to
+            guide the player.
         """
         try:
             if user_input == 'pick up':
@@ -1149,9 +1153,11 @@ class Game:
                 )
             self.reset_game()
             print(prompt_text)
-            self.state = (game_states.FIRST_LAYER_STATES['CHARACTER_CREATION']
+            self.state = (game_states.FIRST_LAYER_STATES
+                          ['CHARACTER_CREATION']
                           if fight.check_death(enemy) else
-                          game_states.FIRST_LAYER_STATES['CHARACTER_CREATION'])
+                          game_states.FIRST_LAYER_STATES
+                          ['CHARACTER_CREATION'])
 
 
 game = Game()

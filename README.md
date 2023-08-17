@@ -391,3 +391,8 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
 </details>
 </details>
 
+<details>
+<summary><h2>Credits</h2></summary>
+
+
+</details>

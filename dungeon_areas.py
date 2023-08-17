@@ -77,8 +77,9 @@ ROOMS = {
                 "\nAwakening in a room, a sense of déjà vu strikes you...\n"
                 "Have you visited this place before?\n"
                 "A shroud of darkness wraps the space, its cold grip only\n"
-                "punctuated by the echoing drip of " + Fore.WHITE + Back.BLUE +
-                "water" + Fore.RESET + Back.RESET + " against stone walls.\n"
+                "punctuated by the echoing drip of " + Fore.WHITE + Back.BLUE
+                + "water" + Fore.RESET + Back.RESET + " against stone"
+                " walls.\n"
                 "In the feeble light, an inscription comes to view on your"
                 " arm,\n"
                 + Fore.WHITE + Back.RED + "etched" + Fore.RESET + Back.RESET +
