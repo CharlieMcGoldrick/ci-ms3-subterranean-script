@@ -39,6 +39,7 @@ As a Frequent user, I want to see if there are any new updates or developments i
 ##### Social Interaction: #####
 As a Frequent user, I want to share my gaming experience with others or compare my decisions and game outcomes with them.
 </details>
+
 <details>
 
 <summary><h4>CLI Owner Goals</h4></summary>
@@ -54,5 +55,20 @@ As a Command Line Application Owner, I want to build a community of engaged play
 ##### Showcasing Creativity: #####
 As a Command Line Application Owner, I want to be able to showcase the creative team behind the game, to promote their work and foster a deeper connection with the player base.
 </details>
+
+<details>
+<summary><h4>Strategy Tradeoffs</h4></summary>
+
+![Subterranean Script Tradeoff Table](assets/images/readme/uxd/strategy/subterranean_scipt_strategy-tradeoffs-table.png)
+
+![Subterranean Script Tradeoff_Graph](assets/images/readme/uxd/strategy/subterranean_scipt_strategy_tradeoffs_graph.png)
+</details>
+
+
+
+
+</details>
+
+
 
 </details>
