@@ -138,6 +138,7 @@ Colours will be based on the [Colorma](https://pypi.org/project/colorama/) libra
 - [Python Tutor](https://pythontutor.com/) Used to test logic of my code.
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) Used to learn and stick to a conventional commit framework.
 - [Photoshop](https://www.adobe.com/uk/products/photoshop.html) Used for readme images.
+- [Text to ASCII](https://patorjk.com/software/taag/#p=display&f=Ogre&t=Subterrain%20) Used to create start screen ASCII.
 
 </details>
 </details>
@@ -634,6 +635,7 @@ NOTE: You might want to turn on *Enable Automatic Deploys*
 - [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) For help with NumPy Style Docstrings.
 - [Colorama](https://pypi.org/project/colorama/) For help with Colorama Syntax.
 - [D&D](https://dnd.wizards.com/what-is-dnd/basic-rules) Inspiration for how to handle stats and rolls.
+- [Text to ASCII](https://patorjk.com/software/taag/#p=display&f=Ogre&t=Subterrain%20) Used to create start screen ASCII.
 </details>
 
 <details>
