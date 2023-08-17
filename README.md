@@ -153,7 +153,7 @@ Start State (handle_start_state method): This state handles the next stage where
 
 Together, these two stages form a cohesive starting experience, introducing players to the tone, setting, and mechanics of the game. The Start Screen State not only welcomes players but also challenges them to take the first step into an adventure filled with choices, mysteries, and uncertainties.
 
-![Start Screen](assets/images/readme/features/start-of-battle-state.png)
+![Start Screen](assets/images/readme/features/start-screen.png)
 
 </details>
 
@@ -389,6 +389,192 @@ I used the [PEP-8 Validator](https://pep8ci.herokuapp.com/) to validate the Pyth
 ![utilities.py](assets/images/readme/features/example-of-stat-state.png)
 
 </details>
+</details>
+
+<details>
+<summary><h2>Application Testing</h2></summary>
+
+<details>
+<summary><h3>START SCREEN</h3></summary>
+
+1. Expected - `INITIALISE` state is expected to load when the user opens the app, with the `GAME_START` state (user input) below it.
+2. Testing  - Tested the feature by loading the app.
+3. Result   - The feature responded as expected.
+</details>
+
+<details>
+<summary><h3>GAME START STATE</h3></summary>
+
+1. Expected - Typing *Enter* is expected to transition to the `CHARACTER_CREATION` state. Typing anything other than *Enter* will give them a prompt telling them what to do and gives them the previous prompt afterwards.
+2. Testing  - Tested the feature by typing *Enter*. Capitlisation doesn't matter due to *.lower() method*.
+            - Tested the feature by typing other strings, number & symbols into *user input* which raise the correct `ValueError`.
+3. Result   - The feature responded as expected.
+
+</details>
+
+<details>
+<summary><h3>CHARACTER CREATION STATE</h3></summary>
+
+1. Expected - Typing a string that doesn't exceed 20 characters will proceed to the `ROOM_PICKUP_FIRST_LAYER` state. Typing anything other than a string will throw one `ValueError` and reprint the original prompt and typing a string longer than 20 character will throw a separate `ValueError`.
+2. Testing  - Tested the feature by typing a string under 20 character which transitioned to the correct state. Capitlisation doesn't matter due to *.lower() method*.
+            - Tested the feature by typing in anything other than a string which raises the correct `ValueError` and reprints the state's prompt.
+            - Tested the feature by typing in a string longer than 20 characters which raises the correct `ValueError` and reprints the state's prompt.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h3>ROOM PICKUP FIRST LAYER</h3></summary>
+
+1. Expected - The user's entered name will get reprinted and their stats will get rolled. A weapon should be randomly selected from a dictionary. The user is then prompted to *Pick Up* or *Leave* the weapon. Anything else typing in should raise the correct `ValueError` and the prompt gets reprinted. If the correct keyword is typed in then it should transition to the `ROOM_DOOR_CHOICE_FIRST_LAYER` state.
+2. Testing  - Tested the feature by typing *Pick Up* which transitions to the correct state. Capitlisation doesn't matter due to *.lower() method*.
+            - Tested the feature by typing *Leave* which transitions to the correct state. Capitlisation doesn't matter due to *.lower() method*.
+            - Tested the feature by typing in anything other than these keywords which raises the correct `ValueError` and reprints the state's prompt.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h3>ROOM DOOR CHOICE FIRST LAYER</h3></summary>
+
+1. Expected - If the user enters *Pick Up* the stats will be printed with an update to stats based on the weapon and the correct weapon should be apployed. *Leave* will print the stats without any stat change. Either choice will then prompt the user to pick between the *Left* or *Right* door. Either choice will transition to the `FIGHT_SECOND_LAYER` state.
+2. Testing  - Tested the feature by typing *Left* which transitions to the correct state. Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by typing *Right* which transitions to the correct state. Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by typing in anything other than these keywords which raises the correct `ValueError` and reprints the state's prompt.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h3>FIGHT SECOND LAYER</h3></summary>
+
+1. Expected - Either choice should pick a room randomly based on a dictionary and based on the room that gets picked an enemy will be randomly spawned from a dictionary of `COMMON_ENEMIES` (spawned in any room) or `SPECIFIC_ENEMIES`. The prompt text should be correctly populated from these random choices and then the user should be prompted to fight after the player's and enemies' HP is correctly printed. The choices are to 'Quick' attack, 'Heavy' attack or 'Dodge'. The player and enemy will take turns, with the enemy randomly choosing the same choices. Damage should be applied to the HP when either entity hits. When either entity reach 0 HP, the `handle_battle` method should end by printing relevant text and restarting the game, by transitioning back to the `CHARACTER_CREATION` state.
+2. Testing  - Tested the feature by typing *Dodge* and the player correctly holds their move, increasing their AC to hopefully dodge the next attack. This works when the enemy choose *Dodge* too.       Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by typing *Quick* where the player then proceeds to unleash a quick attack. Damage is correctly applied when either entity chooses this attack. Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by typing *Heavy* where the player then proceeds to unleash a heavy attack. Damage is correctly applied when either entity chooses this attack. Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by seeing each entity win, where the correct text get's printed based on the users success or defeat. The game then transition correclty.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h3>LOOP</h3></summary>
+
+1. Expected - After the battle is won or lost, the game should clear any changes made in the previous iteration and start from scratch.
+2. Testing  - Tested the feature by typing playing through multiple iterations to make sure anything set in the previous iteration wasn't carried through to the new one.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h3>UNIVERSAL COMMANDS</h3></summary>
+
+<details>
+<summary><h4>HELP</h4></summary>
+
+1. Expected - *Help* can be typed at almost all points in the game, except during the `handle_battle` method. It should display relevant information based on the state the user is currently in.
+2. Testing  - Tested the feature by typing *Help* in every possible state, and the relevant commands appear in each state. Capitlisation doesn't matter due to *.lower() method.
+            - Tested the feature by typing *Help* in the `handle_battle` method where it doesn't work.
+3. Result   - The feature responded as expected.
+
+</details>
+
+<details>
+<summary><h4>STATS</h4></summary>
+
+1. Expected - Typing *Stats* should display them once the stats have been rolled (After `CHARACTER_CREATION` state), except during the `handle_battle` method. It should display the up-to date stats, such as the stat changes from picking up an object. 
+2. Testing  - Tested the feature by typing *Stat* in every state where avaliable, and the up-to date stats appear as expected. Capitlisation doesn't matter due to *.lower() method.
+3. Result   - The feature responded as expected.
+
+</details>
+
+<details>
+<summary><h4>RETURN</h4></summary>
+
+1. Expected - Typing *Return* while in the `HELP` or `CHARACTER_STATS` stat should return the *Layer State* that they were originally in.
+2. Testing  - Tested the feature by typing *Return* in from the `HELP` and `CHARACTER_STATS` state when entering them from all available stats. Capitlisation doesn't matter due to *.lower() method.
+3. Result   - The feature responded as expected
+
+</details>
+
+<details>
+<summary><h4>RETURN</h4></summary>
+
+1. Expected - Typing *Exit* anywhere in the game apart from the `handle_battle` method should print some text and exit the game
+2. Testing  - Tested the feature by typing *Exit* in all relevant states, which exited as expected.
+3. Result   - The feature responded as expected
+
+</details>
+
+</details>
+
+
+</details>
+</details>
+
+<details>
+<summary><h2>User and Owner Story Testing</h2></summary>
+
+***First Time Visitor Goals***
+Understanding Gameplay:
+- As a First Time user, I want to easily understand the main concept of the game and its gameplay mechanics.
+- ***I believe I have acheived this via the simple inputs and the *Help* state giving relevant commands throughout the game.***
+
+Navigating Commands:
+- As a First Time user, I want to be able to effortlessly navigate through the game commands and decision-making processes.
+- ***There are only a few inputs that the user needs to use to navigate through each state, all of which are correctly signposted to the user.***
+
+Experiencing Narrative:
+- As a First Time user, I want to experience a compelling introduction to the game world and its narrative.
+- ***Through the flavour text, I believe I've created the right tone for the game, and an excellent starting point for an engaging narrative.***
+
+***Returning Visitor Goals***
+Exploring New Content:
+- As a Returning user, I want to find and explore new paths, narratives, and experiences within the game that deepen my immersion.
+- ***There is lots more to do with this but I think the random object, enemy and room choices can keep the game fresh.***
+
+Understanding Consequences:
+- As a Returning user, I want to see the consequences of my previous choices and understand how they shape my current gameplay.
+- ***Also a lot more to do with this but I have the skeleton laid out. The user can see that their object choice changed their stats and certain decision in the battle will give different results.***
+
+Varied Experiences:
+- As a Returning user, I want the ability to reset the game or make different decisions, enabling varied experiences and outcomes.
+- ***The game is built to reset whether the player wins the battle or loses. There are further narrative reasons for this which I didn't get a chance to lay out, but again the foundations are there. The plan is to have the user discover bodies in the various rooms which will have various letters from the users name randomly etched on their arm. Giving the idea that they've been at this for a long time.***
+
+***Frequent Visitor Goals***
+Ongoing Adventure:
+- As a Frequent user, I want to continue my ongoing adventure, with the game storing my progress.
+- ***This is something I will need to work on going forwards, and wasn't on the list for sprint 1.***
+
+Updates and Developments:
+- As a Frequent user, I want to see if there are any new updates or developments in the game’s narrative or mechanics.
+- ***This wasn't going to be possible for sprint 1 but I have an excellent starting point to continue building.***
+
+Social Interaction:
+- As a Frequent user, I want to share my gaming experience with others or compare my decisions and game outcomes with them.
+- ***The idea here is to have the app on a website with a forum so people can share their experiences. Also wasn't important for sprint 1.***
+
+CLI Owner Goals
+Engaging Gameplay:
+- As a Command Line Application Owner, I want to offer an intuitive and immersive text-based adventure game that engages users and draws them into its narrative world.
+- ***Sprint 1 was mostly focused on the code and features, but I believe it achieves this to an extent.***
+
+User Notification:
+- As a Command Line Application Owner, I want to notify users of new game content or changes, keeping them interested and up-to-date.
+- ***This would also be achieved by the site that I previous mentioned.***
+
+Gathering Feedback:
+- As a Command Line Application Owner, I want to gather user feedback and experiences, which can be used to refine and expand the game.
+- ***This would need a webiste or a social media presence.***
+
+Community Building:
+- As a Command Line Application Owner, I want to build a community of engaged players who are invested in the game's world and narrative.
+- ***Outside of the scope of sprint 1 as it's important to build something good first and then the players will be attracted to quality.***
+
+Showcasing Creativity:
+- As a Command Line Application Owner, I want to be able to showcase the creative team behind the game, to promote their work and foster a deeper connection with the player base.
+- ***Something more achievable with a website and/or social media presence.***
+
 </details>
 
 <details>
